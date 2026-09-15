@@ -1,0 +1,5 @@
+frontier:
+  - id: BEAL-GCD-SIGNATURE
+    status: OPEN_BRIDGE
+  - id: BEAL-DISCRETE-BOUNDARY
+    status: OPEN_BRIDGE
