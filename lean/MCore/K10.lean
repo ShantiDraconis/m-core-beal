@@ -1,15 +1,12 @@
 import MCore.K9
+import Std.Tactic.Omega
 
 namespace MCore
 
-/-- K10 candidate: constructive proof that every natural number greater than one
-    has a divisor satisfying the repository-local `IsPrime` predicate.
-
-    The proof uses strong induction on `n`. If `n` is already prime, choose it.
-    Otherwise the negation of `IsPrime n` supplies a proper nontrivial divisor;
-    strong induction yields a prime divisor of that divisor, and K9 divisibility
-    transitivity lifts it to a prime divisor of `n`.
--/
+/-- K10 candidate: every natural number greater than one has a divisor satisfying
+    the repository-local `IsPrime` predicate.  This first repair removes the
+    unavailable Mathlib-only `push_neg` dependency and isolates any remaining
+    trust dependency for the explicit K10 axiom audit. -/
 theorem primeDivisorProperty_core : PrimeDivisorProperty := by
   intro n hn
   induction n using Nat.strong_induction_on with
@@ -19,8 +16,16 @@ theorem primeDivisorProperty_core : PrimeDivisorProperty := by
       · have hnotall : ¬ (∀ d : Nat, d ∣ n → d = 1 ∨ d = n) := by
           intro hall
           exact hp ⟨hn, hall⟩
-        push_neg at hnotall
-        obtain ⟨d, hdn, hd1, hdn_eq⟩ := hnotall
+        have hex : ∃ d : Nat, d ∣ n ∧ d ≠ 1 ∧ d ≠ n := by
+          by_contra hnone
+          apply hnotall
+          intro d hdn
+          by_cases hd1 : d = 1
+          · exact Or.inl hd1
+          · right
+            by_contra hdn'
+            exact hnone ⟨d, hdn, hd1, hdn'⟩
+        obtain ⟨d, hdn, hd1, hdn_eq⟩ := hex
         have hdpos : 0 < d := by
           by_contra hz
           have hd0 : d = 0 := Nat.eq_zero_of_not_pos hz
@@ -37,7 +42,6 @@ theorem primeDivisorProperty_core : PrimeDivisorProperty := by
             subst k
             simp at hk
             omega
-          have hk1 : 1 ≤ k := hkpos
           have hdle : d ≤ n := by
             rw [hk]
             exact Nat.le_mul_of_pos_right d hkpos
