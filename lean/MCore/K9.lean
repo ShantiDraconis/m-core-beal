@@ -8,13 +8,15 @@ namespace MCore
 def PrimeDivisorProperty : Prop :=
   ∀ n : Nat, 1 < n → ∃ p : Nat, IsPrime p ∧ p ∣ n
 
-/-- Core-only transitivity of natural-number divisibility. -/
+/-- Core-only transitivity of natural-number divisibility, proved by witness composition. -/
 theorem nat_dvd_trans {a b c : Nat} (hab : a ∣ b) (hbc : b ∣ c) : a ∣ c := by
   rcases hab with ⟨k, hk⟩
   rcases hbc with ⟨l, hl⟩
   refine ⟨k * l, ?_⟩
-  rw [hl, hk]
-  exact Nat.mul_assoc a k l
+  calc
+    c = b * l := hl
+    _ = (a * k) * l := congrArg (fun n : Nat => n * l) hk
+    _ = a * (k * l) := Nat.mul_assoc a k l
 
 /-- A prime divisor of a nontrivial common divisor yields a common prime. -/
 theorem commonDivisor_to_commonPrime_of_primeDivisor
