@@ -6,25 +6,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: leanprover/lean-action@v1
-      - name: Restore Mathlib build cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            .lake/packages/mathlib/.lake/build
-            .lake/packages/batteries/.lake/build
-          key: lean-${{ runner.os }}-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.toml', 'lakefile.lean') }}
-          restore-keys: |
-            lean-${{ runner.os }}-
-      - name: Resolve pinned dependencies and hydrate Mathlib cache
-        run: |
-          set -euo pipefail
-          lake update
-          lake exe cache get
       - name: G0 fail-closed source hygiene
         run: |
           set -euo pipefail
           if grep -R -n -E '(^|[^[:alnum:]_])(sorry|admit)([^[:alnum:]_]|$)' --include='*.lean' lean; then exit 1; else rc=$?; [ "$rc" -eq 1 ] || exit "$rc"; fi
           if grep -R -n -E '^[[:space:]]*(@\[[^]]*\][[:space:]]*)?(axiom|constant|constants)[[:space:]]' --include='*.lean' lean; then exit 1; else rc=$?; [ "$rc" -eq 1 ] || exit "$rc"; fi
+      - {name: Build Beal specification, run: 'lake build MCore.BealSpecification && lake build MCore.GCDSignature && lake build MCore.DiscreteBoundary'}
       - {name: Preserve K3, run: 'lake build MCore.K3 && lake build MCore.Frontier.K3Gaps && lake build MCore.AttackDAG.K3AlgebraAttacks'}
       - {name: Preserve K4-K5, run: 'lake build MCore.K4 && lake build MCore.K5'}
       - {name: Build K6 dependency kernel, run: 'lake build MCore.K6'}
