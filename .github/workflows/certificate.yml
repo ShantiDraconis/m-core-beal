@@ -5,30 +5,41 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: leanprover/lean-action@v1
-      - name: G0 fail-closed source hygiene
+      - name: Install pinned Lean toolchain without implicit project build
+        uses: leanprover/lean-action@v1
+        with:
+          build: false
+          test: false
+          lint: false
+      - name: G0 toolchain and fail-closed source hygiene
         run: |
           set -euo pipefail
+          lean --version
+          lake --version
+          test "$(cat lean-toolchain)" = "leanprover/lean4:v4.19.0"
           if grep -R -n -E '(^|[^[:alnum:]_])(sorry|admit)([^[:alnum:]_]|$)' --include='*.lean' lean; then exit 1; else rc=$?; [ "$rc" -eq 1 ] || exit "$rc"; fi
           if grep -R -n -E '^[[:space:]]*(@\[[^]]*\][[:space:]]*)?(axiom|constant|constants)[[:space:]]' --include='*.lean' lean; then exit 1; else rc=$?; [ "$rc" -eq 1 ] || exit "$rc"; fi
-      - {name: Preserve frozen K9 layer, run: 'lake build MCore.K9.Core.Arith && lake build MCore.K9'}
-      - {name: Build K10 prime-divisor closure, run: 'lake build MCore.K10'}
-      - name: K10 zero-axiom audit
+      - name: G1 preserve frozen K9 layer
+        run: lake build MCore.K9.Core.Arith && lake build MCore.K9
+      - name: G2 build K10 prime-divisor closure
+        run: lake build MCore.K10
+      - name: G3 K10 zero-axiom audit
         run: |
           printf 'import MCore.K10\n#print axioms MCore.primeDivisorProperty_core\n#print axioms MCore.primeDivisorProperty_proved\n#print axioms MCore.commonPrime_iff_commonDivisor\n' > K10AxiomAudit.lean
           lake env lean K10AxiomAudit.lean 2>&1 | tee K10AxiomAudit.log
           for theorem in MCore.primeDivisorProperty_core MCore.primeDivisorProperty_proved MCore.commonPrime_iff_commonDivisor; do
             grep -F "'$theorem' does not depend on any axioms" K10AxiomAudit.log
           done
-      - name: K9 zero-axiom regression
+      - name: G4 K9 zero-axiom regression
         run: |
           printf 'import MCore.K10\n#print axioms MCore.K9.Core.mul_assoc_core\n#print axioms MCore.nat_dvd_trans\n#print axioms MCore.commonDivisor_to_commonPrime_of_primeDivisor\n#print axioms MCore.commonPrime_iff_commonDivisor_of_primeDivisor\n' > K9RegressionAudit.lean
           lake env lean K9RegressionAudit.lean 2>&1 | tee K9RegressionAudit.log
           for theorem in MCore.K9.Core.mul_assoc_core MCore.nat_dvd_trans MCore.commonDivisor_to_commonPrime_of_primeDivisor MCore.commonPrime_iff_commonDivisor_of_primeDivisor; do
             grep -F "'$theorem' does not depend on any axioms" K9RegressionAudit.log
           done
-      - name: Endpoint remains non-promoted
+      - name: G5 endpoint remains non-promoted
         run: |
           printf 'import MCore.K10\nopen MCore\nexample : ¬ Nonempty (ProofCertificate bealEndpointNode) := k7_endpoint_not_certified\n' > NegativeK10.lean
           lake env lean NegativeK10.lean
-      - {name: Clean reproduction, run: 'lake clean && lake build MCore.K9.Core.Arith && lake build MCore.K9 && lake build MCore.K10 && lake build MCore'}
+      - name: G6 clean reproduction
+        run: lake clean && lake build MCore.K9.Core.Arith && lake build MCore.K9 && lake build MCore.K10 && lake build MCore
