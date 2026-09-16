@@ -1,39 +1,40 @@
 namespace MCore
 
-/-- Positive-integer data for the Beal equation, represented in `Nat` with positivity explicit. -/
 structure BealData where
-  A B C : Nat
-  x y z : Nat
-  A_pos : 0 < A
-  B_pos : 0 < B
-  C_pos : 0 < C
+  a : Nat
+  b : Nat
+  c : Nat
+  x : Nat
+  y : Nat
+  z : Nat
+  a_pos : 0 < a
+  b_pos : 0 < b
+  c_pos : 0 < c
   x_gt_two : 2 < x
   y_gt_two : 2 < y
   z_gt_two : 2 < z
-  equation : A ^ x + B ^ y = C ^ z
+  equation : a ^ x + b ^ y = c ^ z
 
-/-- A natural number is a nontrivial common divisor of the three bases. -/
-def CommonDivisor (d A B C : Nat) : Prop :=
-  1 < d ∧ d ∣ A ∧ d ∣ B ∧ d ∣ C
+def CommonDivisor (d a b c : Nat) : Prop :=
+  1 < d ∧ d ∣ a ∧ d ∣ b ∧ d ∣ c
 
-/-- Prime-witness formulation used by the official Beal statement. -/
-def CommonPrime (A B C : Nat) : Prop :=
-  ∃ p : Nat, Nat.Prime p ∧ p ∣ A ∧ p ∣ B ∧ p ∣ C
+/-- Prime in the elementary divisor sense; local definition keeps the kernel dependency-free. -/
+def IsPrime (p : Nat) : Prop :=
+  1 < p ∧ ∀ d : Nat, d ∣ p → d = 1 ∨ d = p
 
-/-- The exact unresolved mathematical endpoint. This is a definition, not a theorem. -/
+def CommonPrime (a b c : Nat) : Prop :=
+  ∃ p : Nat, IsPrime p ∧ p ∣ a ∧ p ∣ b ∧ p ∣ c
+
 def BealConjecture : Prop :=
-  ∀ d : BealData, CommonPrime d.A d.B d.C
+  ∀ d : BealData, CommonPrime d.a d.b d.c
 
-/-- A counterexample is exactly admissible Beal data with no common-prime witness. -/
 def BealCounterexample (d : BealData) : Prop :=
-  ¬ CommonPrime d.A d.B d.C
+  ¬ CommonPrime d.a d.b d.c
 
-/-- Pure logic: a counterexample refutes the conjecture. -/
 theorem counterexample_refutes (d : BealData) (h : BealCounterexample d) : ¬ BealConjecture := by
   intro hBeal
   exact h (hBeal d)
 
-/-- Pure logic: Beal excludes every represented counterexample. -/
 theorem conjecture_excludes_counterexamples (h : BealConjecture) (d : BealData) :
     ¬ BealCounterexample d := by
   intro hd

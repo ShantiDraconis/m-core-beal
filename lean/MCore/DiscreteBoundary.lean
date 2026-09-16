@@ -2,20 +2,15 @@ import MCore.BealSpecification
 
 namespace MCore
 
-/-- The strict exponent hypothesis excludes the exponent boundary 0,1,2. -/
 theorem exponent_three_le (d : BealData) : 3 ≤ d.x ∧ 3 ≤ d.y ∧ 3 ≤ d.z := by
-  omega
+  exact ⟨d.x_gt_two, d.y_gt_two, d.z_gt_two⟩
 
-/-- Positivity excludes zero bases. -/
-theorem bases_ne_zero (d : BealData) : d.A ≠ 0 ∧ d.B ≠ 0 ∧ d.C ≠ 0 := by
-  omega
-
-/-- The admissible exponent region is discrete; exponent 2 is outside it. -/
-theorem exponent_two_excluded (d : BealData) : d.x ≠ 2 ∧ d.y ≠ 2 ∧ d.z ≠ 2 := by
-  omega
-
-/-- Every represented candidate carries exactly the equation used by the conjecture. -/
-theorem candidate_equation (d : BealData) : d.A ^ d.x + d.B ^ d.y = d.C ^ d.z :=
+theorem candidate_equation (d : BealData) : d.a ^ d.x + d.b ^ d.y = d.c ^ d.z :=
   d.equation
+
+/-- The boundary data are carried explicitly; no analytic 0/0 limit is introduced. -/
+theorem admissible_boundary_data (d : BealData) :
+    0 < d.a ∧ 0 < d.b ∧ 0 < d.c ∧ 2 < d.x ∧ 2 < d.y ∧ 2 < d.z := by
+  exact ⟨d.a_pos, d.b_pos, d.c_pos, d.x_gt_two, d.y_gt_two, d.z_gt_two⟩
 
 end MCore
