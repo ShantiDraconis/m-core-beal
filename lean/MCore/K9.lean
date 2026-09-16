@@ -1,5 +1,6 @@
 import MCore.K8
 import MCore.GCDSignature
+import MCore.K9.Core.Arith
 
 namespace MCore
 
@@ -16,7 +17,7 @@ theorem nat_dvd_trans {a b c : Nat} (hab : a ∣ b) (hbc : b ∣ c) : a ∣ c :=
   calc
     c = b * l := hl
     _ = (a * k) * l := congrArg (fun n : Nat => n * l) hk
-    _ = a * (k * l) := Nat.mul_assoc a k l
+    _ = a * (k * l) := K9.Core.mul_assoc_core a k l
 
 /-- A prime divisor of a nontrivial common divisor yields a common prime. -/
 theorem commonDivisor_to_commonPrime_of_primeDivisor
