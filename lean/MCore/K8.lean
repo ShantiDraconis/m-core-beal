@@ -11,21 +11,21 @@ theorem noCommonPrime_is_counterexample (d : BealData) :
     NoCommonPrime d ↔ BealCounterexample d := by
   rfl
 
-/-- Beal is equivalent to saying that no admissible datum has the endpoint obstruction. -/
-theorem beal_iff_no_counterexample :
-    BealConjecture ↔ ∀ d : BealData, ¬ BealCounterexample d := by
-  constructor
-  · intro h d hd
-    exact hd (h d)
-  · intro h d
-    by_contra hd
-    exact h d hd
+/-- A Beal proof constructively excludes every counterexample. -/
+theorem beal_excludes_all_counterexamples (h : BealConjecture) :
+    ∀ d : BealData, ¬ BealCounterexample d := by
+  intro d hd
+  exact hd (h d)
 
-/-- A proof eliminating `NoCommonPrime` for every admissible datum closes the endpoint. -/
-theorem closeBeal_from_noCommonPrime_elimination
-    (h : ∀ d : BealData, ¬ NoCommonPrime d) : BealConjecture := by
-  intro d
-  by_contra hd
-  exact h d hd
+/-- A single no-common-prime datum constructively refutes Beal. -/
+theorem noCommonPrime_refutes_beal (d : BealData) (h : NoCommonPrime d) :
+    ¬ BealConjecture := by
+  intro hBeal
+  exact h (hBeal d)
+
+/-- Exact constructive closing obligation: provide the common-prime witness for every admissible datum. -/
+theorem closeBeal_from_commonPrime_witnesses
+    (h : ∀ d : BealData, CommonPrime d.a d.b d.c) : BealConjecture :=
+  h
 
 end MCore
