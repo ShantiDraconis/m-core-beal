@@ -1,18 +1,16 @@
 import MCore.K9
-import Std.Tactic.Omega
 
 namespace MCore
 
 /-- K10 candidate: every natural number greater than one has a divisor satisfying
-    the repository-local `IsPrime` predicate.  This first repair removes the
-    unavailable Mathlib-only `push_neg` dependency and isolates any remaining
-    trust dependency for the explicit K10 axiom audit. -/
+    the repository-local `IsPrime` predicate.  The proof intentionally stays in
+    the pinned Lean core environment: no Mathlib-only tactics or imports. -/
 theorem primeDivisorProperty_core : PrimeDivisorProperty := by
   intro n hn
   induction n using Nat.strong_induction_on with
   | h n ih =>
       by_cases hp : IsPrime n
-      · exact ⟨n, hp, ⟨1, by simp⟩⟩
+      · exact ⟨n, hp, ⟨1, rfl⟩⟩
       · have hnotall : ¬ (∀ d : Nat, d ∣ n → d = 1 ∨ d = n) := by
           intro hall
           exact hp ⟨hn, hall⟩
@@ -26,22 +24,24 @@ theorem primeDivisorProperty_core : PrimeDivisorProperty := by
             by_contra hdn'
             exact hnone ⟨d, hdn, hd1, hdn'⟩
         obtain ⟨d, hdn, hd1, hdn_eq⟩ := hex
+        have hnpos : 0 < n := Nat.lt_trans Nat.zero_lt_one hn
+        have hn0 : n ≠ 0 := Nat.ne_of_gt hnpos
         have hdpos : 0 < d := by
-          by_contra hz
-          have hd0 : d = 0 := Nat.eq_zero_of_not_pos hz
-          subst d
+          apply Nat.pos_of_ne_zero
+          intro hd0
           rcases hdn with ⟨k, hk⟩
-          simp at hk
-          omega
-        have hdgt1 : 1 < d := by omega
+          subst d
+          exact hn0 (Eq.trans hk rfl)
+        have hdgt1 : 1 < d := by
+          have hle : 1 ≤ d := Nat.succ_le_of_lt hdpos
+          exact Nat.lt_of_le_of_ne hle (Ne.symm hd1)
         have hdlt : d < n := by
           rcases hdn with ⟨k, hk⟩
           have hkpos : 0 < k := by
-            by_contra hkz
-            have hk0 : k = 0 := Nat.eq_zero_of_not_pos hkz
+            apply Nat.pos_of_ne_zero
+            intro hk0
             subst k
-            simp at hk
-            omega
+            exact hn0 (Eq.trans hk rfl)
           have hdle : d ≤ n := by
             rw [hk]
             exact Nat.le_mul_of_pos_right d hkpos
