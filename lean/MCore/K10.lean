@@ -15,13 +15,15 @@ theorem primeDivisorProperty_core : PrimeDivisorProperty := by
           intro hall
           exact hp ⟨hn, hall⟩
         have hex : ∃ d : Nat, d ∣ n ∧ d ≠ 1 ∧ d ≠ n := by
-          by_contra hnone
+          apply Classical.byContradiction
+          intro hnone
           apply hnotall
           intro d hdn
           by_cases hd1 : d = 1
           · exact Or.inl hd1
           · right
-            by_contra hdn'
+            apply Classical.byContradiction
+            intro hdn'
             exact hnone ⟨d, hdn, hd1, hdn'⟩
         obtain ⟨d, hdn, hd1, hdn_eq⟩ := hex
         have hnpos : 0 < n := Nat.lt_trans Nat.zero_lt_one hn
