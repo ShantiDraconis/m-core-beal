@@ -3,11 +3,7 @@ import MCore.K9
 namespace MCore
 
 /-- K10: every natural greater than one has a divisor satisfying the local
-    `IsPrime` predicate. The proof is constructive: instead of deciding
-    `IsPrime n` or using contradiction, it asks whether there is a proper
-    divisor below `n`; bounded existential search on naturals is decidable in
-    Lean core. If there is none, `n` is prime; if there is one, strong
-    induction supplies a prime divisor of it. -/
+    `IsPrime` predicate. Constructive strong induction with bounded search. -/
 theorem primeDivisorProperty_core : PrimeDivisorProperty := by
   intro n
   induction n using Nat.lt_wfRel.wf.induction with
@@ -15,7 +11,7 @@ theorem primeDivisorProperty_core : PrimeDivisorProperty := by
       intro hn
       let P : Nat → Prop := fun d => 1 < d ∧ d < n ∧ d ∣ n
       have instP (d : Nat) : Decidable (P d) := inferInstance
-      let hex : Decidable (∃ d, d < n ∧ P d) := Nat.decidableExistsLT n (fun d _ => P d)
+      let hex : Decidable (∃ d, d < n ∧ P d) := inferInstance
       match hex with
       | isTrue hproper =>
           obtain ⟨d, hdlt, hdgt1, _, hdn⟩ := hproper
@@ -51,8 +47,8 @@ theorem primeDivisorProperty_core : PrimeDivisorProperty := by
                 exact Nat.le_mul_of_pos_right d hkpos
               cases Nat.lt_or_eq_of_le hdle with
               | inl hdlt =>
-                  have : ∃ q, q < n ∧ P q := ⟨d, hdlt, hdgt1, hdlt, ⟨k, hk⟩⟩
-                  exact False.elim (hproper this)
+                  have hbad : ∃ q, q < n ∧ P q := ⟨d, hdlt, hdgt1, hdlt, ⟨k, hk⟩⟩
+                  exact False.elim (hproper hbad)
               | inr hdeq => exact hdeq
           have hdivself : n ∣ n := ⟨1, (Nat.mul_one n).symm⟩
           exact ⟨n, hprime, hdivself⟩
