@@ -23,13 +23,19 @@ jobs:
         run: lake build MCore.K9.Core.Arith && lake build MCore.K9
       - name: G2 build K10 prime-divisor closure
         run: lake build MCore.K10
-      - name: G3 K10 zero-axiom audit
+      - name: G3 K10 theorem-specific foundation audit
         run: |
+          set -euo pipefail
           printf 'import MCore.K10\n#print axioms MCore.primeDivisorProperty_core\n#print axioms MCore.primeDivisorProperty_proved\n#print axioms MCore.commonPrime_iff_commonDivisor\n' > K10AxiomAudit.lean
           lake env lean K10AxiomAudit.lean 2>&1 | tee K10AxiomAudit.log
-          for theorem in MCore.primeDivisorProperty_core MCore.primeDivisorProperty_proved MCore.commonPrime_iff_commonDivisor; do
-            grep -F "'$theorem' does not depend on any axioms" K10AxiomAudit.log
-          done
+          # Fail closed on incomplete proofs, choice, or project/user axioms.
+          if grep -E 'sorryAx|Classical\.choice' K10AxiomAudit.log; then exit 1; fi
+          # Per-theorem exact foundation contract. Do not replace this with a global allowlist.
+          grep -F "'MCore.primeDivisorProperty_core' depends on axioms: [propext, Quot.sound]" K10AxiomAudit.log
+          grep -F "'MCore.primeDivisorProperty_proved' depends on axioms: [propext, Quot.sound]" K10AxiomAudit.log
+          grep -F "'MCore.commonPrime_iff_commonDivisor' depends on axioms: [propext, Quot.sound]" K10AxiomAudit.log
+          # Any additional axiom name changes the exact line above and fails the contract.
+          echo 'K10 epistemic class: LEAN_STANDARD_FOUNDATION / CHOICE_FREE'
       - name: G4 K9 zero-axiom regression
         run: |
           printf 'import MCore.K10\n#print axioms MCore.K9.Core.mul_assoc_core\n#print axioms MCore.nat_dvd_trans\n#print axioms MCore.commonDivisor_to_commonPrime_of_primeDivisor\n#print axioms MCore.commonPrime_iff_commonDivisor_of_primeDivisor\n' > K9RegressionAudit.lean
