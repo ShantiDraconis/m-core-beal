@@ -2,12 +2,12 @@ import MCore.K9
 
 namespace MCore
 
-/-- K10 candidate: every natural number greater than one has a divisor satisfying
-    the repository-local `IsPrime` predicate. The induction principle is taken
-    directly from the well-founded `<` relation available in Lean core. -/
+/-- Every natural number greater than one has a divisor satisfying the
+    repository-local `IsPrime` predicate. Uses the well-founded proof carried
+    by Lean core's `Nat.lt_wfRel`, avoiding Mathlib-only induction APIs. -/
 theorem primeDivisorProperty_core : PrimeDivisorProperty := by
   intro n
-  induction n using Nat.lt_wfRel.induction with
+  induction n using Nat.lt_wfRel.wf.induction with
   | h n ih =>
       intro hn
       by_cases hp : IsPrime n
