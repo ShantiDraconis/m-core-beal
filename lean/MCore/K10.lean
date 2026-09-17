@@ -2,58 +2,60 @@ import MCore.K9
 
 namespace MCore
 
-/-- Every natural number greater than one has a divisor satisfying the
-    repository-local `IsPrime` predicate. Uses the well-founded proof carried
-    by Lean core's `Nat.lt_wfRel`, avoiding Mathlib-only induction APIs. -/
+/-- K10: every natural greater than one has a divisor satisfying the local
+    `IsPrime` predicate. The proof is constructive: instead of deciding
+    `IsPrime n` or using contradiction, it asks whether there is a proper
+    divisor below `n`; bounded existential search on naturals is decidable in
+    Lean core. If there is none, `n` is prime; if there is one, strong
+    induction supplies a prime divisor of it. -/
 theorem primeDivisorProperty_core : PrimeDivisorProperty := by
   intro n
   induction n using Nat.lt_wfRel.wf.induction with
   | h n ih =>
       intro hn
-      by_cases hp : IsPrime n
-      · have hdivself : n ∣ n := by
-          exact ⟨1, (Nat.mul_one n).symm⟩
-        exact ⟨n, hp, hdivself⟩
-      · have hnotall : ¬ (∀ d : Nat, d ∣ n → d = 1 ∨ d = n) := by
-          intro hall
-          exact hp ⟨hn, hall⟩
-        have hex : ∃ d : Nat, d ∣ n ∧ d ≠ 1 ∧ d ≠ n := by
-          apply Classical.byContradiction
-          intro hnone
-          apply hnotall
-          intro d hdn
-          by_cases hd1 : d = 1
-          · exact Or.inl hd1
-          · right
-            apply Classical.byContradiction
-            intro hdn'
-            exact hnone ⟨d, hdn, hd1, hdn'⟩
-        obtain ⟨d, hdn, hd1, hdn_eq⟩ := hex
-        have hnpos : 0 < n := Nat.lt_trans Nat.zero_lt_one hn
-        have hn0 : n ≠ 0 := Nat.ne_of_gt hnpos
-        have hdpos : 0 < d := by
-          apply Nat.pos_of_ne_zero
-          intro hd0
-          rcases hdn with ⟨k, hk⟩
-          subst d
-          have hz : 0 * k = 0 := Nat.zero_mul k
-          exact hn0 (hk.trans hz)
-        have hdgt1 : 1 < d := by
-          have hle : 1 ≤ d := Nat.succ_le_of_lt hdpos
-          exact Nat.lt_of_le_of_ne hle (Ne.symm hd1)
-        have hdlt : d < n := by
-          rcases hdn with ⟨k, hk⟩
-          have hkpos : 0 < k := by
-            apply Nat.pos_of_ne_zero
-            intro hk0
-            subst k
-            exact hn0 hk
-          have hdle : d ≤ n := by
-            rw [hk]
-            exact Nat.le_mul_of_pos_right d hkpos
-          exact Nat.lt_of_le_of_ne hdle hdn_eq
-        obtain ⟨p, hprime, hpd⟩ := ih d hdlt hdgt1
-        exact ⟨p, hprime, nat_dvd_trans hpd hdn⟩
+      let P : Nat → Prop := fun d => 1 < d ∧ d < n ∧ d ∣ n
+      have instP (d : Nat) : Decidable (P d) := inferInstance
+      let hex : Decidable (∃ d, d < n ∧ P d) := Nat.decidableExistsLT n (fun d _ => P d)
+      match hex with
+      | isTrue hproper =>
+          obtain ⟨d, hdlt, hdgt1, _, hdn⟩ := hproper
+          obtain ⟨p, hp, hpd⟩ := ih d hdlt hdgt1
+          exact ⟨p, hp, nat_dvd_trans hpd hdn⟩
+      | isFalse hproper =>
+          have hprime : IsPrime n := by
+            refine ⟨hn, ?_⟩
+            intro d hdn
+            by_cases hd1 : d = 1
+            · exact Or.inl hd1
+            · right
+              have hnpos : 0 < n := Nat.lt_trans Nat.zero_lt_one hn
+              have hn0 : n ≠ 0 := Nat.ne_of_gt hnpos
+              have hdpos : 0 < d := by
+                apply Nat.pos_of_ne_zero
+                intro hd0
+                rcases hdn with ⟨k, hk⟩
+                subst d
+                have hz : 0 * k = 0 := Nat.zero_mul k
+                exact hn0 (hk.trans hz)
+              have hdgt1 : 1 < d := by
+                have hle : 1 ≤ d := Nat.succ_le_of_lt hdpos
+                exact Nat.lt_of_le_of_ne hle (Ne.symm hd1)
+              rcases hdn with ⟨k, hk⟩
+              have hkpos : 0 < k := by
+                apply Nat.pos_of_ne_zero
+                intro hk0
+                subst k
+                exact hn0 hk
+              have hdle : d ≤ n := by
+                rw [hk]
+                exact Nat.le_mul_of_pos_right d hkpos
+              cases Nat.lt_or_eq_of_le hdle with
+              | inl hdlt =>
+                  have : ∃ q, q < n ∧ P q := ⟨d, hdlt, hdgt1, hdlt, ⟨k, hk⟩⟩
+                  exact False.elim (hproper this)
+              | inr hdeq => exact hdeq
+          have hdivself : n ∣ n := ⟨1, (Nat.mul_one n).symm⟩
+          exact ⟨n, hprime, hdivself⟩
 
 theorem primeDivisorProperty_proved : PrimeDivisorProperty :=
   primeDivisorProperty_core
