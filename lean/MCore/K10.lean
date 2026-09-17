@@ -11,7 +11,9 @@ theorem primeDivisorProperty_core : PrimeDivisorProperty := by
   | h n ih =>
       intro hn
       by_cases hp : IsPrime n
-      · exact ⟨n, hp, ⟨1, rfl⟩⟩
+      · have hdivself : n ∣ n := by
+          exact ⟨1, (Nat.mul_one n).symm⟩
+        exact ⟨n, hp, hdivself⟩
       · have hnotall : ¬ (∀ d : Nat, d ∣ n → d = 1 ∨ d = n) := by
           intro hall
           exact hp ⟨hn, hall⟩
@@ -34,7 +36,8 @@ theorem primeDivisorProperty_core : PrimeDivisorProperty := by
           intro hd0
           rcases hdn with ⟨k, hk⟩
           subst d
-          exact hn0 (Eq.trans hk rfl)
+          have hz : 0 * k = 0 := Nat.zero_mul k
+          exact hn0 (hk.trans hz)
         have hdgt1 : 1 < d := by
           have hle : 1 ≤ d := Nat.succ_le_of_lt hdpos
           exact Nat.lt_of_le_of_ne hle (Ne.symm hd1)
@@ -44,7 +47,7 @@ theorem primeDivisorProperty_core : PrimeDivisorProperty := by
             apply Nat.pos_of_ne_zero
             intro hk0
             subst k
-            exact hn0 (Eq.trans hk rfl)
+            exact hn0 hk
           have hdle : d ≤ n := by
             rw [hk]
             exact Nat.le_mul_of_pos_right d hkpos
