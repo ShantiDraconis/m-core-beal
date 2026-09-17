@@ -3,12 +3,13 @@ import MCore.K9
 namespace MCore
 
 /-- K10 candidate: every natural number greater than one has a divisor satisfying
-    the repository-local `IsPrime` predicate.  The proof intentionally stays in
-    the pinned Lean core environment: no Mathlib-only tactics or imports. -/
+    the repository-local `IsPrime` predicate. The induction principle is taken
+    directly from the well-founded `<` relation available in Lean core. -/
 theorem primeDivisorProperty_core : PrimeDivisorProperty := by
-  intro n hn
-  induction n using Nat.strong_induction_on with
+  intro n
+  induction n using Nat.lt_wfRel.induction with
   | h n ih =>
+      intro hn
       by_cases hp : IsPrime n
       · exact ⟨n, hp, ⟨1, rfl⟩⟩
       · have hnotall : ¬ (∀ d : Nat, d ∣ n → d = 1 ∨ d = n) := by
@@ -51,12 +52,9 @@ theorem primeDivisorProperty_core : PrimeDivisorProperty := by
         obtain ⟨p, hprime, hpd⟩ := ih d hdlt hdgt1
         exact ⟨p, hprime, nat_dvd_trans hpd hdn⟩
 
-/-- K10 discharges the explicit K9 prime-divisor hypothesis. -/
 theorem primeDivisorProperty_proved : PrimeDivisorProperty :=
   primeDivisorProperty_core
 
-/-- With the elementary prime-divisor theorem discharged, common-prime and
-    nontrivial-common-divisor formulations are unconditionally equivalent. -/
 theorem commonPrime_iff_commonDivisor {a b c : Nat} :
     CommonPrime a b c ↔ ∃ d : Nat, CommonDivisor d a b c :=
   commonPrime_iff_commonDivisor_of_primeDivisor primeDivisorProperty_proved
