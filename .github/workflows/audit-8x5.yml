@@ -1,0 +1,100 @@
+name: audit-8x5-beal
+
+on:
+  push:
+    branches: [audit/multistate-proof-refutation-v1]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  certify-8x5:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install pinned Lean
+        uses: leanprover/lean-action@v1
+        with:
+          build: false
+          test: false
+          lint: false
+
+      - name: L1 HEAD_EXATO
+        run: |
+          set -euo pipefail
+          HEAD_NOW="$(git rev-parse HEAD)"
+          test "${#HEAD_NOW}" -eq 40
+          git cat-file -e 5b5aa8e0ea0aef519d236422459975918d38a968^{commit}
+          echo "HEAD_RUNTIME=$HEAD_NOW"
+          echo "SOURCE_HEAD_EXACT=5b5aa8e0ea0aef519d236422459975918d38a968"
+
+      - name: L2 FROZEN_S1 U-REF
+        run: |
+          set -euo pipefail
+          git show 5b5aa8e0ea0aef519d236422459975918d38a968:lean/MCore/K10.lean > /tmp/S1.lean
+          grep -q 'theorem commonPrime_iff_commonDivisor' /tmp/S1.lean
+          echo 'U_REF=ShantiDraconis/m-core-beal@5b5aa8e0ea0aef519d236422459975918d38a968/lean/MCore/K10.lean::commonPrime_iff_commonDivisor'
+
+      - name: L3 ENDPOINT_DEFINITION
+        run: |
+          grep -q 'def BealConjecture : Prop' lean/MCore/BealSpecification.lean
+          lake build MCore.BealSpecification
+
+      - name: L4 COMPRESSION
+        run: |
+          lake env lean lean/MCore/Audit8x5.lean 2>&1 | tee Audit8x5.log
+          grep -q 'beal_iff_deltaStar' lean/MCore/Audit8x5.lean
+
+      - name: L5 internal five-axis audit
+        run: |
+          set -euo pipefail
+          grep -q 'HC := .blocking' lean/MCore/Audit8x5.lean
+          grep -q 'Q := .matched' lean/MCore/Audit8x5.lean
+          grep -q 'S := .matched' lean/MCore/Audit8x5.lean
+          grep -q 'K := .matched' lean/MCore/Audit8x5.lean
+          grep -q 'A := .pending' lean/MCore/Audit8x5.lean
+          echo 'SIGMA_REVIEWED=(BLOCKING,MATCH,MATCH,MATCH,PENDING)'
+
+      - name: L6 RESIDUE_CLASSIFIER
+        run: |
+          set -euo pipefail
+          grep -q '"state": "BLOCKING"' audit/8x5/BEAL_8x5_STATE.json
+          grep -q 'DeltaStar is equivalent to BealConjecture' audit/8x5/BEAL_8x5_STATE.json
+          echo 'RESIDUE=BLOCKING_HC'
+
+      - name: L7 BUILD K0-K10
+        run: |
+          set -euo pipefail
+          for k in 0 1 2 3 4 5 6 7 8 9 10; do
+            lake build "MCore.K$k"
+          done
+          lake clean
+          lake build MCore
+
+      - name: L8 NO-PLACEBO source hygiene
+        run: |
+          set -euo pipefail
+          if grep -R -n -E '(^|[^[:alnum:]_])(sorry|admit)([^[:alnum:]_]|$)' --include='*.lean' lean; then exit 1; else rc=$?; [ "$rc" -eq 1 ] || exit "$rc"; fi
+          if grep -R -n -E '^[[:space:]]*(@\[[^]]*\][[:space:]]*)?(axiom|constant|constants)[[:space:]]' --include='*.lean' lean; then exit 1; else rc=$?; [ "$rc" -eq 1 ] || exit "$rc"; fi
+          printf 'import MCore.Audit8x5\nexample : ¬ Nonempty (MCore.ProofCertificate MCore.bealEndpointNode) := MCore.Audit8x5.no_placebo_endpoint\n' > NoPlacebo8x5.lean
+          lake env lean NoPlacebo8x5.lean
+
+      - name: L8 exact axiom footprint
+        run: |
+          set -euo pipefail
+          printf 'import MCore.Audit8x5\n#print axioms MCore.Audit8x5.beal_iff_deltaStar\n#print axioms MCore.Audit8x5.quantifier_match_iff_deltaStar\n#print axioms MCore.Audit8x5.scaling_match\n#print axioms MCore.Audit8x5.constant_match\n#print axioms MCore.Audit8x5.no_placebo_endpoint\n' > Axiom8x5.lean
+          lake env lean Axiom8x5.lean 2>&1 | tee Axiom8x5.log
+          if grep -E 'sorryAx|Classical\.choice' Axiom8x5.log; then exit 1; fi
+          echo 'A_AXIS=PASS_PENDING_SEAL'
+
+      - name: No triple-closed promotion
+        run: |
+          set -euo pipefail
+          grep -q '"emit_closed_closed_closed": false' audit/8x5/BEAL_8x5_STATE.json
+          echo 'L1-L8 mechanical protocol passed.'
+          echo 'Sigma=(BLOCKING,MATCH,MATCH,MATCH,MATCH-after-seal)'
+          echo 'FECHADO_FECHADO_FECHADO=NO'
