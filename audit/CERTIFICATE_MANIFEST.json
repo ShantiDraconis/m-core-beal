@@ -1,0 +1,15 @@
+{
+  "sha": "c28ac22975049eeb5451f969e00df8b5e2f6e310",
+  "head": "b680d292b40c08f6fa45603745a576239ce5aef7",
+  "runs": [
+    35381412306,
+    35381412411
+  ],
+  "footprint": [
+    "propext",
+    "Quot.sound"
+  ],
+  "classification": "LAST_REAL_CLOSED / K9_K10_CERTIFIED",
+  "theorem": "CommonDivisor -> CommonPrime",
+  "scientific_promotion": "CERTIFIED_INTERNAL"
+}
