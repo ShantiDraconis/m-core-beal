@@ -1,6 +1,9 @@
 name: certify-k10
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - audit/multistate-proof-refutation-v1
 
 jobs:
   build:
@@ -59,13 +62,7 @@ jobs:
           #print axioms injectedChoice
           EOF
           lake env lean /tmp/K10ChoiceContaminated.lean 2>&1 | tee /tmp/k10-negative.log
-
-          # The fixture itself MUST compile; the negative control is semantic,
-          # not a deliberately malformed Lean file.
           grep -q 'Classical.choice' /tmp/k10-negative.log
-
-          # Simulate the exact fail-closed foundation gate: choice contamination
-          # must be rejected. If it is not visible, the negative control fails.
           if ! grep -q 'Classical.choice' /tmp/k10-negative.log; then
             echo "NEGATIVE_CONTROL FAIL - choice contamination escaped detection"
             exit 1
