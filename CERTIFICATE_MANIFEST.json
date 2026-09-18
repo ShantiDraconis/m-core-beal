@@ -1,1 +1,23 @@
-{"checkpoint":"K0","scope":"architecture/boundary kernel","green":false,"requires_ci":true,"scientific_claim":false}
+{
+  "checkpoint": "G3_LITERAL_COLLISION",
+  "scope": "Beal backward dense oracle/without-oracle collision audit",
+  "write_branch": "audit/multistate-proof-refutation-v1",
+  "target_head": "88ca1d0d692255cfb8d23207e3f84a6cf6768b86",
+  "target_head_message": "ci: add Beal backward oracle A-B gate",
+  "k7_frozen": "2263d6a...",
+  "preserve": [
+    "K8",
+    "K9",
+    "K10"
+  ],
+  "closed_model_not_proved_closed": true,
+  "source_catalog_only": true,
+  "no_mathematical_promotion": true,
+  "candidate_delta_star": "forall d : BealData, exists p : Nat, IsPrime p and p|d.a and p|d.b and p|d.c",
+  "candidate_delta_status": "REVIEWED_NOT_YET_BLOCKING",
+  "oracle_alias_final": "REFUTED_AS_INDEPENDENT_PROOF_PATH",
+  "mechanical_build": "REVIEW_PENDING_CI",
+  "axioms_print": "REVIEW_PENDING_CI",
+  "scientific_claim": false,
+  "requires_ci": true
+}
