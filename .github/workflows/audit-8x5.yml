@@ -41,11 +41,14 @@ jobs:
 
       - name: L3 ENDPOINT_DEFINITION
         run: |
+          set -euo pipefail
           grep -q 'def BealConjecture : Prop' lean/MCore/BealSpecification.lean
           lake build MCore.BealSpecification
 
       - name: L4 COMPRESSION
         run: |
+          set -euo pipefail
+          lake build MCore.Audit8x5
           lake env lean lean/MCore/Audit8x5.lean 2>&1 | tee Audit8x5.log
           grep -q 'beal_iff_deltaStar' lean/MCore/Audit8x5.lean
 
