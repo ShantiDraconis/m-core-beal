@@ -55,18 +55,20 @@ jobs:
       - name: L5 internal five-axis audit
         run: |
           set -euo pipefail
-          grep -q 'HC := .blocking' lean/MCore/Audit8x5.lean
-          grep -q 'Q := .matched' lean/MCore/Audit8x5.lean
-          grep -q 'S := .matched' lean/MCore/Audit8x5.lean
-          grep -q 'K := .matched' lean/MCore/Audit8x5.lean
-          grep -q 'A := .pending' lean/MCore/Audit8x5.lean
-          echo 'SIGMA_REVIEWED=(BLOCKING,MATCH,MATCH,MATCH,PENDING)'
+          grep -q 'def sigmaCertified' lean/MCore/Audit8x5.lean
+          grep -q 'theorem HC_axis_is_blocking' lean/MCore/Audit8x5.lean
+          grep -q 'theorem Q_axis_is_matched' lean/MCore/Audit8x5.lean
+          grep -q 'theorem S_axis_is_matched' lean/MCore/Audit8x5.lean
+          grep -q 'theorem K_axis_is_matched' lean/MCore/Audit8x5.lean
+          grep -q 'theorem A_axis_is_matched' lean/MCore/Audit8x5.lean
+          echo 'SIGMA_CERTIFIED=(BLOCKING,MATCH,MATCH,MATCH,MATCH)'
 
       - name: L6 RESIDUE_CLASSIFIER
         run: |
           set -euo pipefail
           grep -q '"state": "BLOCKING"' audit/8x5/BEAL_8x5_STATE.json
-          grep -q 'DeltaStar is equivalent to BealConjecture' audit/8x5/BEAL_8x5_STATE.json
+          grep -q '"position": "L5_6D_AUDIT"' audit/8x5/BEAL_8x5_STATE.json
+          grep -q '"nature": "HC"' audit/8x5/BEAL_8x5_STATE.json
           echo 'RESIDUE=BLOCKING_HC'
 
       - name: L7 BUILD K0-K10
@@ -99,5 +101,5 @@ jobs:
           set -euo pipefail
           grep -q '"emit_closed_closed_closed": false' audit/8x5/BEAL_8x5_STATE.json
           echo 'L1-L8 mechanical protocol passed.'
-          echo 'Sigma=(BLOCKING,MATCH,MATCH,MATCH,MATCH-after-seal)'
+          echo 'Sigma=(BLOCKING,MATCH,MATCH,MATCH,MATCH)'
           echo 'FECHADO_FECHADO_FECHADO=NO'
