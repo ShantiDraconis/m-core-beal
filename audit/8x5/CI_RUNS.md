@@ -8,28 +8,46 @@
 - job: `105701813818`
 - conclusion: `RED_BUILD_GRAPH`
 
-Passed before failure:
+L1-L7 passed. L8 failed because `MCore.Audit8x5` was not imported by the
+library root after `lake clean`. This was a build-graph error, not a
+mathematical residue.
+
+## Run 2 — GREEN
+
+- source audit commit: `14d553250751522a4ce0605a58941251751a7038`
+- workflow: `audit-8x5-beal`
+- run: `35376633156`
+- job: `105702718253`
+- completed: `2026-09-18T17:50:19Z`
+- conclusion: `SUCCESS`
+
+All outer locks passed:
 
 - L1 HEAD_EXATO: GREEN
-- L2 FROZEN_S1 U-REF: GREEN
+- L2 FROZEN_S1: GREEN
 - L3 ENDPOINT_DEFINITION: GREEN
-- L4 semantic source check: source file present; direct Lean call lacked built dependency
-- L5 five-axis audit text contract: GREEN
+- L4 COMPRESSION: GREEN
+- L5 5-axis semantic audit: GREEN
 - L6 RESIDUE_CLASSIFIER: GREEN
-- L7 K0-K10 build + clean MCore build: GREEN
+- L7 K0-K10 + clean MCore build: GREEN
+- L8 NO-PLACEBO + exact axiom footprint: GREEN
 
-Failure:
+Exact theorem footprints:
 
-L8 attempted to import `MCore.Audit8x5` after `lake clean && lake build MCore`,
-but the root `MCore.lean` did not import `MCore.Audit8x5`. Therefore no
-`Audit8x5.olean` existed. The same build-graph issue was visible in L4, where
-a pipeline without `pipefail` masked the direct-Lean error.
+- `beal_iff_deltaStar`: `[propext, Quot.sound]`
+- `quantifier_match_iff_deltaStar`: no axioms
+- `scaling_match`: no axioms
+- `constant_match`: no axioms
+- `no_placebo_endpoint`: no axioms
 
-Classification: `MECHANICAL_RED`, not mathematical residue.
+No `sorryAx`, no `Classical.choice`, no project axiom, no source
+`sorry/admit`.
 
-Repair:
+Certified signature:
 
-- add `import MCore.Audit8x5` to the library root;
-- explicitly build `MCore.Audit8x5` before direct compilation;
-- run L4 under `set -euo pipefail`;
-- rerun the same 8-lock gate without changing Sigma.
+[
+Sigma_Beal=(BLOCKING,MATCH,MATCH,MATCH,MATCH).
+]
+
+Therefore the K / CONSTANT_MATCH axis is CLOSED. The remaining residue is HC.
+No FECHADO-FECHADO-FECHADO certificate is emitted.

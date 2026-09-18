@@ -3,6 +3,7 @@
   "problem": "Beal",
   "write_branch": "audit/multistate-proof-refutation-v1",
   "source_head_exact": "5b5aa8e0ea0aef519d236422459975918d38a968",
+  "audit_green_source": "14d553250751522a4ce0605a58941251751a7038",
   "frozen_s1": {
     "repo": "ShantiDraconis/m-core-beal",
     "sha": "5b5aa8e0ea0aef519d236422459975918d38a968",
@@ -10,26 +11,35 @@
     "theorem": "commonPrime_iff_commonDivisor"
   },
   "locks": {
-    "L1_HEAD_EXATO": "REVIEWED",
-    "L2_FROZEN_S1": "REVIEWED",
-    "L3_ENDPOINT_DEFINITION": "REVIEWED",
-    "L4_COMPRESSION": "REVIEWED",
-    "L5_6D_AUDIT": "REVIEWED",
-    "L6_RESIDUE_CLASSIFIER": "REVIEWED",
-    "L7_BUILD": "PENDING",
-    "L8_NO_PLACEBO": "PENDING"
+    "L1_HEAD_EXATO": "GREEN",
+    "L2_FROZEN_S1": "GREEN",
+    "L3_ENDPOINT_DEFINITION": "GREEN",
+    "L4_COMPRESSION": "GREEN",
+    "L5_6D_AUDIT": "GREEN",
+    "L6_RESIDUE_CLASSIFIER": "GREEN",
+    "L7_BUILD": "GREEN",
+    "L8_NO_PLACEBO": "GREEN"
   },
   "sigma": {
     "HC": "BLOCKING",
     "Q": "MATCH",
     "S": "MATCH",
     "K": "MATCH",
-    "A": "PENDING"
+    "A": "MATCH"
   },
   "residue": {
     "state": "BLOCKING",
+    "position": "L5_6D_AUDIT",
+    "nature": "HC",
     "statement": "BealData -> exists nontrivial common divisor",
-    "reason": "DeltaStar is equivalent to BealConjecture after K10"
+    "reason": "DeltaStar is Lean-proved equivalent to BealConjecture after K10"
+  },
+  "axiom_footprint": {
+    "beal_iff_deltaStar": ["propext", "Quot.sound"],
+    "quantifier_match_iff_deltaStar": [],
+    "scaling_match": [],
+    "constant_match": [],
+    "no_placebo_endpoint": []
   },
   "emit_closed_closed_closed": false
 }
