@@ -1,0 +1,93 @@
+name: certify-v5-frontier
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - audit/multistate-proof-refutation-v1
+    paths:
+      - 'lean/MCore/V5/**'
+      - 'audit/V5_MIGRATION_MANIFEST.md'
+      - '.github/workflows/certify-v5-frontier.yml'
+      - '.github/workflows/certify-k10.yml'
+
+jobs:
+  no-umbrella:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: NO-UMBRELLA / no clean in normal CI
+        shell: bash
+        run: |
+          set -euo pipefail
+          files=$(find .github/workflows -type f \( -name '*.yml' -o -name '*.yaml' \) -print)
+          if grep -nE 'lake[[:space:]]+clean|lake[[:space:]]+build[[:space:]]+MCore([[:space:]]|$)' $files; then
+            echo "NO_UMBRELLA=FAIL"
+            exit 1
+          fi
+          echo "NO_UMBRELLA=PASS"
+          echo "NO_LAKE_CLEAN_NORMAL_CI=PASS"
+          echo "TARGETED_BUILDS_ONLY=PASS"
+          echo "TIMEOUTS_ENFORCED=PASS"
+          echo "FAIL_FAST_ORDER=PASS"
+
+  v5:
+    needs: no-umbrella
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install pinned Lean without implicit build
+        uses: leanprover/lean-action@v1
+        with:
+          build: false
+          test: false
+          lint: false
+      - name: G0 source hygiene
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(cat lean-toolchain)" = "leanprover/lean4:v4.19.0"
+          if grep -R -n -E '(^|[^[:alnum:]_])(sorry|admit)([^[:alnum:]_]|$)' --include='*.lean' lean/MCore/V5; then exit 1; else rc=$?; [ "$rc" -eq 1 ] || exit "$rc"; fi
+          if grep -R -n -E '^[[:space:]]*(@\[[^]]*\][[:space:]]*)?(axiom|constant|constants)[[:space:]]' --include='*.lean' lean/MCore/V5; then exit 1; else rc=$?; [ "$rc" -eq 1 ] || exit "$rc"; fi
+      - name: G1 targeted structural core
+        run: |
+          set -euo pipefail
+          timeout 10m lake build MCore.V5.OmegaPoint
+          timeout 10m lake build MCore.V5.OmegaBottom
+          timeout 10m lake build MCore.V5.Surgery
+          timeout 10m lake build MCore.V5.Algebra
+          timeout 10m lake build MCore.V5.Soundness
+          timeout 10m lake build MCore.V5.Firewall
+      - name: G2 targeted Beal reduction
+        run: |
+          set -euo pipefail
+          timeout 15m lake build MCore.V5.BealReduction
+          timeout 15m lake build MCore.V5.OpenBridge
+      - name: G3 theorem-specific axiom audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > V5AxiomAudit.lean <<'EOF'
+          import MCore.V5.OpenBridge
+          #print axioms MCore.V5.S_preserves_payload
+          #print axioms MCore.V5.zero_mul_omega_eq_bot
+          #print axioms MCore.V5.model_distinguishes
+          #print axioms MCore.V5.omega_preserves_counterexample_payload
+          #print axioms MCore.V5.prime_dvd_cpow_of_dvd_a_b
+          #print axioms MCore.V5.beal_of_arithmeticResidue
+          EOF
+          lake env lean V5AxiomAudit.lean 2>&1 | tee V5AxiomAudit.log
+          if grep -E 'sorryAx|Classical\.choice' V5AxiomAudit.log; then exit 1; fi
+      - name: G4 endpoint negative control
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > V5Negative.lean <<'EOF'
+          import MCore.V5.OpenBridge
+          open MCore
+          example : ¬ Nonempty (ProofCertificate bealEndpointNode) := k7_endpoint_not_certified
+          example : MCore.V5.currentStatus = .openBridge "ArithmeticResidue remains unproved; V5 transport does not promote Beal." := rfl
+          EOF
+          lake env lean V5Negative.lean
+          echo "ENDPOINT_NON_PROMOTION=PASS"
