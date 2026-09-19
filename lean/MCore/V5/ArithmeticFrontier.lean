@@ -8,13 +8,11 @@ namespace MCore.V5
 def ArithmeticResidue : Prop :=
   ∀ d : MCore.BealData, MCore.BealCounterexample d → False
 
-theorem beal_of_arithmetic_residue (h : ArithmeticResidue) :
-    MCore.BealConjecture := by
-  intro d
-  by_contra hn
-  exact h d hn
-
-/-- Dependency marker only: V5 does not inhabit this proposition. -/
+/-- Dependency marker only. V5 deliberately provides no inhabitant of this
+    proposition and therefore makes no FINAL_PROOF promotion. -/
 def FinalProofRequires : Prop := ArithmeticResidue
+
+theorem finalProofRequires_is_residue :
+    FinalProofRequires = ArithmeticResidue := rfl
 
 end MCore.V5
