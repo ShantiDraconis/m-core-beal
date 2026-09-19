@@ -1,0 +1,7 @@
+{
+  "schema": "m-core-beal.v5.certificate.v1",
+  "branch": "audit/multistate-proof-refutation-v1",
+  "required_fields": ["commit_sha","target","build_result","axiom_audit","incomplete_proof_audit","circularity_audit","negative_control","mathematical_status"],
+  "allowed_mathematical_status": ["CERTIFIED","OPEN_BRIDGE","REFUTED","EXTERNAL"],
+  "promotion_rule": "CI_GREEN_DOES_NOT_IMPLY_MATHEMATICAL_CLOSED"
+}
