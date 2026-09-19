@@ -62,5 +62,13 @@ jobs:
           if grep -F 'sorryAx' BackwardOracle.log BackwardWithout.log; then exit 1; fi
           grep -F "'MCore.BackwardAudit.hypothetical_common_prime' does not depend on any axioms" BackwardOracle.log
           grep -F "'MCore.BackwardAudit.witness_contract_closes_beal' does not depend on any axioms" BackwardWithout.log
+      - name: G5b Beal witness kernel
+        run: |
+          set -euo pipefail
+          lake build MCore.BackwardAudit.WitnessKernel
+          lake env lean lean/MCore/BackwardAudit/WitnessKernel.lean 2>&1 | tee WitnessKernel.log
+          if grep -F 'sorryAx' WitnessKernel.log; then exit 1; fi
+          grep -F "MCore.BackwardAudit.beal_constructor_iff_contract" WitnessKernel.log
+          grep -F "MCore.BackwardAudit.beal_witness_constructor_still_open" WitnessKernel.log
       - name: G6 clean reproduction
         run: lake clean && timeout 20m lake build MCore
