@@ -1,0 +1,72 @@
+name: certify-v5-structural
+on:
+  workflow_dispatch:
+  push:
+    branches: [audit/multistate-proof-refutation-v1]
+    paths:
+      - 'lean/MCore/V5/**'
+      - 'audit/V5_*'
+      - '.github/workflows/certify-v5-structural.yml'
+
+jobs:
+  static:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: V5 incomplete-proof scan
+        shell: bash
+        run: |
+          set -euo pipefail
+          ! grep -R -n -E '\b(sorry|admit)\b' lean/MCore/V5
+          echo "INCOMPLETE_PROOF_SCAN=PASS"
+
+  structural:
+    needs: static
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: leanprover/lean-action@v1
+        with:
+          build: false
+          test: false
+          lint: false
+      - name: Targeted V5 builds only
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 10m lake build MCore.V5.Surgery
+          timeout 10m lake build MCore.V5.Firewall
+          timeout 10m lake build MCore.V5.BealPayload
+          timeout 10m lake build MCore.V5.ArithmeticFrontier
+      - name: Axiom audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat >/tmp/V5AxiomAudit.lean <<'EOF'
+          import MCore.V5.ArithmeticFrontier
+          #print axioms MCore.V5.S_preserves_payload
+          #print axioms MCore.V5.counterexample_payload_preserved
+          #print axioms MCore.V5.beal_of_arithmetic_residue
+          EOF
+          lake env lean /tmp/V5AxiomAudit.lean 2>&1 | tee /tmp/v5-axioms.log
+          ! grep -q 'sorryAx' /tmp/v5-axioms.log
+      - name: Negative control - residue must remain uninhabited
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat >/tmp/V5Negative.lean <<'EOF'
+          import MCore.V5.ArithmeticFrontier
+          example : MCore.V5.ArithmeticResidue := by
+            intro d h
+            exact h (by
+              fail_if_success exact Classical.choice (show Nonempty (MCore.CommonPrime d.a d.b d.c) from by infer_instance)
+              contradiction)
+          EOF
+          if lake env lean /tmp/V5Negative.lean >/tmp/v5-negative.log 2>&1; then
+            echo "NEGATIVE_CONTROL=FAIL"
+            cat /tmp/v5-negative.log
+            exit 1
+          fi
+          echo "NEGATIVE_CONTROL=PASS"
