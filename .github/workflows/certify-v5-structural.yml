@@ -48,7 +48,7 @@ jobs:
           import MCore.V5.ArithmeticFrontier
           #print axioms MCore.V5.S_preserves_payload
           #print axioms MCore.V5.counterexample_payload_preserved
-          #print axioms MCore.V5.beal_of_arithmetic_residue
+          #print axioms MCore.V5.finalProofRequires_is_residue
           EOF
           lake env lean /tmp/V5AxiomAudit.lean 2>&1 | tee /tmp/v5-axioms.log
           ! grep -q 'sorryAx' /tmp/v5-axioms.log
