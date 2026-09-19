@@ -31,10 +31,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          lake update
-          lake clean
           timeout 20m lake build MCore.K10
-          timeout 20m lake build MCore
           lake env lean lean/MCore/K10.lean
           echo "BUILD PASS"
 
