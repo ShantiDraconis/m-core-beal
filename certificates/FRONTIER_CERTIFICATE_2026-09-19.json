@@ -1,0 +1,18 @@
+{
+  "schema": "mcore.frontier.certificate.v1",
+  "problem": "Beal",
+  "certified_source_sha": "ccf054d669b269b09f3b65f840ac2745daf4e821",
+  "workflow_run": 35432912618,
+  "workflow_job": 105870537118,
+  "conclusion": "SUCCESS",
+  "certified_scope": "logical compression of Beal closure to BealWitnessConstructor",
+  "certified_theorems": [
+    "MCore.BackwardAudit.beal_constructor_iff_contract",
+    "MCore.BackwardAudit.beal_constructor_closes",
+    "MCore.BackwardAudit.beal_witness_constructor_still_open"
+  ],
+  "formal_status": "STRUCTURAL_CLOSURE_CERTIFIED",
+  "mathematical_endpoint_status": "OPEN",
+  "remaining_frontier": "construct a common-prime witness for every admissible Beal datum",
+  "no_mathematical_promotion": true
+}
