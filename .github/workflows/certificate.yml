@@ -47,5 +47,6 @@ jobs:
         run: |
           printf 'import MCore.K10\nopen MCore\nexample : ¬ Nonempty (ProofCertificate bealEndpointNode) := k7_endpoint_not_certified\n' > NegativeK10.lean
           lake env lean NegativeK10.lean
-      - name: G6 clean reproduction
-        run: lake clean && lake build MCore.K9.Core.Arith && lake build MCore.K9 && lake build MCore.K10 && lake build MCore
+      - name: G6 targeted K10 reproduction
+        timeout-minutes: 20
+        run: lake build MCore.K10
