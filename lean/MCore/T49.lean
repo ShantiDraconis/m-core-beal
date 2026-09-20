@@ -60,13 +60,22 @@ theorem T49_all_four_beal_equation_is_flt4
   rcases h4 with ⟨rfl, rfl, rfl⟩
   exact heq
 
+/-- Local FLT contract, kept branch-independent from sibling T47. -/
+def T49FLTAt (n : Nat) : Prop :=
+  ∀ a b c : Nat,
+    0 < a →
+    0 < b →
+    0 < c →
+    a ^ n + b ^ n = c ^ n →
+    False
+
 /-- A certified FLT(4) theorem eliminates the all-four Beal branch. -/
 theorem T49_flt4_eliminates_all_four
     {a b c x y z : Nat}
     (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
     (h4 : T49AllFour x y z)
     (heq : a ^ x + b ^ y = c ^ z)
-    (hFLT4 : T47FLTAt 4) :
+    (hFLT4 : T49FLTAt 4) :
     False := by
   exact hFLT4 a b c ha hb hc
     (T49_all_four_beal_equation_is_flt4 h4 heq)
