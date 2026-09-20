@@ -1,4 +1,4 @@
-name = "m-core-beal"
+name = "m_core_beal"
 version = "0.1.0"
 defaultTargets = ["MCore"]
 
