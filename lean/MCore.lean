@@ -19,6 +19,7 @@ import MCore.T7
 import MCore.T8
 import MCore.T9
 import MCore.T10
+import MCore.T11
 import MCore.Frontier.K3Gaps
 import MCore.AttackDAG.K3AlgebraAttacks
 import MCore.Audit
