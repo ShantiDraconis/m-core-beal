@@ -1,46 +1,39 @@
-import Init.Data.Nat.Coprime
+import Init.Data.Nat.Gcd
 import MCore.T26
 
 namespace MCore
 
-/-- For the repository-local elementary prime predicate, failure to divide n
-    forces coprimality with n. -/
-theorem T27_prime_coprime_of_not_dvd
-    {p n : Nat} (hp : IsPrime p) (hnd : ¬ p ∣ n) :
-    Nat.Coprime p n := by
-  rw [Nat.coprime_iff_gcd_eq_one]
-  have hg : Nat.gcd p n ∣ p := Nat.gcd_dvd_left p n
-  rcases hp.2 (Nat.gcd p n) hg with h1 | hpEq
-  · exact h1
-  · exfalso
-    apply hnd
-    rw [← hpEq]
-    exact Nat.gcd_dvd_right p n
-
-/-- Euclid's lemma for the repository-local prime predicate. -/
+/-- Euclid's lemma for the repository-local elementary prime predicate,
+    proved using the factor decomposition theorem Nat.dvd_mul available in
+    Lean 4.19 core. -/
 theorem T27_prime_dvd_mul
     {p m n : Nat} (hp : IsPrime p) (h : p ∣ m * n) :
     p ∣ m ∨ p ∣ n := by
-  by_cases hm : p ∣ m
-  · exact Or.inl hm
+  rcases (Nat.dvd_mul.mp h) with ⟨k1, k2, hk1m, hk2n, hkprod⟩
+  have hk1p : k1 ∣ p := ⟨k2, hkprod.symm⟩
+  rcases hp.2 k1 hk1p with hk1 | hk1
   · right
-    have hcop : Nat.Coprime p m :=
-      T27_prime_coprime_of_not_dvd hp hm
-    exact Nat.Coprime.dvd_of_dvd_mul_left hcop h
+    have hk2p : k2 = p := by
+      simpa [hk1] using hkprod
+    rw [← hk2p]
+    exact hk2n
+  · left
+    rw [← hk1]
+    exact hk1m
 
 /-- A local prime dividing a natural power already divides the base. -/
 theorem T27_prime_dvd_pow
     {p a n : Nat} (hp : IsPrime p) (h : p ∣ a ^ n) :
     p ∣ a := by
-  by_cases ha : p ∣ a
-  · exact ha
-  · have hcop : Nat.Coprime p a :=
-      T27_prime_coprime_of_not_dvd hp ha
-    have hpowcop : Nat.Coprime p (a ^ n) :=
-      hcop.pow_right n
-    have hp1 : p = 1 :=
-      hpowcop.eq_one_of_dvd h
-    exact False.elim ((Nat.ne_of_gt hp.1) hp1)
+  induction n with
+  | zero =>
+      have hp1 : p = 1 := Nat.eq_one_of_dvd_one (by simpa using h)
+      exact False.elim ((Nat.ne_of_gt hp.1) hp1)
+  | succ n ih =>
+      rw [Nat.pow_succ] at h
+      rcases T27_prime_dvd_mul hp h with hpow | ha
+      · exact ih hpow
+      · exact ha
 
 /-- The only local prime divisor of the fixed factor 16 is 2. -/
 theorem T27_prime_dvd_sixteen_eq_two
@@ -150,7 +143,6 @@ theorem T27_beal_iff_odd_prime_support_frontier :
     T27FreyOddPrimeSupportScientificFrontier
   exact not_congr T27_candidate_iff_odd_prime_support
 
-#print axioms MCore.T27_prime_coprime_of_not_dvd
 #print axioms MCore.T27_prime_dvd_mul
 #print axioms MCore.T27_prime_dvd_pow
 #print axioms MCore.T27_prime_dvd_sixteen_eq_two
