@@ -12,6 +12,20 @@ jobs:
           build: false
           test: false
           lint: false
+          use-mathlib-cache: false
+      - name: Fetch pinned Mathlib cache with retry
+        run: |
+          set -euo pipefail
+          ok=0
+          for attempt in 1 2 3; do
+            if lake exe cache get; then
+              ok=1
+              break
+            fi
+            echo "mathlib cache attempt $attempt failed; retrying"
+            sleep 5
+          done
+          test "$ok" = 1
       - name: G0 toolchain and fail-closed source hygiene
         run: |
           set -euo pipefail
@@ -66,5 +80,4 @@ jobs:
         run: |
           set -euo pipefail
           lake clean
-          lake exe cache get
           timeout 45m lake build MCore
