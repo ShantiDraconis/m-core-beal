@@ -21,47 +21,43 @@ theorem T13_odd_mod_four
   | isTrue hk =>
       rcases hk with ⟨m, hkm⟩
       left
-      rw [hak, hkm]
-      simp [Nat.mul_assoc, Nat.add_mod, Nat.mul_mod]
+      have hform : 2 * (2 * m) + 1 = m * 4 + 1 := by
+        simp [Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm]
+      rw [hak, hkm, hform]
+      exact Nat.mul_add_mod_of_lt (by decide)
   | isFalse hk =>
       have hko : T12Odd k := (T12_not_even_iff_odd k).mp hk
       rcases T13_odd_representation hko with ⟨m, hkm⟩
       right
-      rw [hak, hkm]
-      simp [Nat.mul_assoc, Nat.add_mod, Nat.mul_mod]
+      have hform : 2 * (2 * m + 1) + 1 = m * 4 + 3 := by
+        simp [Nat.mul_add, Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm, Nat.add_assoc]
+      rw [hak, hkm, hform]
+      exact Nat.mul_add_mod_of_lt (by decide)
 
 theorem T13_odd_fourth_mod_four
     {a : Nat} (ha : T12Odd a) :
     a ^ 4 % 4 = 1 := by
   rcases T13_odd_mod_four ha with h1 | h3
-  · calc
-      a ^ 4 % 4 = (((a % 4) * (a % 4)) % 4 *
-          ((a % 4) * (a % 4)) % 4) % 4 := by
-            simp [Nat.pow_succ, Nat.mul_mod, Nat.mul_assoc]
-      _ = 1 := by rw [h1]; decide
-  · calc
-      a ^ 4 % 4 = (((a % 4) * (a % 4)) % 4 *
-          ((a % 4) * (a % 4)) % 4) % 4 := by
-            simp [Nat.pow_succ, Nat.mul_mod, Nat.mul_assoc]
-      _ = 1 := by rw [h3]; decide
+  · simp [Nat.pow_succ, Nat.mul_mod, h1]
+  · simp [Nat.pow_succ, Nat.mul_mod, h3]
 
 theorem T13_even_pow_mod_four
     {c z : Nat} (hc : T12Even c) (hz : 2 < z) :
     c ^ z % 4 = 0 := by
   rcases hc with ⟨k, hck⟩
+  rw [hck]
   cases z with
   | zero =>
       exact False.elim (Nat.not_lt_zero 2 hz)
   | succ z =>
       cases z with
       | zero =>
-          exact False.elim (Nat.lt_irrefl 2 hz)
+          exact False.elim ((Nat.not_lt_of_ge (by decide : 1 ≤ 2)) hz)
       | succ z =>
-          have hdiv : 4 ∣ (2 * k) ^ Nat.succ (Nat.succ z) := by
-            refine ⟨((2 * k) ^ z) * k * k, ?_⟩
-            simp [Nat.pow_succ, Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm]
-          rw [hck]
-          exact Nat.mod_eq_zero_of_dvd hdiv
+          apply Nat.mod_eq_zero_of_dvd
+          refine ⟨((2 * k) ^ z) * k * k, ?_⟩
+          rw [Nat.pow_succ, Nat.pow_succ]
+          simp [Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm]
 
 /-- If C is the unique even base, the two left exponents cannot both be 4. -/
 theorem T13_c_even_excludes_double_four
@@ -95,7 +91,7 @@ theorem T13_c_even_excludes_double_four
   have hleft : (a ^ 4 + b ^ 4) % 4 = 2 := by
     rw [Nat.add_mod, ha4, hb4]
   rw [hleft, hc4] at hmod
-  exact Nat.two_ne_zero hmod
+  exact (by decide : (2 : Nat) ≠ 0) hmod
 
 /-- T13 residual adds the first nontrivial exponent/parity exclusion. -/
 def T13ModularReducedCandidate : Prop :=
