@@ -43,7 +43,9 @@ theorem T14_c_even_left_four_forces_right_three
               | zero =>
                   rfl
               | succ r =>
-                  simp at hlt
+                  have hge : 4 ≤ Nat.succ (Nat.succ (Nat.succ (Nat.succ r))) := by
+                    exact Nat.succ_le_succ (Nat.succ_le_succ (Nat.succ_le_succ (Nat.succ_le_succ (Nat.zero_le r))))
+                  exact False.elim ((Nat.not_le_of_gt hlt) hge)
 
 /-- Symmetric residue restriction when the second left exponent is four. -/
 theorem T14_c_even_right_four_forces_left_three
@@ -84,7 +86,9 @@ theorem T14_c_even_right_four_forces_left_three
               | zero =>
                   rfl
               | succ r =>
-                  simp at hlt
+                  have hge : 4 ≤ Nat.succ (Nat.succ (Nat.succ (Nat.succ r))) := by
+                    exact Nat.succ_le_succ (Nat.succ_le_succ (Nat.succ_le_succ (Nat.succ_le_succ (Nat.zero_le r))))
+                  exact False.elim ((Nat.not_le_of_gt hlt) hge)
 
 def T14CResidueConstraint (a b c x y z : Nat) : Prop :=
   T12Even c →
