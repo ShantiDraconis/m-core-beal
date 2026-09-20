@@ -44,6 +44,13 @@ import MCore.T32
 import MCore.T33
 import MCore.T34
 import MCore.T35
+import MCore.T36
+import MCore.T37
+import MCore.T38
+import MCore.T39
+import MCore.T40
+import MCore.T41
+import MCore.T42
 import MCore.Frontier.K3Gaps
 import MCore.AttackDAG.K3AlgebraAttacks
 import MCore.Audit
