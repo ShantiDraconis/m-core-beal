@@ -65,7 +65,7 @@ theorem T10_candidate_to_reduced :
     hrx, hry, hrz, ?_, T9_powered_primitive_unconditional s.primitive⟩
   calc
     (s.a ^ kx) ^ rx + (s.b ^ ky) ^ ry
-        = s.a ^ s.x + s.b ^ s.y := congrArg₂ (fun u v : Nat => u + v) hax hby
+        = s.a ^ s.x + s.b ^ s.y := by rw [hax, hby]
     _ = s.c ^ s.z := s.equation
     _ = (s.c ^ kz) ^ rz := hcz.symm
 
