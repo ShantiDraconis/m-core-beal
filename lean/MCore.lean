@@ -50,6 +50,7 @@ import MCore.T36B
 import MCore.T36C
 import MCore.T36D
 import MCore.T36E1
+import MCore.T36E2
 import MCore.T37
 import MCore.T38
 import MCore.T39
