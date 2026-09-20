@@ -22,31 +22,26 @@ theorem T10_pow_mul_outer (a k r : Nat) :
   | succ r ih =>
       rw [Nat.pow_succ, ih, Nat.mul_succ, T10_pow_add]
 
-/-- A primitive Beal candidate in reduced exponent signature: every outer
-    exponent is either 4 or a prime greater than 2. -/
-structure T10ReducedPrimitiveSolution where
-  a : Nat
-  b : Nat
-  c : Nat
-  x : Nat
-  y : Nat
-  z : Nat
-  a_pos : 0 < a
-  b_pos : 0 < b
-  c_pos : 0 < c
-  x_reduced : T7ReducedExponent x
-  y_reduced : T7ReducedExponent y
-  z_reduced : T7ReducedExponent z
-  equation : a ^ x + b ^ y = c ^ z
-  primitive : ¬ ∃ q : Nat, CommonDivisor q a b c
+/-- Purely propositional reduced candidate. Keeping this in Prop permits the
+    constructive T7 existential witnesses to be consumed without choice. -/
+def T10ReducedCandidate : Prop :=
+  ∃ a b c x y z : Nat,
+    0 < a ∧
+    0 < b ∧
+    0 < c ∧
+    T7ReducedExponent x ∧
+    T7ReducedExponent y ∧
+    T7ReducedExponent z ∧
+    a ^ x + b ^ y = c ^ z ∧
+    (¬ ∃ q : Nat, CommonDivisor q a b c)
 
 def T10ReducedScientificFrontier : Prop :=
-  ¬ Nonempty T10ReducedPrimitiveSolution
+  ¬ T10ReducedCandidate
 
-/-- Every T6 primitive candidate can be normalized to a T10 candidate while
-    preserving its equation and primitiveness. -/
-theorem T10_reduce_primitive_solution
-    (s : T6PrimitiveSolution) : T10ReducedPrimitiveSolution := by
+/-- Every T6 primitive candidate has a reduced-signature representative. -/
+theorem T10_candidate_to_reduced :
+    Nonempty T6PrimitiveSolution → T10ReducedCandidate := by
+  rintro ⟨s⟩
   rcases T7_exponent_reduction s.x_gt_two with ⟨rx, kx, hx, hrx⟩
   rcases T7_exponent_reduction s.y_gt_two with ⟨ry, ky, hy, hry⟩
   rcases T7_exponent_reduction s.z_gt_two with ⟨rz, kz, hz, hrz⟩
@@ -65,53 +60,41 @@ theorem T10_reduce_primitive_solution
       (s.c ^ kz) ^ rz = s.c ^ (kz * rz) := T10_pow_mul_outer s.c kz rz
       _ = s.c ^ (rz * kz) := by rw [Nat.mul_comm kz rz]
       _ = s.c ^ s.z := (congrArg (fun n : Nat => s.c ^ n) hz).symm
-  refine
-    { a := s.a ^ kx
-      b := s.b ^ ky
-      c := s.c ^ kz
-      x := rx
-      y := ry
-      z := rz
-      a_pos := Nat.pow_pos s.a_pos
-      b_pos := Nat.pow_pos s.b_pos
-      c_pos := Nat.pow_pos s.c_pos
-      x_reduced := hrx
-      y_reduced := hry
-      z_reduced := hrz
-      equation := ?_
-      primitive := T9_powered_primitive_unconditional s.primitive }
+  refine ⟨s.a ^ kx, s.b ^ ky, s.c ^ kz, rx, ry, rz,
+    Nat.pow_pos s.a_pos, Nat.pow_pos s.b_pos, Nat.pow_pos s.c_pos,
+    hrx, hry, hrz, ?_, T9_powered_primitive_unconditional s.primitive⟩
   calc
     (s.a ^ kx) ^ rx + (s.b ^ ky) ^ ry
         = s.a ^ s.x + s.b ^ s.y := congrArg₂ (fun u v : Nat => u + v) hax hby
     _ = s.c ^ s.z := s.equation
     _ = (s.c ^ kz) ^ rz := hcz.symm
 
-/-- A reduced candidate is already a T6 primitive candidate. -/
-def T10_to_T6 (s : T10ReducedPrimitiveSolution) : T6PrimitiveSolution :=
-  { a := s.a
-    b := s.b
-    c := s.c
-    x := s.x
-    y := s.y
-    z := s.z
-    a_pos := s.a_pos
-    b_pos := s.b_pos
-    c_pos := s.c_pos
-    x_gt_two := s.x_reduced.1
-    y_gt_two := s.y_reduced.1
-    z_gt_two := s.z_reduced.1
-    equation := s.equation
-    primitive := s.primitive }
+/-- Every reduced-signature candidate is already a T6 primitive candidate. -/
+theorem T10_reduced_to_candidate :
+    T10ReducedCandidate → Nonempty T6PrimitiveSolution := by
+  rintro ⟨a, b, c, x, y, z, ha, hb, hc, hx, hy, hz, heq, hprim⟩
+  exact ⟨{
+    a := a
+    b := b
+    c := c
+    x := x
+    y := y
+    z := z
+    a_pos := ha
+    b_pos := hb
+    c_pos := hc
+    x_gt_two := hx.1
+    y_gt_two := hy.1
+    z_gt_two := hz.1
+    equation := heq
+    primitive := hprim
+  }⟩
 
-/-- T10 is an exact normalization, not a weakening: primitive candidates
-    exist iff reduced-signature primitive candidates exist. -/
+/-- Exact normalization: primitive candidates exist iff reduced-signature
+    primitive candidates exist. -/
 theorem T10_candidate_iff_reduced :
-    Nonempty T6PrimitiveSolution ↔ Nonempty T10ReducedPrimitiveSolution := by
-  constructor
-  · rintro ⟨s⟩
-    exact ⟨T10_reduce_primitive_solution s⟩
-  · rintro ⟨s⟩
-    exact ⟨T10_to_T6 s⟩
+    Nonempty T6PrimitiveSolution ↔ T10ReducedCandidate :=
+  ⟨T10_candidate_to_reduced, T10_reduced_to_candidate⟩
 
 theorem T10_frontier_iff_reduced :
     T6ScientificFrontier ↔ T10ReducedScientificFrontier := by
@@ -124,7 +107,7 @@ theorem T10_beal_iff_reduced_frontier :
 
 #print axioms MCore.T10_pow_add
 #print axioms MCore.T10_pow_mul_outer
-#print axioms MCore.T10_reduce_primitive_solution
+#print axioms MCore.T10_candidate_to_reduced
 #print axioms MCore.T10_candidate_iff_reduced
 #print axioms MCore.T10_beal_iff_reduced_frontier
 
