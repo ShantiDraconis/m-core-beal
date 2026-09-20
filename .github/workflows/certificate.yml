@@ -63,4 +63,8 @@ jobs:
           grep -F "'MCore.BackwardAudit.hypothetical_common_prime' does not depend on any axioms" BackwardOracle.log
           grep -F "'MCore.BackwardAudit.witness_contract_closes_beal' does not depend on any axioms" BackwardWithout.log
       - name: G6 clean reproduction
-        run: lake clean && timeout 45m lake build MCore
+        run: |
+          set -euo pipefail
+          lake clean
+          lake exe cache get
+          timeout 45m lake build MCore
