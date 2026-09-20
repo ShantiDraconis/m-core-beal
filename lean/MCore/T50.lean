@@ -9,10 +9,10 @@ T50 — CERTIFIED MATHLIB FLT(3)/FLT(4) BRIDGE
 
 This module is intentionally on a lateral branch with Mathlib v4.19.0 pinned.
 It converts Mathlib's kernel-checked FLT(3) and FLT(4) theorems into the
-internal T47FLTAt contracts used by the Beal signature analysis.
+internal T49FLTAt contracts used by the Beal signature analysis.
 -/
 
-theorem T50_mathlib_flt3 : T47FLTAt 3 := by
+theorem T50_mathlib_flt3 : T49FLTAt 3 := by
   intro a b c ha hb hc heq
   exact (fermatLastTheoremThree
     a b c
@@ -20,7 +20,7 @@ theorem T50_mathlib_flt3 : T47FLTAt 3 := by
     (Nat.ne_of_gt hb)
     (Nat.ne_of_gt hc)) heq
 
-theorem T50_mathlib_flt4 : T47FLTAt 4 := by
+theorem T50_mathlib_flt4 : T49FLTAt 4 := by
   intro a b c ha hb hc heq
   exact (fermatLastTheoremFour
     a b c
@@ -53,7 +53,7 @@ def T50SmallCertifiedExponent (n : Nat) : Prop :=
 theorem T50_small_certified_exponent_has_flt
     {n : Nat}
     (h : T50SmallCertifiedExponent n) :
-    T47FLTAt n := by
+    T49FLTAt n := by
   rcases h with rfl | rfl
   · exact T50_mathlib_flt3
   · exact T50_mathlib_flt4
