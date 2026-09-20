@@ -9,6 +9,10 @@ def T12Even (n : Nat) : Prop :=
 def T12Odd (n : Nat) : Prop :=
   n % 2 = 1
 
+def T12EvenDecidable (n : Nat) : Decidable (T12Even n) := by
+  unfold T12Even
+  exact Nat.decidable_dvd 2 n
+
 theorem T12_not_even_iff_odd (n : Nat) :
     (¬ T12Even n) ↔ T12Odd n := by
   unfold T12Even T12Odd
@@ -38,15 +42,15 @@ theorem T12_some_base_even
     {a b c x y z : Nat}
     (heq : a ^ x + b ^ y = c ^ z) :
     T12Even a ∨ T12Even b ∨ T12Even c := by
-  match (inferInstance : Decidable (T12Even a)) with
+  match T12EvenDecidable a with
   | isTrue ha =>
       exact Or.inl ha
   | isFalse ha =>
-      match (inferInstance : Decidable (T12Even b)) with
+      match T12EvenDecidable b with
       | isTrue hb =>
           exact Or.inr (Or.inl hb)
       | isFalse hb =>
-          match (inferInstance : Decidable (T12Even c)) with
+          match T12EvenDecidable c with
           | isTrue hc =>
               exact Or.inr (Or.inr hc)
           | isFalse hc =>
