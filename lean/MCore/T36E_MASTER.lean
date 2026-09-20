@@ -109,6 +109,9 @@ theorem T36EM_local_lt_one_iff_dvd
   rw [IsScalarTower.algebraMap_apply
     ℤ (T36EMAtPrime p hp) (FractionRing ℤ)]
   rw [IsDedekindDomain.HeightOneSpectrum.valuation_lt_one_iff_mem]
+  change
+    (algebraMap ℤ (T36EMAtPrime p hp)) (n : ℤ) ∈
+        IsLocalRing.maximalIdeal (T36EMAtPrime p hp) ↔ p ∣ n
   rw [IsLocalization.AtPrime.to_map_mem_maximal_iff
     (T36EMAtPrime p hp) (T36EMHeightOne p hp).asIdeal]
   change (n : ℤ) ∈ T36EMPrimeIdeal p ↔ p ∣ n
@@ -127,6 +130,9 @@ theorem T36EM_local_eq_one_iff_not_dvd
   rw [IsScalarTower.algebraMap_apply
     ℤ (T36EMAtPrime p hp) (FractionRing ℤ)]
   rw [IsDedekindDomain.HeightOneSpectrum.valuation_eq_one_iff_notMem]
+  change
+    (algebraMap ℤ (T36EMAtPrime p hp)) (n : ℤ) ∉
+        IsLocalRing.maximalIdeal (T36EMAtPrime p hp) ↔ ¬ p ∣ n
   rw [IsLocalization.AtPrime.to_map_mem_maximal_iff
     (T36EMAtPrime p hp) (T36EMHeightOne p hp).asIdeal]
   change (n : ℤ) ∉ T36EMPrimeIdeal p ↔ ¬ p ∣ n
@@ -281,7 +287,8 @@ theorem T36EM_isMinimal_of_integral_c4_unit
   have huInv_le :
       valuation K (IsDiscreteValuationRing.maximalIdeal R)
           ((C.u⁻¹ : K)) ≤ 1 := by
-    exact (pow_le_one_iff (by decide : (4 : Nat) ≠ 0)).mp hc4C_le
+    simpa only [Units.val_inv_eq_inv_val] using
+      (pow_le_one_iff (by decide : (4 : Nat) ≠ 0)).mp hc4C_le
   have huInv12_le :
       (valuation K (IsDiscreteValuationRing.maximalIdeal R)
           ((C.u⁻¹ : K))) ^ 12 ≤ 1 := by
@@ -289,7 +296,7 @@ theorem T36EM_isMinimal_of_integral_c4_unit
   rw [WeierstrassCurve.variableChange_Δ]
   simp only [map_mul, map_pow]
   simpa using
-    (mul_le_mul_right'
+    (mul_le_mul_left
       huInv12_le
       (valuation K (IsDiscreteValuationRing.maximalIdeal R) W.Δ))
 
@@ -310,8 +317,10 @@ theorem T36EM_local_baseChange_eq
       WeierstrassCurve.baseChange,
       WeierstrassCurve.map_a₁, WeierstrassCurve.map_a₂,
       WeierstrassCurve.map_a₃, WeierstrassCurve.map_a₄,
-      WeierstrassCurve.map_a₆,
-      IsScalarTower.algebraMap_apply]
+      WeierstrassCurve.map_a₆] <;>
+    exact
+      (IsScalarTower.algebraMap_apply
+        ℤ (T36EMAtPrime p hp) (FractionRing ℤ) _).symm
 
 /-- The exact fraction-field Frey equation is integral over Z_(p). -/
 theorem T36EM_frey_isIntegral
