@@ -1,0 +1,53 @@
+name: t36e-mathlib-master
+on:
+  push:
+    branches: [attack/t36e-mathlib-master]
+  pull_request:
+    paths:
+      - 'lean/MCore/T36E_TEMPLATE.lean'
+      - 't36e_mathlib/**'
+      - '.github/workflows/t36e-mathlib.yml'
+
+jobs:
+  t36e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pinned T36E Lean/Mathlib environment
+        uses: leanprover/lean-action@v1
+        with:
+          lake-package-directory: t36e_mathlib
+          build: false
+          test: false
+          lint: false
+          use-mathlib-cache: true
+
+      - name: G0 exact pins and fail-closed source hygiene
+        run: |
+          set -euo pipefail
+          test "$(cat t36e_mathlib/lean-toolchain)" = "leanprover/lean4:v4.35.0-rc2"
+          grep -F 'rev = "6ebcdee77a1b7bf10f211d4c993d85fbb19644bc"' t36e_mathlib/lakefile.toml
+          test "$(git -C t36e_mathlib/.lake/packages/mathlib rev-parse HEAD)" = "6ebcdee77a1b7bf10f211d4c993d85fbb19644bc"
+          if grep -n -E '(^|[^[:alnum:]_])(sorry|admit)([^[:alnum:]_]|$)' lean/MCore/T36E_TEMPLATE.lean; then exit 1; else rc=$?; [ "$rc" -eq 1 ] || exit "$rc"; fi
+          if grep -n -E '^[[:space:]]*(@\[[^]]*\][[:space:]]*)?(axiom|constant|constants)[[:space:]]' lean/MCore/T36E_TEMPLATE.lean; then exit 1; else rc=$?; [ "$rc" -eq 1 ] || exit "$rc"; fi
+
+      - name: G1 compile unchanged T36E template against Mathlib master pin
+        working-directory: t36e_mathlib
+        run: |
+          set -euo pipefail
+          lake env lean ../lean/MCore/T36E_TEMPLATE.lean 2>&1 | tee T36E_TEMPLATE.log
+          if grep -F 'sorryAx' T36E_TEMPLATE.log; then exit 1; fi
+
+      - name: G2 verify template blob identity
+        run: |
+          set -euo pipefail
+          test "$(git hash-object lean/MCore/T36E_TEMPLATE.lean)" = "b13056cdc5a2f86e38d73638bad38e5da5863e4c"
+          echo "T36E_TEMPLATE_BLOB=IDENTICAL"
+
+      - name: G3 endpoint remains non-promoted
+        run: |
+          set -euo pipefail
+          ! grep -F 'import MCore.T36E_TEMPLATE' lean/MCore.lean
+          echo "T36E_TEMPLATE_NOT_IMPORTED=PASS"
