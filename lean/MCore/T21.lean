@@ -22,7 +22,8 @@ theorem T21_diff_factorization
         b ^ n * b + (c - b) * (c ^ n + b * T21DiffQuot c b n)
             = b * (b ^ n + (c - b) * T21DiffQuot c b n) + (c - b) * c ^ n := by
                 simp [Nat.left_distrib, Nat.right_distrib, Nat.mul_assoc,
-                  Nat.mul_comm, Nat.mul_left_comm]
+                  Nat.mul_comm, Nat.mul_left_comm, Nat.add_assoc,
+                  Nat.add_comm, Nat.add_left_comm]
         _ = b * c ^ n + (c - b) * c ^ n := by rw [ih]
         _ = (b + (c - b)) * c ^ n := by
               rw [Nat.add_mul]
