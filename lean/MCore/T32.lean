@@ -62,7 +62,15 @@ theorem T32_no_odd_common_prime_delta_c4
     have hY2 : p ∣ (b ^ y) ^ 2 := by
       have hsub :=
         Nat.dvd_sub hS hU
-      simpa using hsub
+      have hdiff :
+          ((a ^ x) ^ 2 + (a ^ x) * (b ^ y) + (b ^ y) ^ 2) -
+              ((a ^ x) ^ 2 + (a ^ x) * (b ^ y)) =
+            (b ^ y) ^ 2 :=
+        Nat.add_sub_cancel_left
+          ((a ^ x) ^ 2 + (a ^ x) * (b ^ y))
+          ((b ^ y) ^ 2)
+      rw [hdiff] at hsub
+      exact hsub
     have hpb' : p ∣ b :=
       T30_prime_dvd_power_square_to_base hp hy hY2
     exact hpw.1 ⟨p, hp.1, hpa, hpb'⟩
@@ -96,7 +104,15 @@ theorem T32_no_odd_common_prime_delta_c4
       exact hS
     have hY2 : p ∣ (b ^ y) ^ 2 := by
       have hsub := Nat.dvd_sub hS' hU
-      simpa using hsub
+      have hdiff :
+          ((a ^ x) * (a ^ x + b ^ y) + (b ^ y) ^ 2) -
+              ((a ^ x) * (a ^ x + b ^ y)) =
+            (b ^ y) ^ 2 :=
+        Nat.add_sub_cancel_left
+          ((a ^ x) * (a ^ x + b ^ y))
+          ((b ^ y) ^ 2)
+      rw [hdiff] at hsub
+      exact hsub
     have hpb' : p ∣ b :=
       T30_prime_dvd_power_square_to_base hp hy hY2
     exact hpw.2.2 ⟨p, hp.1, hpb', hpc⟩
