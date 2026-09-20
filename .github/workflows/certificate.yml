@@ -17,7 +17,7 @@ jobs:
           set -euo pipefail
           lean --version
           lake --version
-          test "$(cat lean-toolchain)" = "leanprover/lean4:v4.19.0"
+          test "$(cat lean-toolchain)" = "leanprover/lean4:v4.29.0-rc6"
           if grep -R -n -E '(^|[^[:alnum:]_])(sorry|admit)([^[:alnum:]_]|$)' --include='*.lean' lean; then exit 1; else rc=$?; [ "$rc" -eq 1 ] || exit "$rc"; fi
           if grep -R -n -E '^[[:space:]]*(@\[[^]]*\][[:space:]]*)?(axiom|constant|constants)[[:space:]]' --include='*.lean' lean; then exit 1; else rc=$?; [ "$rc" -eq 1 ] || exit "$rc"; fi
       - name: G1 preserve frozen K9 layer
