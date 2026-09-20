@@ -38,24 +38,30 @@ theorem T12_some_base_even
     {a b c x y z : Nat}
     (heq : a ^ x + b ^ y = c ^ z) :
     T12Even a ∨ T12Even b ∨ T12Even c := by
-  by_cases ha : T12Even a
-  · exact Or.inl ha
-  · by_cases hb : T12Even b
-    · exact Or.inr (Or.inl hb)
-    · by_cases hc : T12Even c
-      · exact Or.inr (Or.inr hc)
-      · have hoa : T12Odd a := (T12_not_even_iff_odd a).mp ha
-        have hob : T12Odd b := (T12_not_even_iff_odd b).mp hb
-        have hoc : T12Odd c := (T12_not_even_iff_odd c).mp hc
-        have hax : a ^ x % 2 = 1 := T12_odd_pow_mod_two hoa
-        have hby : b ^ y % 2 = 1 := T12_odd_pow_mod_two hob
-        have hcz : c ^ z % 2 = 1 := T12_odd_pow_mod_two hoc
-        have hmod := congrArg (fun n : Nat => n % 2) heq
-        have hleft : (a ^ x + b ^ y) % 2 = 0 := by
-          rw [Nat.add_mod, hax, hby]
-        change (a ^ x + b ^ y) % 2 = c ^ z % 2 at hmod
-        rw [hleft, hcz] at hmod
-        exact False.elim (Nat.zero_ne_one hmod)
+  match (inferInstance : Decidable (T12Even a)) with
+  | isTrue ha =>
+      exact Or.inl ha
+  | isFalse ha =>
+      match (inferInstance : Decidable (T12Even b)) with
+      | isTrue hb =>
+          exact Or.inr (Or.inl hb)
+      | isFalse hb =>
+          match (inferInstance : Decidable (T12Even c)) with
+          | isTrue hc =>
+              exact Or.inr (Or.inr hc)
+          | isFalse hc =>
+              have hoa : T12Odd a := (T12_not_even_iff_odd a).mp ha
+              have hob : T12Odd b := (T12_not_even_iff_odd b).mp hb
+              have hoc : T12Odd c := (T12_not_even_iff_odd c).mp hc
+              have hax : a ^ x % 2 = 1 := T12_odd_pow_mod_two hoa
+              have hby : b ^ y % 2 = 1 := T12_odd_pow_mod_two hob
+              have hcz : c ^ z % 2 = 1 := T12_odd_pow_mod_two hoc
+              have hmod := congrArg (fun n : Nat => n % 2) heq
+              have hleft : (a ^ x + b ^ y) % 2 = 0 := by
+                rw [Nat.add_mod, hax, hby]
+              change (a ^ x + b ^ y) % 2 = c ^ z % 2 at hmod
+              rw [hleft, hcz] at hmod
+              exact False.elim (Nat.zero_ne_one hmod)
 
 def T12ExactlyOneEven (a b c : Nat) : Prop :=
   (T12Even a ∧ ¬ T12Even b ∧ ¬ T12Even c) ∨
