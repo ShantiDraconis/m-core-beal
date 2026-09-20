@@ -29,7 +29,7 @@ theorem T22_two_pow_dvd_mul_odd_left
     {d q : Nat} (hq : T12Odd q) :
     ∀ r : Nat, 2 ^ r ∣ d * q → 2 ^ r ∣ d := by
   intro r
-  induction r with
+  induction r generalizing d with
   | zero =>
       intro _
       simp
@@ -48,7 +48,6 @@ theorem T22_two_pow_dvd_mul_odd_left
             have hod : T12Odd d := (T12_not_even_iff_odd d).mp hd
             have hoddprod : (d * q) % 2 = 1 := by
               rw [Nat.mul_mod, hod, hq]
-              simp
             have hzero : (d * q) % 2 = 0 := Nat.mod_eq_zero_of_dvd h2prod
             rw [hoddprod] at hzero
             exact False.elim (Nat.one_ne_zero hzero)
