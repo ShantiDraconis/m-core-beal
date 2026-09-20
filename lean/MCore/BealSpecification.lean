@@ -40,4 +40,21 @@ theorem conjecture_excludes_counterexamples (h : BealConjecture) (d : BealData) 
   intro hd
   exact hd (h d)
 
+
+/-- Exact negated endpoint: an admissible Beal datum with no common prime. -/
+def NoCommonPrimeCandidate : Prop :=
+  ∃ d : BealData, BealCounterexample d
+
+theorem noCommonPrimeCandidate_iff_not_beal :
+    NoCommonPrimeCandidate ↔ ¬ BealConjecture := by
+  constructor
+  · rintro ⟨d, hd⟩ hBeal
+    exact hd (hBeal d)
+  · intro h
+    by_contra hnone
+    apply h
+    intro d
+    by_contra hd
+    exact hnone ⟨d, hd⟩
+
 end MCore
