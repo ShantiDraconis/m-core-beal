@@ -37,7 +37,7 @@ jobs:
         working-directory: t36e_mathlib
         run: |
           set -euo pipefail
-          lake env lean ../lean/MCore/T36E_TEMPLATE.lean 2>&1 | tee T36E_TEMPLATE.log
+          lake build MCore.T36E_TEMPLATE 2>&1 | tee T36E_TEMPLATE.log
           if grep -F 'sorryAx' T36E_TEMPLATE.log; then exit 1; fi
 
       - name: G2 verify template blob identity

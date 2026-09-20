@@ -36,7 +36,7 @@ jobs:
         working-directory: t36e_mathlib
         run: |
           set -euo pipefail
-          lake env lean ../lean/MCore/T36E_MASTER.lean 2>&1 | tee T36E_MASTER.log
+          lake build MCore.T36E_MASTER 2>&1 | tee T36E_MASTER.log
           if grep -F 'sorryAx' T36E_MASTER.log; then exit 1; fi
 
       - name: G2 endpoint remains non-promoted
