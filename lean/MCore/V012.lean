@@ -73,6 +73,52 @@ theorem T4_from_T3
   intro a b c x y z ha hb hc hx hy hz hNo heq
   exact hNo (h a b c x y z ha hb hc hx hy hz heq)
 
+/-- T5: existence of a nontrivial common divisor is stable for positive a,
+    because every such divisor is bounded by a and bounded search is decidable. -/
+theorem T5_commonDivisor_exists_stable
+    {a b c : Nat} (ha : 0 < a) :
+    ¬¬ (∃ q : Nat, CommonDivisor q a b c) →
+      ∃ q : Nat, CommonDivisor q a b c := by
+  intro hnn
+  let P : Nat → Prop := fun q =>
+    q < a + 1 ∧ CommonDivisor q a b c
+  have instP (q : Nat) : Decidable (P q) := inferInstance
+  let hex : Decidable (∃ q, q < a + 1 ∧ CommonDivisor q a b c) := inferInstance
+  match hex with
+  | isTrue h =>
+      rcases h with ⟨q, _, hq⟩
+      exact ⟨q, hq⟩
+  | isFalse h =>
+      exfalso
+      apply hnn
+      intro hexists
+      rcases hexists with ⟨q, hqgt, hqa, hqb, hqc⟩
+      have hqa_copy : q ∣ a := hqa
+      rcases hqa with ⟨k, hak⟩
+      have hkpos : 0 < k := by
+        apply Nat.pos_of_ne_zero
+        intro hk0
+        subst k
+        have hz : q * 0 = 0 := Nat.mul_zero q
+        exact Nat.ne_of_gt ha (hak.trans hz)
+      have hqle : q ≤ a := by
+        rw [hak]
+        exact Nat.le_mul_of_pos_right q hkpos
+      apply h
+      exact ⟨q, Nat.lt_succ_of_le hqle, hqgt, hqa_copy, hqb, hqc⟩
+
+/-- Reverse obstruction direction, now constructive: T4 implies T3. -/
+theorem T5_T4_to_T3
+    (h : T4NoPrimitiveEquation) : T3RawEquationDivisorBridge := by
+  intro a b c x y z ha hb hc hx hy hz heq
+  apply T5_commonDivisor_exists_stable ha
+  intro hNo
+  exact (h a b c x y z ha hb hc hx hy hz hNo) heq
+
+theorem T5_T3_iff_T4 :
+    T3RawEquationDivisorBridge ↔ T4NoPrimitiveEquation :=
+  ⟨T4_from_T3, T5_T4_to_T3⟩
+
 theorem T3_closes_beal
     (h : T3RawEquationDivisorBridge) : BealConjecture :=
   T1_v0_to_beal ((T3_v0_iff_raw).mpr h)
@@ -83,5 +129,8 @@ theorem T3_closes_beal
 #print axioms MCore.T3_v0_iff_raw
 #print axioms MCore.T4_from_T3
 #print axioms MCore.T3_closes_beal
+#print axioms MCore.T5_commonDivisor_exists_stable
+#print axioms MCore.T5_T4_to_T3
+#print axioms MCore.T5_T3_iff_T4
 
 end MCore
