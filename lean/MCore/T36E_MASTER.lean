@@ -106,7 +106,7 @@ theorem T36EM_local_lt_one_iff_dvd
         (IsDiscreteValuationRing.maximalIdeal (T36EMAtPrime p hp))
         (algebraMap ℤ (FractionRing ℤ) (n : ℤ)) < 1
       ↔ p ∣ n := by
-  rw [← IsScalarTower.algebraMap_apply
+  rw [IsScalarTower.algebraMap_apply
     ℤ (T36EMAtPrime p hp) (FractionRing ℤ)]
   rw [IsDedekindDomain.HeightOneSpectrum.valuation_lt_one_iff_mem]
   rw [IsLocalization.AtPrime.to_map_mem_maximal_iff
@@ -124,7 +124,7 @@ theorem T36EM_local_eq_one_iff_not_dvd
         (IsDiscreteValuationRing.maximalIdeal (T36EMAtPrime p hp))
         (algebraMap ℤ (FractionRing ℤ) (n : ℤ)) = 1
       ↔ ¬ p ∣ n := by
-  rw [← IsScalarTower.algebraMap_apply
+  rw [IsScalarTower.algebraMap_apply
     ℤ (T36EMAtPrime p hp) (FractionRing ℤ)]
   rw [IsDedekindDomain.HeightOneSpectrum.valuation_eq_one_iff_notMem]
   rw [IsLocalization.AtPrime.to_map_mem_maximal_iff
@@ -198,7 +198,8 @@ theorem T36EM_frey_c4
     (T36EMFreyCurve a b x y).c₄ =
       algebraMap ℤ (FractionRing ℤ)
         (T32FreyC4Kernel a b x y : ℤ) := by
-  simp [T36EMFreyCurve, T36EM_freyZ_c4]
+  unfold T36EMFreyCurve WeierstrassCurve.baseChange
+  rw [WeierstrassCurve.map_c₄, T36EM_freyZ_c4]
 
 /-- Delta after base change remains exactly the embedded T24 kernel. -/
 theorem T36EM_frey_delta
@@ -206,7 +207,8 @@ theorem T36EM_frey_delta
     (T36EMFreyCurve a b x y).Δ =
       algebraMap ℤ (FractionRing ℤ)
         (T24FreyDiscriminantKernel a b x y : ℤ) := by
-  simp [T36EMFreyCurve, T36EM_freyZ_delta]
+  unfold T36EMFreyCurve WeierstrassCurve.baseChange
+  rw [WeierstrassCurve.map_Δ, T36EM_freyZ_delta]
 
 /-- Under the Beal equation, the same Delta is the embedded T24 Beal form. -/
 theorem T36EM_frey_delta_beal
@@ -264,6 +266,7 @@ theorem T36EM_isMinimal_of_integral_c4_unit
   intro C hC _
   letI : WeierstrassCurve.IsIntegral R (C • W) := hC
   simp only [one_smul]
+  rw [← Subtype.coe_le_coe]
   rw [WeierstrassCurve.valuation_Δ_aux_eq_of_isIntegral R (C • W)]
   rw [WeierstrassCurve.valuation_Δ_aux_eq_of_isIntegral R W]
   have hc4C_le :
@@ -303,9 +306,12 @@ theorem T36EM_local_baseChange_eq
     (T36EMFreyCurveLocal a b x y p hp).baseChange (FractionRing ℤ) =
       T36EMFreyCurve a b x y := by
   ext <;>
-    simp [T36EMFreyCurveLocal, T36EMFreyCurve,
-      IsScalarTower.algebraMap_apply
-        ℤ (T36EMAtPrime p hp) (FractionRing ℤ)]
+    simp only [T36EMFreyCurveLocal, T36EMFreyCurve,
+      WeierstrassCurve.baseChange,
+      WeierstrassCurve.map_a₁, WeierstrassCurve.map_a₂,
+      WeierstrassCurve.map_a₃, WeierstrassCurve.map_a₄,
+      WeierstrassCurve.map_a₆,
+      IsScalarTower.algebraMap_apply]
 
 /-- The exact fraction-field Frey equation is integral over Z_(p). -/
 theorem T36EM_frey_isIntegral

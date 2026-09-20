@@ -2,6 +2,10 @@ name: t36e-mathlib-master
 on:
   push:
     branches: [attack/t36e-mathlib-master]
+    paths:
+      - 'lean/MCore/T36E_TEMPLATE.lean'
+      - 't36e_mathlib/**'
+      - '.github/workflows/t36e-mathlib.yml'
   pull_request:
     paths:
       - 'lean/MCore/T36E_TEMPLATE.lean'
