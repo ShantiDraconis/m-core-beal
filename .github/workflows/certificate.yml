@@ -12,6 +12,8 @@ jobs:
           build: false
           test: false
           lint: false
+      - name: Restore pinned Mathlib binary cache
+        run: lake exe cache get
       - name: G0 toolchain and fail-closed source hygiene
         run: |
           set -euo pipefail
@@ -62,5 +64,11 @@ jobs:
           if grep -F 'sorryAx' BackwardOracle.log BackwardWithout.log; then exit 1; fi
           grep -F "'MCore.BackwardAudit.hypothetical_common_prime' does not depend on any axioms" BackwardOracle.log
           grep -F "'MCore.BackwardAudit.witness_contract_closes_beal' does not depend on any axioms" BackwardWithout.log
+      - name: T36 targeted semantic build
+        run: lake build MCore.T36B MCore.T36C MCore.T36D
       - name: G6 clean reproduction
-        run: lake clean && timeout 20m lake build MCore
+        run: |
+          set -euo pipefail
+          lake clean
+          lake exe cache get
+          timeout 20m lake build MCore
