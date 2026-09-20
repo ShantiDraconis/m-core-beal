@@ -24,11 +24,11 @@ theorem T60_packet_to_genuine_multiplicative_reduction
 
 def T60GenuineOddMultiplicativeReduction
     (d : T59ResidualCandidate) : Prop :=
-  ∀ p : Nat,
-    IsPrime p →
-    p ≠ 2 →
-    p ∣ T24FreyDiscriminantBeal d.a d.b d.c d.x d.y d.z →
-    let hpkt := T60_candidate_odd_prime_has_arithmetic_packet d ‹IsPrime p› ‹p ≠ 2› ‹p ∣ T24FreyDiscriminantBeal d.a d.b d.c d.x d.y d.z›
+  ∀ (p : Nat)
+    (hp : IsPrime p)
+    (hp2 : p ≠ 2)
+    (hDelta : p ∣ T24FreyDiscriminantBeal d.a d.b d.c d.x d.y d.z),
+    let hpkt := T60_candidate_odd_prime_has_arithmetic_packet d hp hp2 hDelta
     letI : (T36EMHeightOne p hpkt.input.1).asIdeal.IsPrime :=
       (T36EMHeightOne p hpkt.input.1).isPrime
     letI : IsDiscreteValuationRing (T36EMAtPrime p hpkt.input.1) :=
