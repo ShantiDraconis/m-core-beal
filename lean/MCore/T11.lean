@@ -63,8 +63,10 @@ theorem T11_ac_pair_forces_common
   have hpby : p ∣ b ^ y := by
     have hsub : p ∣ c ^ z - a ^ x := Nat.dvd_sub hpcz hpax
     have hdiff : c ^ z - a ^ x = b ^ y := by
-      rw [← heq]
-      simp
+      calc
+        c ^ z - a ^ x = (a ^ x + b ^ y) - a ^ x :=
+          congrArg (fun t : Nat => t - a ^ x) heq.symm
+        _ = b ^ y := Nat.add_sub_cancel_left (a ^ x) (b ^ y)
     rw [hdiff] at hsub
     exact hsub
   have hpb : p ∣ b :=
@@ -87,8 +89,10 @@ theorem T11_bc_pair_forces_common
   have hpax : p ∣ a ^ x := by
     have hsub : p ∣ c ^ z - b ^ y := Nat.dvd_sub hpcz hpby
     have hdiff : c ^ z - b ^ y = a ^ x := by
-      rw [← heq]
-      simp
+      calc
+        c ^ z - b ^ y = (a ^ x + b ^ y) - b ^ y :=
+          congrArg (fun t : Nat => t - b ^ y) heq.symm
+        _ = a ^ x := Nat.add_sub_cancel (a ^ x) (b ^ y)
     rw [hdiff] at hsub
     exact hsub
   have hpa : p ∣ a :=
