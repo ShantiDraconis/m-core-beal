@@ -1,0 +1,28 @@
+name: certify-v24-common-divisor-residual
+on:
+  push:
+    branches: [research/pure-math-final-proof-v1]
+    paths:
+      - 'lean/MCore/V24CommonDivisorResidual.lean'
+      - '.github/workflows/certify-v24-common-divisor-residual.yml'
+  workflow_dispatch:
+jobs:
+  targeted:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: leanprover/lean-action@v1
+        with:
+          build: false
+          test: false
+          lint: false
+      - name: Targeted V24 check
+        run: |
+          set -euo pipefail
+          timeout 15m lake env lean lean/MCore/V24CommonDivisorResidual.lean 2>&1 | tee /tmp/v24.log
+          ! grep -R -nE '\b(sorry|admit)\b' lean/MCore/V24CommonDivisorResidual.lean
+          echo '#print axioms MCore.counterexample_no_common_divisor' >/tmp/Audit.lean
+          echo 'import MCore.V24CommonDivisorResidual' | cat - /tmp/Audit.lean >/tmp/Audit2.lean
+          lake env lean /tmp/Audit2.lean 2>&1 | tee /tmp/axioms.log
+          echo "V24 TARGET PASS"
