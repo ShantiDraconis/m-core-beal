@@ -2,28 +2,73 @@ import MCore.T15
 
 namespace MCore
 
+theorem T16_odd_mod_eight
+    {a : Nat} (ha : T12Odd a) :
+    a % 8 = 1 ∨ a % 8 = 3 ∨ a % 8 = 5 ∨ a % 8 = 7 := by
+  rcases T13_odd_representation ha with ⟨k, hak⟩
+  match T12EvenDecidable k with
+  | isTrue hk =>
+      rcases hk with ⟨m, hkm⟩
+      match T12EvenDecidable m with
+      | isTrue hm =>
+          rcases hm with ⟨n, hmn⟩
+          left
+          have hform : 2 * (2 * (2 * n)) + 1 = n * 8 + 1 := by
+            simp [Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm]
+          rw [hak, hkm, hmn, hform]
+          simp [Nat.add_mod, Nat.mul_mod]
+      | isFalse hm =>
+          have hmo : T12Odd m := (T12_not_even_iff_odd m).mp hm
+          rcases T13_odd_representation hmo with ⟨n, hmn⟩
+          right
+          right
+          left
+          have hform : 2 * (2 * (2 * n + 1)) + 1 = n * 8 + 5 := by
+            simp [Nat.mul_add, Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm, Nat.add_assoc]
+          rw [hak, hkm, hmn, hform]
+          simp [Nat.add_mod, Nat.mul_mod]
+  | isFalse hk =>
+      have hko : T12Odd k := (T12_not_even_iff_odd k).mp hk
+      rcases T13_odd_representation hko with ⟨m, hkm⟩
+      match T12EvenDecidable m with
+      | isTrue hm =>
+          rcases hm with ⟨n, hmn⟩
+          right
+          left
+          have hform : 2 * (2 * (2 * n) + 1) + 1 = n * 8 + 3 := by
+            simp [Nat.mul_add, Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm, Nat.add_assoc]
+          rw [hak, hkm, hmn, hform]
+          simp [Nat.add_mod, Nat.mul_mod]
+      | isFalse hm =>
+          have hmo : T12Odd m := (T12_not_even_iff_odd m).mp hm
+          rcases T13_odd_representation hmo with ⟨n, hmn⟩
+          right
+          right
+          right
+          have hform : 2 * (2 * (2 * n + 1) + 1) + 1 = n * 8 + 7 := by
+            simp [Nat.mul_add, Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm, Nat.add_assoc]
+          rw [hak, hkm, hmn, hform]
+          simp [Nat.add_mod, Nat.mul_mod]
+
 theorem T16_odd_square_mod_eight
     {a : Nat} (ha : T12Odd a) :
     a ^ 2 % 8 = 1 := by
-  have hdecomp := Nat.mod_add_div a 4
-  rcases T13_odd_mod_four ha with h1 | h3
-  · rw [h1] at hdecomp
-    have haform : a = 1 + 4 * (a / 4) := hdecomp.symm
-    rw [haform]
-    simp [Nat.pow_succ, Nat.mul_mod, Nat.add_mod, Nat.mul_assoc]
-  · rw [h3] at hdecomp
-    have haform : a = 3 + 4 * (a / 4) := hdecomp.symm
-    rw [haform]
-    simp [Nat.pow_succ, Nat.mul_mod, Nat.add_mod, Nat.mul_assoc]
+  rcases T16_odd_mod_eight ha with h1 | h3 | h5 | h7
+  · simp [Nat.pow_succ, Nat.mul_mod, h1]
+  · simp [Nat.pow_succ, Nat.mul_mod, h3]
+  · simp [Nat.pow_succ, Nat.mul_mod, h5]
+  · simp [Nat.pow_succ, Nat.mul_mod, h7]
 
 theorem T16_odd_fourth_mod_eight
     {a : Nat} (ha : T12Odd a) :
     a ^ 4 % 8 = 1 := by
   have h2 : a ^ 2 % 8 = 1 := T16_odd_square_mod_eight ha
-  have h4 : a ^ 4 = (a ^ 2) * (a ^ 2) := by
-    simp [Nat.pow_succ, Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm]
-  rw [h4, Nat.mul_mod, h2]
-  simp
+  have h4 : a ^ 4 = a ^ 2 * a ^ 2 := by
+    simpa using T10_pow_add a 2 2
+  calc
+    a ^ 4 % 8 = (a ^ 2 * a ^ 2) % 8 := congrArg (fun n : Nat => n % 8) h4
+    _ = (a ^ 2 % 8 * (a ^ 2 % 8)) % 8 := Nat.mul_mod _ _ _
+    _ = 1 := by rw [h2]
 
 theorem T16_even_pow_mod_eight
     {c z : Nat} (hc : T12Even c) (hz : 2 < z) :
@@ -86,9 +131,16 @@ private theorem T16_mod_eight_succ_zero_forces_seven
                               | zero =>
                                   rfl
                               | succ r =>
-                                  have hge : 8 ≤ Nat.succ (Nat.succ (Nat.succ (Nat.succ (Nat.succ (Nat.succ (Nat.succ (Nat.succ r)))))))) := by
-                                    exact Nat.succ_le_succ (Nat.succ_le_succ (Nat.succ_le_succ (Nat.succ_le_succ (Nat.succ_le_succ (Nat.succ_le_succ (Nat.succ_le_succ (Nat.succ_le_succ (Nat.zero_le r))))))))
-                                  exact False.elim ((Nat.not_le_of_gt hlt) hge)
+                                  have h0 : 0 ≤ r := Nat.zero_le r
+                                  have h1 : 1 ≤ Nat.succ r := Nat.succ_le_succ h0
+                                  have h2 : 2 ≤ Nat.succ (Nat.succ r) := Nat.succ_le_succ h1
+                                  have h3 : 3 ≤ Nat.succ (Nat.succ (Nat.succ r)) := Nat.succ_le_succ h2
+                                  have h4 : 4 ≤ Nat.succ (Nat.succ (Nat.succ (Nat.succ r))) := Nat.succ_le_succ h3
+                                  have h5 : 5 ≤ Nat.succ (Nat.succ (Nat.succ (Nat.succ (Nat.succ r)))) := Nat.succ_le_succ h4
+                                  have h6 : 6 ≤ Nat.succ (Nat.succ (Nat.succ (Nat.succ (Nat.succ (Nat.succ r))))) := Nat.succ_le_succ h5
+                                  have h7 : 7 ≤ Nat.succ (Nat.succ (Nat.succ (Nat.succ (Nat.succ (Nat.succ (Nat.succ r)))))) := Nat.succ_le_succ h6
+                                  have h8 : 8 ≤ Nat.succ (Nat.succ (Nat.succ (Nat.succ (Nat.succ (Nat.succ (Nat.succ (Nat.succ r))))))) := Nat.succ_le_succ h7
+                                  exact False.elim ((Nat.not_le_of_gt hlt) h8)
 
 theorem T16_c_even_left_four_forces_right_seven
     {a b c x y z : Nat}
