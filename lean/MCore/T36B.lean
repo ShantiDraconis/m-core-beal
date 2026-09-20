@@ -46,26 +46,29 @@ theorem T36B_frey_c4_eq_nat_kernel (a b x y : Nat) :
   rw [T36B_frey_c4_formula]
   unfold T32FreyC4Kernel
   norm_num
-  push_cast
-  ring
 
-/-- Under the Beal equation, T24's natural-number discriminant kernel is
-    exactly the discriminant of the same Mathlib Frey curve after coercion. -/
+/-- The algebraic discriminant formula is exactly T24's natural-number
+    Frey discriminant kernel after coercion to Q. -/
+theorem T36B_frey_delta_eq_nat_kernel (a b x y : Nat) :
+    (T36BFreyCurveQ a b x y).Δ =
+      ((T24FreyDiscriminantKernel a b x y : Nat) : ℚ) := by
+  rw [T36B_frey_delta_formula]
+  unfold T24FreyDiscriminantKernel
+  norm_num
+
+/-- Under the Beal equation, T24's Beal normal form follows by the already
+    proved exact natural-number rewrite, rather than rewriting inside casts. -/
 theorem T36B_frey_delta_eq_nat_beal
     {a b c x y z : Nat}
     (heq : a ^ x + b ^ y = c ^ z) :
     (T36BFreyCurveQ a b x y).Δ =
       ((T24FreyDiscriminantBeal a b c x y z : Nat) : ℚ) := by
-  rw [T36B_frey_delta_formula]
-  unfold T24FreyDiscriminantBeal
-  norm_num
-  push_cast
-  have hq :
-      (((a ^ x : Nat) : ℚ) + ((b ^ y : Nat) : ℚ)) =
-        ((c ^ z : Nat) : ℚ) := by
-    exact_mod_cast heq
-  rw [hq]
-  ring
+  calc
+    (T36BFreyCurveQ a b x y).Δ =
+        ((T24FreyDiscriminantKernel a b x y : Nat) : ℚ) :=
+      T36B_frey_delta_eq_nat_kernel a b x y
+    _ = ((T24FreyDiscriminantBeal a b c x y z : Nat) : ℚ) := by
+      exact_mod_cast T24_frey_discriminant_rewrite heq
 
 /-- The exact adapter package needed before moving from elementary Nat
     divisibility to local valuations. -/
@@ -98,6 +101,7 @@ def T36BLocalValuationAdapterGoal : Prop :=
 #print axioms MCore.T36B_frey_c4_formula
 #print axioms MCore.T36B_frey_delta_formula
 #print axioms MCore.T36B_frey_c4_eq_nat_kernel
+#print axioms MCore.T36B_frey_delta_eq_nat_kernel
 #print axioms MCore.T36B_frey_delta_eq_nat_beal
 #print axioms MCore.T36B_build_frey_invariant_adapter
 
