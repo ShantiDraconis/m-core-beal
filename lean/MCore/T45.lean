@@ -120,10 +120,11 @@ inductive T45ResidualRoute
   | equalPrimeFLT
   | mixedSignatureSpecific
 
-def T45ResidualRouteFor (x y z : Nat) : T45ResidualRoute :=
-  if _h : T45EqualOddPrimeSignature x y z
-  then .equalPrimeFLT
-  else .mixedSignatureSpecific
+noncomputable def T45ResidualRouteFor (x y z : Nat) : T45ResidualRoute := by
+  classical
+  exact if _h : T45EqualOddPrimeSignature x y z
+    then .equalPrimeFLT
+    else .mixedSignatureSpecific
 
 #print axioms MCore.T45_odd_prime_not_dvd_four
 #print axioms MCore.T45_reduced_exponent_eq_residual_prime
