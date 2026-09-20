@@ -17,7 +17,6 @@ theorem T15_one_mod_four_pow
       simp
   | succ k ih =>
       rw [Nat.pow_succ, Nat.mul_mod, ih, hu]
-      simp
 
 /-- An odd base raised to an odd exponent has the same residue modulo four. -/
 theorem T15_odd_pow_mod_four_eq_base
