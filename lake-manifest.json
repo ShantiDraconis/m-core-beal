@@ -111,6 +111,6 @@
    "configFile": "lakefile.toml"
   }
  ],
- "name": "m-core-beal",
+ "name": "m_core_beal",
  "lakeDir": ".lake"
 }
