@@ -51,10 +51,12 @@ theorem noCommonPrimeCandidate_iff_not_beal :
   · rintro ⟨d, hd⟩ hBeal
     exact hd (hBeal d)
   · intro h
-    by_contra hnone
+    apply Classical.byContradiction
+    intro hnone
     apply h
     intro d
-    by_contra hd
+    apply Classical.byContradiction
+    intro hd
     exact hnone ⟨d, hd⟩
 
 end MCore
