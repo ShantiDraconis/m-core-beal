@@ -1,5 +1,4 @@
 import Init.Data.Nat.Lemmas
-import Init.Omega
 import MCore.T11
 
 namespace MCore
@@ -13,9 +12,17 @@ def T12Odd (n : Nat) : Prop :=
 theorem T12_not_even_iff_odd (n : Nat) :
     (¬ T12Even n) ↔ T12Odd n := by
   unfold T12Even T12Odd
-  rw [Nat.dvd_iff_mod_eq_zero]
-  have hlt : n % 2 < 2 := Nat.mod_lt n (by decide)
-  omega
+  constructor
+  · intro h
+    have hpos : 0 < n % 2 := Nat.emod_pos_of_not_dvd h
+    have hlt : n % 2 < 2 := Nat.mod_lt n (by decide)
+    have hle : n % 2 ≤ 1 := Nat.le_of_lt_succ hlt
+    have hge : 1 ≤ n % 2 := Nat.succ_le_of_lt hpos
+    exact Nat.le_antisymm hle hge
+  · intro hodd hdvd
+    have hzero : n % 2 = 0 := Nat.mod_eq_zero_of_dvd hdvd
+    rw [hodd] at hzero
+    exact Nat.one_ne_zero hzero
 
 theorem T12_odd_pow_mod_two
     {a n : Nat} (ha : T12Odd a) :
@@ -26,7 +33,6 @@ theorem T12_odd_pow_mod_two
       simp
   | succ n ih =>
       rw [Nat.pow_succ, Nat.mul_mod, ih, ha]
-      decide
 
 theorem T12_some_base_even
     {a b c x y z : Nat}
@@ -47,7 +53,7 @@ theorem T12_some_base_even
         have hmod := congrArg (fun n : Nat => n % 2) heq
         have hleft : (a ^ x + b ^ y) % 2 = 0 := by
           rw [Nat.add_mod, hax, hby]
-          decide
+        change (a ^ x + b ^ y) % 2 = c ^ z % 2 at hmod
         rw [hleft, hcz] at hmod
         exact False.elim (Nat.zero_ne_one hmod)
 
