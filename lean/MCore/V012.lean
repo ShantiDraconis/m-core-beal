@@ -81,13 +81,14 @@ theorem T5_commonDivisor_exists_stable
       ∃ q : Nat, CommonDivisor q a b c := by
   intro hnn
   let P : Nat → Prop := fun q =>
-    q < a + 1 ∧ CommonDivisor q a b c
+    q < a + 1 ∧ 1 < q ∧ q ∣ a ∧ q ∣ b ∧ q ∣ c
   have instP (q : Nat) : Decidable (P q) := inferInstance
-  let hex : Decidable (∃ q, q < a + 1 ∧ CommonDivisor q a b c) := inferInstance
+  let hex : Decidable (∃ q, q < a + 1 ∧ 1 < q ∧ q ∣ a ∧ q ∣ b ∧ q ∣ c) :=
+    inferInstance
   match hex with
   | isTrue h =>
-      rcases h with ⟨q, _, hq⟩
-      exact ⟨q, hq⟩
+      rcases h with ⟨q, _, hqgt, hqa, hqb, hqc⟩
+      exact ⟨q, hqgt, hqa, hqb, hqc⟩
   | isFalse h =>
       exfalso
       apply hnn
