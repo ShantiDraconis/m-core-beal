@@ -45,6 +45,7 @@ import MCore.T33
 import MCore.T34
 import MCore.T35
 import MCore.T36
+import MCore.T36A
 import MCore.T37
 import MCore.T38
 import MCore.T39
