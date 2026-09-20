@@ -120,6 +120,66 @@ theorem T5_T3_iff_T4 :
     T3RawEquationDivisorBridge ↔ T4NoPrimitiveEquation :=
   ⟨T4_from_T3, T5_T4_to_T3⟩
 
+/-- T6 packages the exact surviving mathematical obstruction as data.
+    A value of this structure would be a primitive Beal counterexample in the
+    common-divisor formulation. -/
+structure T6PrimitiveSolution where
+  a : Nat
+  b : Nat
+  c : Nat
+  x : Nat
+  y : Nat
+  z : Nat
+  a_pos : 0 < a
+  b_pos : 0 < b
+  c_pos : 0 < c
+  x_gt_two : 2 < x
+  y_gt_two : 2 < y
+  z_gt_two : 2 < z
+  equation : a ^ x + b ^ y = c ^ z
+  primitive : ¬ ∃ q : Nat, CommonDivisor q a b c
+
+def T6ScientificFrontier : Prop :=
+  ¬ Nonempty T6PrimitiveSolution
+
+theorem T6_T4_iff_no_primitive :
+    T4NoPrimitiveEquation ↔ T6ScientificFrontier := by
+  constructor
+  · intro h hs
+    rcases hs with ⟨s⟩
+    exact (h s.a s.b s.c s.x s.y s.z
+      s.a_pos s.b_pos s.c_pos
+      s.x_gt_two s.y_gt_two s.z_gt_two
+      s.primitive) s.equation
+  · intro h a b c x y z ha hb hc hx hy hz hprimitive heq
+    apply h
+    exact ⟨{
+      a := a
+      b := b
+      c := c
+      x := x
+      y := y
+      z := z
+      a_pos := ha
+      b_pos := hb
+      c_pos := hc
+      x_gt_two := hx
+      y_gt_two := hy
+      z_gt_two := hz
+      equation := heq
+      primitive := hprimitive
+    }⟩
+
+/-- Exact collision statement after V0/V1/V2 and T3-T5:
+    Beal is equivalent to the absence of a T6 primitive solution. -/
+theorem T6_beal_iff_frontier :
+    BealConjecture ↔ T6ScientificFrontier := by
+  calc
+    BealConjecture ↔ V0EquationToCommonDivisor := T2_v2_collision
+    _ ↔ T3RawEquationDivisorBridge := T3_v0_iff_raw
+    _ ↔ T4NoPrimitiveEquation := T5_T3_iff_T4
+    _ ↔ T6ScientificFrontier := T6_T4_iff_no_primitive
+
 theorem T3_closes_beal
     (h : T3RawEquationDivisorBridge) : BealConjecture :=
   T1_v0_to_beal ((T3_v0_iff_raw).mpr h)
@@ -133,5 +193,7 @@ theorem T3_closes_beal
 #print axioms MCore.T5_commonDivisor_exists_stable
 #print axioms MCore.T5_T4_to_T3
 #print axioms MCore.T5_T3_iff_T4
+#print axioms MCore.T6_T4_iff_no_primitive
+#print axioms MCore.T6_beal_iff_frontier
 
 end MCore
