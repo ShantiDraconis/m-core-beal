@@ -1,0 +1,46 @@
+{
+  "certificate_scope": "EXACT_TERMINAL_REDUCTION",
+  "certifies": [
+    "Kernel-checked exact terminal equivalence between BealConjecture and UniversalTripleGCDLowerBound.",
+    "A nontrivial common divisor is equivalent to the canonical triple-gcd lower bound in the formal BealData setting.",
+    "The terminal reduction build, hygiene/axiom checks, and clean reproduction passed on the frozen source commit."
+  ],
+  "certifying_runs": [
+    {
+      "conclusion": "success",
+      "id": 35641414716,
+      "workflow": "atk-terminal-producer"
+    },
+    {
+      "conclusion": "success",
+      "id": 35641414763,
+      "workflow": "certificate"
+    },
+    {
+      "conclusion": "success",
+      "id": 35641897480,
+      "workflow": "certificate"
+    }
+  ],
+  "does_not_certify": [
+    "UniversalTripleGCDLowerBound itself.",
+    "The Beal conjecture."
+  ],
+  "fail_closed_rules": {
+    "admit_allowed": false,
+    "hidden_axiom_promotion_allowed": false,
+    "proxy_to_endpoint_promotion_allowed": false,
+    "sorry_allowed": false,
+    "vacuous_witness_promotion_allowed": false
+  },
+  "final_proof_global": "0/7",
+  "generated_date": "2026-09-21",
+  "mathematical_endpoint_status": "OPEN",
+  "next_open_delta": "Conductor exponent and exact lowered-level extraction; reuse frozen/post-t36e-conductor-bridge-green-1d9217aa for genuine odd-prime multiplicative reduction.",
+  "problem": "Beal",
+  "repository": "ShantiDraconis/m-core-beal",
+  "schema": "atk.terminal.frozen-certificate.v1",
+  "source_frozen_branch": "frozen/triple-gcd-equivalence-green-73f1fd7b",
+  "source_frozen_commit": "73f1fd7b2a692ea857acaea70e18745f08878c2a",
+  "source_status": "GREEN_FROZEN"
+}
