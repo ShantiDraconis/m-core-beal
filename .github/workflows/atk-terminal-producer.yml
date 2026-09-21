@@ -2,7 +2,9 @@ name: atk-terminal-producer
 
 on:
   push:
-    branches: [attack/terminal-producer-20260921]
+    branches:
+      - attack/terminal-producer-20260921
+      - attack/triple-gcd-equivalence-20260921
   workflow_dispatch:
 
 jobs:
@@ -23,12 +25,15 @@ jobs:
         run: |
           cat > /tmp/BealTerminalAudit.lean <<'EOF'
           import MCore.Attack.TerminalProducer
+          import MCore.Attack.GCDTerminalProducer
           #print axioms MCore.Attack.bealConjecture_iff_universalCommonDivisor
+          #print axioms MCore.Attack.commonDivisor_closes_tripleGCD_gt_one
+          #print axioms MCore.Attack.bealConjecture_iff_universalTripleGCDLowerBound
           EOF
           lake env lean /tmp/BealTerminalAudit.lean 2>&1 | tee /tmp/beal-terminal.log
           if grep -E 'sorryAx|Classical.choice' /tmp/beal-terminal.log; then exit 1; fi
       - name: Keep endpoint open
         run: |
-          grep -q 'OPEN_MATH: prove UniversalCommonDivisor' lean/MCore/Attack/TerminalProducer.lean
-          echo "BEAL_TERMINAL_REDUCTION=GREEN"
+          grep -q 'OPEN_MATH: prove UniversalTripleGCDLowerBound' lean/MCore/Attack/GCDTerminalProducer.lean
+          echo "BEAL_TERMINAL_COMPRESSION=GREEN_IF_BUILD_PASSES"
           echo "BEAL_PROOF=OPEN"
