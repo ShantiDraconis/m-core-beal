@@ -3,7 +3,7 @@ on: [push, pull_request]
 jobs:
   k10:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       - name: Install pinned Lean toolchain without implicit project build
@@ -12,6 +12,20 @@ jobs:
           build: false
           test: false
           lint: false
+          use-mathlib-cache: false
+      - name: Fetch pinned Mathlib cache with retry
+        run: |
+          set -euo pipefail
+          ok=0
+          for attempt in 1 2 3; do
+            if lake exe cache get; then
+              ok=1
+              break
+            fi
+            echo "mathlib cache attempt $attempt failed; retrying"
+            sleep 5
+          done
+          test "$ok" = 1
       - name: G0 toolchain and fail-closed source hygiene
         run: |
           set -euo pipefail
@@ -63,4 +77,7 @@ jobs:
           grep -F "'MCore.BackwardAudit.hypothetical_common_prime' does not depend on any axioms" BackwardOracle.log
           grep -F "'MCore.BackwardAudit.witness_contract_closes_beal' does not depend on any axioms" BackwardWithout.log
       - name: G6 clean reproduction
-        run: lake clean && timeout 20m lake build MCore
+        run: |
+          set -euo pipefail
+          lake clean
+          timeout 45m lake build MCore
