@@ -1,0 +1,32 @@
+name: atk-terminal-producer
+
+on:
+  push:
+    branches: [attack/terminal-producer-20260921]
+  workflow_dispatch:
+
+jobs:
+  beal-terminal:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: leanprover/lean-action@v1
+        with:
+          build: false
+          test: false
+          lint: false
+      - name: Compile exact terminal reduction
+        run: lake env lean lean/MCore/Attack/TerminalProducer.lean
+      - name: Axiom audit
+        run: |
+          cat > /tmp/BealTerminalAudit.lean <<'EOF'
+          import MCore.Attack.TerminalProducer
+          #print axioms MCore.Attack.bealConjecture_iff_universalCommonDivisor
+          EOF
+          lake env lean /tmp/BealTerminalAudit.lean 2>&1 | tee /tmp/beal-terminal.log
+          if grep -E 'sorryAx|Classical.choice' /tmp/beal-terminal.log; then exit 1; fi
+      - name: Keep endpoint open
+        run: |
+          grep -q 'OPEN_MATH: prove UniversalCommonDivisor' lean/MCore/Attack/TerminalProducer.lean
+          echo "BEAL_TERMINAL_REDUCTION=GREEN"
+          echo "BEAL_PROOF=OPEN"
