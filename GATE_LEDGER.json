@@ -1,0 +1,16 @@
+{
+  "schema": "ATK_GATE_LEDGER_V1",
+  "repo": "m-core-beal",
+  "queue": "BEAL",
+  "hard_composite_remaining": 2,
+  "hard_atomic_remaining": 2,
+  "current_gate": "B01",
+  "current_head": "d039136fe260d626fbf0974a3413d222e13d43f8",
+  "state_ci": "RED",
+  "state_math": "OPEN_MATH",
+  "last_certificate_run": 35548578656,
+  "last_hard_run": 35548578609,
+  "next": "B01 repair/provenance -> B02 residual family elimination",
+  "progress_metric": "FROZEN_HARD/TOTAL_HARD",
+  "tests_are_progress_metric": false
+}
