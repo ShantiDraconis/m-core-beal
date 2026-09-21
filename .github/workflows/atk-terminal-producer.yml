@@ -18,7 +18,7 @@ jobs:
         run: |
           lake update
       - name: Compile exact terminal reduction
-        run: lake env lean lean/MCore/Attack/TerminalProducer.lean
+        run: lake build MCore.Attack.TerminalProducer
       - name: Axiom audit
         run: |
           cat > /tmp/BealTerminalAudit.lean <<'EOF'
