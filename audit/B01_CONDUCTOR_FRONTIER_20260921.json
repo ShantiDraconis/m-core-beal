@@ -1,0 +1,37 @@
+{
+  "schema": "ATK_B01_CONDUCTOR_FRONTIER_V1",
+  "date": "2026-09-21",
+  "repo": "ShantiDraconis/m-core-beal",
+  "base_semantic_gate_commit": "badce4dae8fa23699b02bfc020b43cb776cd60dc",
+  "status": "OPEN_FORMAL_AND_MATH",
+  "established_prefix": {
+    "theorem": "MCore.T36EM_hasMultiplicativeReduction",
+    "meaning": "The selected Frey model has genuine Mathlib HasMultiplicativeReduction at the relevant odd primes once T33 input is supplied."
+  },
+  "external_mathlib_api_audit": {
+    "repository": "leanprover-community/mathlib4",
+    "searched_symbols": [
+      "HasMultiplicativeReduction",
+      "conductor WeierstrassCurve",
+      "conductorExponent",
+      "Tate conductor"
+    ],
+    "results": {
+      "HasMultiplicativeReduction": "FOUND in Mathlib/AlgebraicGeometry/EllipticCurve/Reduction.lean",
+      "local_L_factor": "FOUND in Mathlib/AlgebraicGeometry/EllipticCurve/LFunction.lean; reduction type selects local polynomial",
+      "elliptic_curve_conductor": "NO matching conductor/conductorExponent API found by repository code search"
+    },
+    "note": "Absence from code search is an API audit result, not a mathematical impossibility theorem."
+  },
+  "first_open_bridge": {
+    "input": "HasMultiplicativeReduction for the actual Frey curve at an odd prime p",
+    "output": "a rigorously defined local conductor exponent and proof of the exact exponent used by level lowering",
+    "status": "OPEN_BRIDGE"
+  },
+  "implications": [
+    "B01 cannot be promoted merely by importing an existing Mathlib conductor theorem.",
+    "A project-side conductor definition plus theorem, or a verified external formalization, is required.",
+    "Exact global conductor and exact lowered level remain downstream and OPEN."
+  ],
+  "promotion_allowed": false
+}
