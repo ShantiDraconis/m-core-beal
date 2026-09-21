@@ -1,0 +1,25 @@
+{
+  "schema": "ATK_SEMANTIC_GATE_V1",
+  "date": "2026-09-21",
+  "gate": "B01",
+  "audited_head": "d039136fe260d626fbf0974a3413d222e13d43f8",
+  "kernel_gate": "RED",
+  "semantic_status": "OPEN_MATH",
+  "promotion_allowed": false,
+  "promotion_scope": "B01_ONLY",
+  "endpoint": "Beal conjecture",
+  "established_prefix": [
+    "Concrete Frey model Y^2 = X(X-A)(X+B)",
+    "Odd-prime c4/discriminant local arithmetic",
+    "Genuine Mathlib multiplicative reduction at relevant odd primes"
+  ],
+  "first_open_bridge": "genuine multiplicative reduction -> conductor exponent / exact conductor -> exact lowered level for each residual candidate",
+  "provenance": {
+    "barrios_minimal_models": "VERIFIED_SUBCLAIM_ONLY",
+    "barrios_roy_local_data": "VERIFIED_SUBCLAIM_ONLY",
+    "warning": "2-adic local classifications do not by themselves establish the global conductor or level-lowering conclusion"
+  },
+  "nontriviality": "PASS_FOR_PREFIX_ONLY",
+  "semantic_equivalence": "B01 is a genuine modular-method subproblem, not equivalent to the full Beal endpoint",
+  "freeze_rule": "FROZEN_HARD requires kernel + provenance + semantic equivalence + nontriviality + clean reproduction"
+}
