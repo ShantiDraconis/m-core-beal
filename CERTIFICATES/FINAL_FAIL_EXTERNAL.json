@@ -1,0 +1,29 @@
+{
+  "schema": "atk.final-fail-external.v1",
+  "problem": "BEAL",
+  "repository": "ShantiDraconis/m-core-beal",
+  "process_state": "FINAL_FAIL_EXTERNAL_CANDIDATE",
+  "process_closed": true,
+  "proof_claimed": false,
+  "mathematical_endpoint_proved": false,
+  "active_validated_head": {
+    "sha": "4246435eddd340131cc74df03de1f567a91b538e",
+    "run": 35649957265,
+    "status": "SUCCESS"
+  },
+  "certified_terminal_anchor": {
+    "source_sha": "73f1fd7b2a692ea857acaea70e18745f08878c2a",
+    "certificate_package_sha": "0a0819ea3800d1a9cf40c2888eb971ad35dda188",
+    "certifying_runs": [
+      35641414716,
+      35641414763,
+      35641897480
+    ],
+    "state": "GREEN_FROZEN_TERMINAL_FRONTIER"
+  },
+  "terminal_endpoint": {
+    "name": "B01_EXACT_CONDUCTOR_LEVEL / B02_RESIDUAL_ELIMINATION",
+    "disposition": "OPEN_RECORDED_IN_FINAL_FAIL"
+  },
+  "policy": "Close and externalize the audit/process lane using certified evidence. Do not manufacture a theorem endpoint, hidden axiom, oracle, sorry, or admit."
+}
