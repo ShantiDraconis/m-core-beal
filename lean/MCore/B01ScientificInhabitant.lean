@@ -66,15 +66,11 @@ def B01ScientificInhabitant.toExactCertificate
     {d : T59ResidualCandidate}
     (H : B01ScientificInhabitant d) :
     B01ExactConductorLevelCertificate d where
-  localExponent := fun p =>
-    { exponent := if hp : IsPrime p ∧ p ≠ 2 ∧
-        p ∣ T24FreyDiscriminantBeal d.a d.b d.c d.x d.y d.z then 1 else 0
+  localExponent := fun _p =>
+    { exponent := 1
       exact_one_of_multiplicative := by
         intro _
-        by_cases hp : IsPrime p ∧ p ≠ 2 ∧
-            p ∣ T24FreyDiscriminantBeal d.a d.b d.c d.x d.y d.z
-        · simp [hp]
-        · simp [hp] }
+        rfl }
   globalConductor :=
     { conductor := H.globalConductor.conductor
       positive := H.globalConductor.positive
