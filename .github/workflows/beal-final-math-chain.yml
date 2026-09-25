@@ -37,13 +37,16 @@ jobs:
         working-directory: t36e_mathlib
         run: |
           set -euo pipefail
-          lake env lean ../lean/MCore/B01ExactConductorLevelCertificate.lean -o .lake/build/lib/lean/MCore/B01ExactConductorLevelCertificate.olean 2>&1 | tee B01Exact.log
+          mkdir -p MCore
+          cp ../lean/MCore/B01ExactConductorLevelCertificate.lean MCore/B01ExactConductorLevelCertificate.lean
+          lake env lean MCore/B01ExactConductorLevelCertificate.lean -o .lake/build/lib/lean/MCore/B01ExactConductorLevelCertificate.olean 2>&1 | tee B01Exact.log
           if grep -F 'sorryAx' B01Exact.log; then exit 1; fi
       - name: Kernel check final chain
         working-directory: t36e_mathlib
         run: |
           set -euo pipefail
-          lake env lean ../lean/MCore/BealFinalMathematicalChain.lean 2>&1 | tee BealFinalMath.log
+          cp ../lean/MCore/BealFinalMathematicalChain.lean MCore/BealFinalMathematicalChain.lean
+          lake env lean MCore/BealFinalMathematicalChain.lean 2>&1 | tee BealFinalMath.log
           if grep -F 'sorryAx' BealFinalMath.log; then exit 1; fi
       - name: Validate fail-closed certificate
         run: |
