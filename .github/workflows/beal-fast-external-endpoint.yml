@@ -1,0 +1,58 @@
+name: BEAL fast external endpoint
+
+on:
+  push:
+    branches:
+      - attack/beal-open-math-inhabitants-v1
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fast-endpoint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: leanprover/lean-action@v1
+        with:
+          lake-package-directory: t36e_mathlib
+          build: false
+          test: false
+          lint: false
+          use-mathlib-cache: true
+      - name: Build exact endpoint dependencies
+        working-directory: t36e_mathlib
+        run: |
+          set -euo pipefail
+          mkdir -p MCore
+          lake build MCore.K10 MCore.K8 MCore.BealThreeLaneClosure
+          cp ../lean/MCore/B01ExactConductorLevelCertificate.lean MCore/B01ExactConductorLevelCertificate.lean
+          lake env lean MCore/B01ExactConductorLevelCertificate.lean -o .lake/build/lib/lean/MCore/B01ExactConductorLevelCertificate.olean
+          cp ../lean/MCore/BealFinalMathematicalChain.lean MCore/BealFinalMathematicalChain.lean
+          lake env lean MCore/BealFinalMathematicalChain.lean -o .lake/build/lib/lean/MCore/BealFinalMathematicalChain.olean
+          cp ../lean/MCore/BealEndpointDenseFrontier.lean MCore/BealEndpointDenseFrontier.lean
+          lake env lean MCore/BealEndpointDenseFrontier.lean -o .lake/build/lib/lean/MCore/BealEndpointDenseFrontier.olean
+      - name: Kernel check shortest exact endpoint
+        working-directory: t36e_mathlib
+        run: |
+          set -euo pipefail
+          cp ../lean/MCore/BealFastExternalEndpoint.lean MCore/BealFastExternalEndpoint.lean
+          lake env lean MCore/BealFastExternalEndpoint.lean 2>&1 | tee BealFastExternalEndpoint.log
+          if grep -F 'sorryAx' BealFastExternalEndpoint.log; then exit 1; fi
+      - name: Validate fail-closed endpoint
+        run: |
+          python3 - <<'PY'
+          import json
+          x=json.load(open('CERTIFICATES/BEAL_FAST_EXTERNAL_ENDPOINT.json'))
+          assert x['scientific_state']=='OPEN_MATH'
+          assert x['proof_claimed'] is False
+          assert x['promotion_allowed'] is False
+          assert x['relation_to_beal']=='exact_equivalence'
+          PY
+      - name: Boundary
+        run: |
+          echo 'FAST_ENDPOINT_INFRA=GREEN_IF_JOB_SUCCEEDS'
+          echo 'FAST_ENDPOINT_MATH=OPEN_MATH'
+          echo 'MINIMAL_REQUIRED_OBJECT=BealCommonDivisorProducer'
