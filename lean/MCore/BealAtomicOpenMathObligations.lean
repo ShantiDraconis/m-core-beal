@@ -1,6 +1,7 @@
 import MCore.B01DenseScientificFrontier
 import MCore.B02DenseScientificFrontier
 import MCore.BealEndpointDenseFrontier
+import MCore.BealDenseOpenMathPackage
 
 namespace MCore
 
