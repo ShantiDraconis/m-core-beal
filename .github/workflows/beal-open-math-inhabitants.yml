@@ -25,7 +25,7 @@ jobs:
       - name: Hygiene
         run: |
           set -euo pipefail
-          for f in lean/MCore/BealOpenMathInhabitants.lean lean/MCore/B01ScientificInhabitant.lean; do
+          for f in lean/MCore/BealOpenMathInhabitants.lean lean/MCore/B01ScientificInhabitant.lean lean/MCore/B01DenseScientificFrontier.lean; do
             if grep -n -E '(^|[^[:alnum:]_])(sorry|admit)([^[:alnum:]_]|$)' "$f"; then exit 1; fi
             if grep -n -E '^[[:space:]]*(@\[[^]]*\][[:space:]]*)?(axiom|constant|constants)[[:space:]]' "$f"; then exit 1; fi
           done
@@ -46,6 +46,9 @@ jobs:
           cp ../lean/MCore/B01ScientificInhabitant.lean MCore/B01ScientificInhabitant.lean
           lake env lean MCore/B01ScientificInhabitant.lean -o .lake/build/lib/lean/MCore/B01ScientificInhabitant.olean 2>&1 | tee B01ScientificInhabitant.log
           if grep -F 'sorryAx' B01ScientificInhabitant.log; then exit 1; fi
+          cp ../lean/MCore/B01DenseScientificFrontier.lean MCore/B01DenseScientificFrontier.lean
+          lake env lean MCore/B01DenseScientificFrontier.lean -o .lake/build/lib/lean/MCore/B01DenseScientificFrontier.olean 2>&1 | tee B01DenseScientificFrontier.log
+          if grep -F 'sorryAx' B01DenseScientificFrontier.log; then exit 1; fi
           cp ../lean/MCore/BealOpenMathInhabitants.lean MCore/BealOpenMathInhabitants.lean
           lake env lean MCore/BealOpenMathInhabitants.lean 2>&1 | tee BealOpenMathInhabitants.log
           if grep -F 'sorryAx' BealOpenMathInhabitants.log; then exit 1; fi
@@ -54,11 +57,15 @@ jobs:
           python3 - <<'PY'
           import json
           x=json.load(open('CERTIFICATES/BEAL_OPEN_MATH_INHABITANTS.json'))
+          y=json.load(open('CERTIFICATES/BEAL_B01_DENSE_FRONTIER.json'))
           assert x['proof_claimed'] is False
           assert x['refutation_claimed'] is False
           assert x['final_mathematical_certificate_issued'] is False
           assert x['promotion_allowed'] is False
           assert all(i['state']=='OPEN_MATH' for i in x['exact_remaining'])
+          assert y['promotion_allowed'] is False
+          assert y['proof_claimed'] is False
+          assert all(i['state']=='OPEN_MATH' for i in y['obligations'])
           PY
       - name: Boundary
         run: |
