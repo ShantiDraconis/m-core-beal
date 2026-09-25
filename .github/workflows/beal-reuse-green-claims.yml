@@ -1,0 +1,50 @@
+name: BEAL reuse GREEN claims
+
+on:
+  push:
+    branches:
+      - claim/beal-reuse-green-v1
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  reuse-green:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: leanprover/lean-action@v1
+        with:
+          lake-package-directory: t36e_mathlib
+          build: false
+          test: false
+          lint: false
+          use-mathlib-cache: true
+      - name: Hygiene
+        run: |
+          set -euo pipefail
+          f=lean/MCore/BealReusableGreenClaims.lean
+          if grep -n -E '(^|[^[:alnum:]_])(sorry|admit)([^[:alnum:]_]|$)' "$f"; then exit 1; fi
+          if grep -n -E '^[[:space:]]*(@\[[^]]*\][[:space:]]*)?(axiom|constant|constants)[[:space:]]' "$f"; then exit 1; fi
+      - name: Kernel check reused claims
+        working-directory: t36e_mathlib
+        run: |
+          set -euo pipefail
+          lake env lean ../lean/MCore/BealReusableGreenClaims.lean 2>&1 | tee BealReusableGreenClaims.log
+          if grep -F 'sorryAx' BealReusableGreenClaims.log; then exit 1; fi
+      - name: Validate scope
+        run: |
+          python3 - <<'PY'
+          import json
+          x=json.load(open('CERTIFICATES/BEAL_REUSED_GREEN_CLAIMS.json'))
+          assert x['mathematical_status']=='OPEN_MATH'
+          assert x['promotion_allowed'] is False
+          assert 'BealConjecture' in x['not_claimed']
+          assert 'not BealConjecture' in x['not_claimed']
+          PY
+      - name: Boundary
+        run: |
+          echo 'BEAL_REUSED_GREEN_CLAIMS=GREEN_IF_JOB_SUCCEEDS'
+          echo 'BEAL_FINAL_MATH=OPEN_MATH'
