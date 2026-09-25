@@ -1,0 +1,65 @@
+{
+  "schema": "atk.beal-b01-dense-frontier.v1",
+  "problem": "BEAL",
+  "branch": "attack/beal-open-math-inhabitants-v1",
+  "purpose": "Dense fail-closed decomposition of the exact scientific content still required by B01.",
+  "green_prefix": {
+    "theorem": "MCore.T60_every_candidate_has_genuine_odd_multiplicative_reduction",
+    "state": "GREEN_REUSED",
+    "scope": "Every odd prime dividing the Frey discriminant has genuine Mathlib multiplicative reduction for the concrete Frey curve."
+  },
+  "obligations": [
+    {
+      "id": "B01-O1",
+      "object": "B01OddExponentOneLaw",
+      "statement": "For every residual candidate and odd bad prime, the genuine local conductor exponent is exactly 1.",
+      "state": "OPEN_MATH"
+    },
+    {
+      "id": "B01-O2",
+      "object": "B01TwoAdicExactPackage",
+      "statement": "Determine and certify the actual local conductor exponent at p=2 for every residual candidate.",
+      "state": "OPEN_MATH"
+    },
+    {
+      "id": "B01-O3",
+      "object": "B01GlobalConductorExactPackage",
+      "statement": "Assemble one positive global conductor whose exact prime-power exponents agree with the certified local exponents.",
+      "state": "OPEN_MATH"
+    },
+    {
+      "id": "B01-O4",
+      "object": "B01ResidualInput",
+      "statement": "Provide an admissible residual prime and all exact semantic hypotheses needed for the chosen level-lowering theorem.",
+      "state": "OPEN_MATH"
+    },
+    {
+      "id": "B01-O5",
+      "object": "B01LoweredLevelExactPackage",
+      "statement": "Produce the actual lowered level, prove its semantic correctness, positivity, conductor divisibility, squarefreeness, and base support.",
+      "state": "OPEN_MATH"
+    }
+  ],
+  "exact_dependency_chain": [
+    "T60/T36E GREEN genuine multiplicative reduction",
+    "B01-O1 odd conductor exponent = 1",
+    "B01-O2 exact 2-adic conductor exponent",
+    "B01-O3 exact global conductor",
+    "B01-O4 residual admissibility hypotheses",
+    "B01-O5 exact lowered level",
+    "B01DenseScientificInhabitant",
+    "B01ExactConductorLevelCertificate",
+    "BealFinalMathematicalPackage"
+  ],
+  "anti_shortcuts": [
+    "No Boolean or True-valued proxy counts as a mathematical inhabitant.",
+    "No conductor value is hard-coded.",
+    "No 2-adic exponent is assumed.",
+    "No lowered level is assumed from exponent signature alone.",
+    "No wrapper certificate is promoted without its semantic inhabitant.",
+    "No sorry/admit/axiom/constant is permitted in the dense frontier source."
+  ],
+  "final_state": "OPEN_MATH",
+  "promotion_allowed": false,
+  "proof_claimed": false
+}
