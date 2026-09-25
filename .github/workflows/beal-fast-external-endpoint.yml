@@ -33,17 +33,26 @@ jobs:
         run: |
           set -euo pipefail
           cp ../lean/MCore/BealFastExternalEndpoint.lean MCore/BealFastExternalEndpoint.lean
-          lake env lean MCore/BealFastExternalEndpoint.lean 2>&1 | tee BealFastExternalEndpoint.log
+          lake env lean MCore/BealFastExternalEndpoint.lean -o .lake/build/lib/lean/MCore/BealFastExternalEndpoint.olean 2>&1 | tee BealFastExternalEndpoint.log
           if grep -F 'sorryAx' BealFastExternalEndpoint.log; then exit 1; fi
+          cp ../lean/MCore/BealFastClosureAudit.lean MCore/BealFastClosureAudit.lean
+          lake env lean MCore/BealFastClosureAudit.lean 2>&1 | tee BealFastClosureAudit.log
+          if grep -F 'sorryAx' BealFastClosureAudit.log; then exit 1; fi
       - name: Validate fail-closed endpoint
         run: |
           python3 - <<'PY'
           import json
           x=json.load(open('CERTIFICATES/BEAL_FAST_EXTERNAL_ENDPOINT.json'))
+          y=json.load(open('CERTIFICATES/BEAL_FAST_CLOSURE_AUDIT.json'))
           assert x['scientific_state']=='OPEN_MATH'
           assert x['proof_claimed'] is False
           assert x['promotion_allowed'] is False
           assert x['relation_to_beal']=='exact_equivalence'
+          assert y['mathematical_state']=='OPEN_MATH'
+          assert y['exact_remaining_count']==1
+          assert y['exact_remaining_object']=='MCore.BealCommonDivisorProducer'
+          assert y['proof_claimed'] is False
+          assert y['promotion_allowed'] is False
           PY
       - name: Boundary
         run: |
