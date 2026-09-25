@@ -62,7 +62,7 @@ theorem beal_external_payloads_exclusive
     (P : BealExternalProofPayload)
     (R : BealExternalRefutationPayload) : False :=
   proof_refutation_exclusive
-    (universalCommonPrime_to_proofCertificate P.producer.toEndpoint)
+    ⟨commonDivisorProducer_closes_beal P.producer⟩
     R.toCertificate
 
 inductive BealFinalExternalResolution
