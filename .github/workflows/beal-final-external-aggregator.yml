@@ -1,0 +1,73 @@
+name: BEAL final external aggregator
+
+on:
+  push:
+    branches:
+      - attack/beal-open-math-inhabitants-v1
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  final-external:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: leanprover/lean-action@v1
+        with:
+          lake-package-directory: t36e_mathlib
+          build: false
+          test: false
+          lint: false
+          use-mathlib-cache: true
+      - name: Build dependencies once
+        working-directory: t36e_mathlib
+        run: |
+          set -euo pipefail
+          mkdir -p MCore
+          lake build MCore.PostT36EConductorBridge MCore.B01ConductorLevel MCore.K10 MCore.K8 MCore.K7 MCore.BealThreeLaneClosure
+          cp ../lean/MCore/B01ExactConductorLevelCertificate.lean MCore/B01ExactConductorLevelCertificate.lean
+          lake env lean MCore/B01ExactConductorLevelCertificate.lean -o .lake/build/lib/lean/MCore/B01ExactConductorLevelCertificate.olean
+          cp ../lean/MCore/BealFinalMathematicalChain.lean MCore/BealFinalMathematicalChain.lean
+          lake env lean MCore/BealFinalMathematicalChain.lean -o .lake/build/lib/lean/MCore/BealFinalMathematicalChain.olean
+          cp ../lean/MCore/B01ScientificInhabitant.lean MCore/B01ScientificInhabitant.lean
+          lake env lean MCore/B01ScientificInhabitant.lean -o .lake/build/lib/lean/MCore/B01ScientificInhabitant.olean
+          cp ../lean/MCore/B01DenseScientificFrontier.lean MCore/B01DenseScientificFrontier.lean
+          lake env lean MCore/B01DenseScientificFrontier.lean -o .lake/build/lib/lean/MCore/B01DenseScientificFrontier.olean
+          cp ../lean/MCore/B02DenseScientificFrontier.lean MCore/B02DenseScientificFrontier.lean
+          lake env lean MCore/B02DenseScientificFrontier.lean -o .lake/build/lib/lean/MCore/B02DenseScientificFrontier.olean
+          cp ../lean/MCore/BealEndpointDenseFrontier.lean MCore/BealEndpointDenseFrontier.lean
+          lake env lean MCore/BealEndpointDenseFrontier.lean -o .lake/build/lib/lean/MCore/BealEndpointDenseFrontier.olean
+          cp ../lean/MCore/BealFastExternalEndpoint.lean MCore/BealFastExternalEndpoint.lean
+          lake env lean MCore/BealFastExternalEndpoint.lean -o .lake/build/lib/lean/MCore/BealFastExternalEndpoint.olean
+          cp ../lean/MCore/BealAtomicOpenMathObligations.lean MCore/BealAtomicOpenMathObligations.lean
+          lake env lean MCore/BealAtomicOpenMathObligations.lean -o .lake/build/lib/lean/MCore/BealAtomicOpenMathObligations.olean
+          cp ../lean/MCore/BealDenseOpenMathPackage.lean MCore/BealDenseOpenMathPackage.lean
+          lake env lean MCore/BealDenseOpenMathPackage.lean -o .lake/build/lib/lean/MCore/BealDenseOpenMathPackage.olean
+          cp ../lean/MCore/BealMasterExternalProof.lean MCore/BealMasterExternalProof.lean
+          lake env lean MCore/BealMasterExternalProof.lean -o .lake/build/lib/lean/MCore/BealMasterExternalProof.olean
+      - name: Kernel check final external aggregator
+        working-directory: t36e_mathlib
+        run: |
+          set -euo pipefail
+          cp ../lean/MCore/BealFinalExternalAggregator.lean MCore/BealFinalExternalAggregator.lean
+          lake env lean MCore/BealFinalExternalAggregator.lean 2>&1 | tee BealFinalExternalAggregator.log
+          if grep -F 'sorryAx' BealFinalExternalAggregator.log; then exit 1; fi
+      - name: Validate fail-closed manifest
+        run: |
+          python3 - <<'PY'
+          import json
+          x=json.load(open('CERTIFICATES/BEAL_FINAL_EXTERNAL.json'))
+          assert x['infrastructure']['state']=='GREEN_FROZEN_CERTIFIED'
+          assert x['proof_claimed'] is False
+          assert x['refutation_claimed'] is False
+          assert x['final_external_issued'] is False
+          assert any(c['state']=='OPEN_MATH' for c in x['claims'])
+          PY
+      - name: Boundary
+        run: |
+          echo 'FINAL_EXTERNAL_INFRA=GREEN_IF_JOB_SUCCEEDS'
+          echo 'FINAL_EXTERNAL_ISSUED=false'
+          echo 'MATH_STATE=OPEN_MATH'
