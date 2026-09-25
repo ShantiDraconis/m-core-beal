@@ -84,15 +84,13 @@ def B01ScientificInhabitant.toExactCertificate
       squarefree := H.loweredLevel.squarefree
       support := H.loweredLevel.support }
 
-/-- Universal B01 closure target. -/
-def B01ScientificUniversal : Prop :=
-  ∀ d : T59ResidualCandidate, B01ScientificInhabitant d
+/-- Universal B01 closure target.  This is data, not a proposition. -/
+structure B01ScientificUniversal where
+  inhabit : ∀ d : T59ResidualCandidate, B01ScientificInhabitant d
 
-theorem b01_scientific_universal_to_exact
+def B01ScientificUniversal.toExact
     (H : B01ScientificUniversal) :
     ∀ d : T59ResidualCandidate, B01ExactConductorLevelCertificate d :=
-  fun d => (H d).toExactCertificate
-
-#print axioms MCore.b01_scientific_universal_to_exact
+  fun d => (H.inhabit d).toExactCertificate
 
 end MCore
