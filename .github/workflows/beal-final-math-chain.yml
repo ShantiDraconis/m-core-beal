@@ -1,0 +1,62 @@
+name: BEAL final mathematical chain
+
+on:
+  push:
+    branches:
+      - attack/beal-final-math-chain-v1
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  final-chain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: leanprover/lean-action@v1
+        with:
+          lake-package-directory: t36e_mathlib
+          build: false
+          test: false
+          lint: false
+          use-mathlib-cache: true
+      - name: Hygiene
+        run: |
+          set -euo pipefail
+          for f in lean/MCore/B01ExactConductorLevelCertificate.lean lean/MCore/BealFinalMathematicalChain.lean; do
+            if grep -n -E '(^|[^[:alnum:]_])(sorry|admit)([^[:alnum:]_]|$)' "$f"; then exit 1; fi
+            if grep -n -E '^[[:space:]]*(@\[[^]]*\][[:space:]]*)?(axiom|constant|constants)[[:space:]]' "$f"; then exit 1; fi
+          done
+      - name: Build dependencies
+        working-directory: t36e_mathlib
+        run: |
+          lake build MCore.PostT36EConductorBridge MCore.B01ConductorLevel MCore.T58 MCore.K8 MCore.BealThreeLaneClosure
+      - name: Kernel check B01 contract
+        working-directory: t36e_mathlib
+        run: |
+          set -euo pipefail
+          lake env lean ../lean/MCore/B01ExactConductorLevelCertificate.lean 2>&1 | tee B01Exact.log
+          if grep -F 'sorryAx' B01Exact.log; then exit 1; fi
+      - name: Kernel check final chain
+        working-directory: t36e_mathlib
+        run: |
+          set -euo pipefail
+          lake env lean ../lean/MCore/BealFinalMathematicalChain.lean 2>&1 | tee BealFinalMath.log
+          if grep -F 'sorryAx' BealFinalMath.log; then exit 1; fi
+      - name: Validate fail-closed certificate
+        run: |
+          python3 - <<'PY'
+          import json
+          x=json.load(open('CERTIFICATES/BEAL_FINAL_MATH_CHAIN.json'))
+          assert x['theorem_not_claimed'] is True
+          assert x['refutation_not_claimed'] is True
+          assert x['final_mathematical_certificate_issued'] is False
+          assert x['promotion_allowed'] is False
+          PY
+      - name: Boundary
+        run: |
+          echo 'BEAL_FINAL_CHAIN=GREEN_IF_JOB_SUCCEEDS'
+          echo 'BEAL_MATH=OPEN_MATH'
+          echo 'FINAL_MATH_CERTIFICATE_ISSUED=false'
