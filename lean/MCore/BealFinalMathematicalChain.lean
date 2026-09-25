@@ -49,7 +49,7 @@ theorem finalPackage_issues_proof_certificate
   universalCommonPrime_to_proofCertificate P.endpoint
 
 /-- Refutation lane remains independent and requires one explicit admissible counterexample. -/
-theorem refutationPackage_issues_refutation_certificate
+def refutationPackage_issues_refutation_certificate
     (d : BealData) (h : BealCounterexample d) : BealRefutationCertificate :=
   ⟨d, h⟩
 
