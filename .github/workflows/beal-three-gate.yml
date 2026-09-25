@@ -1,0 +1,132 @@
+name: BEAL three gate
+
+on:
+  push:
+    branches:
+      - attack/beal-open-math-inhabitants-v1
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      head: ${{ steps.meta.outputs.head }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: meta
+        run: echo "head=${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
+
+  g1-b01:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: leanprover/lean-action@v1
+        with:
+          lake-package-directory: t36e_mathlib
+          build: false
+          test: false
+          lint: false
+          use-mathlib-cache: true
+      - name: Build B01 dependencies
+        working-directory: t36e_mathlib
+        run: |
+          set -euo pipefail
+          mkdir -p MCore
+          lake build MCore.PostT36EConductorBridge MCore.B01ConductorLevel
+          cp ../lean/MCore/B01ExactConductorLevelCertificate.lean MCore/B01ExactConductorLevelCertificate.lean
+          lake env lean MCore/B01ExactConductorLevelCertificate.lean -o .lake/build/lib/lean/MCore/B01ExactConductorLevelCertificate.olean
+          cp ../lean/MCore/B01ScientificInhabitant.lean MCore/B01ScientificInhabitant.lean
+          lake env lean MCore/B01ScientificInhabitant.lean -o .lake/build/lib/lean/MCore/B01ScientificInhabitant.olean
+          cp ../lean/MCore/B01DenseScientificFrontier.lean MCore/B01DenseScientificFrontier.lean
+          lake env lean MCore/B01DenseScientificFrontier.lean -o .lake/build/lib/lean/MCore/B01DenseScientificFrontier.olean
+      - name: G1 boundary
+        run: |
+          echo 'G1_B01_INFRA=GREEN'
+          echo 'G1_B01_MATH=OPEN_MATH'
+
+  g2-b02:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: leanprover/lean-action@v1
+        with:
+          lake-package-directory: t36e_mathlib
+          build: false
+          test: false
+          lint: false
+          use-mathlib-cache: true
+      - name: Build B02 dependencies
+        working-directory: t36e_mathlib
+        run: |
+          set -euo pipefail
+          mkdir -p MCore
+          lake build MCore.T58 MCore.K8 MCore.BealThreeLaneClosure
+          cp ../lean/MCore/B01ExactConductorLevelCertificate.lean MCore/B01ExactConductorLevelCertificate.lean
+          lake env lean MCore/B01ExactConductorLevelCertificate.lean -o .lake/build/lib/lean/MCore/B01ExactConductorLevelCertificate.olean
+          cp ../lean/MCore/BealFinalMathematicalChain.lean MCore/BealFinalMathematicalChain.lean
+          lake env lean MCore/BealFinalMathematicalChain.lean -o .lake/build/lib/lean/MCore/BealFinalMathematicalChain.olean
+          cp ../lean/MCore/B02DenseScientificFrontier.lean MCore/B02DenseScientificFrontier.lean
+          lake env lean MCore/B02DenseScientificFrontier.lean -o .lake/build/lib/lean/MCore/B02DenseScientificFrontier.olean
+      - name: G2 boundary
+        run: |
+          echo 'G2_B02_INFRA=GREEN'
+          echo 'G2_B02_MATH=OPEN_MATH'
+
+  g3-endpoint:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: leanprover/lean-action@v1
+        with:
+          lake-package-directory: t36e_mathlib
+          build: false
+          test: false
+          lint: false
+          use-mathlib-cache: true
+      - name: Build endpoint dependencies
+        working-directory: t36e_mathlib
+        run: |
+          set -euo pipefail
+          mkdir -p MCore
+          lake build MCore.K8 MCore.BealThreeLaneClosure
+          cp ../lean/MCore/B01ExactConductorLevelCertificate.lean MCore/B01ExactConductorLevelCertificate.lean
+          lake env lean MCore/B01ExactConductorLevelCertificate.lean -o .lake/build/lib/lean/MCore/B01ExactConductorLevelCertificate.olean
+          cp ../lean/MCore/BealFinalMathematicalChain.lean MCore/BealFinalMathematicalChain.lean
+          lake env lean MCore/BealFinalMathematicalChain.lean -o .lake/build/lib/lean/MCore/BealFinalMathematicalChain.olean
+          cp ../lean/MCore/BealEndpointDenseFrontier.lean MCore/BealEndpointDenseFrontier.lean
+          lake env lean MCore/BealEndpointDenseFrontier.lean -o .lake/build/lib/lean/MCore/BealEndpointDenseFrontier.olean
+      - name: G3 boundary
+        run: |
+          echo 'G3_ENDPOINT_INFRA=GREEN'
+          echo 'G3_ENDPOINT_MATH=OPEN_MATH'
+
+  aggregate:
+    needs: [g1-b01, g2-b02, g3-endpoint]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate three-gate fail-closed ledger
+        run: |
+          python3 - <<'PY'
+          import json
+          x=json.load(open('CERTIFICATES/BEAL_MASTER_LEDGER.json'))
+          assert x['mathematical_state']=='OPEN_MATH'
+          assert x['proof_lane']['atomic_missing']==12
+          assert x['proof_lane']['promotion_allowed'] is False
+          assert x['current_state']=='UNRESOLVED_FAIL_CLOSED'
+          PY
+      - name: Three gate summary
+        run: |
+          echo 'G1=INFRA_GREEN_MATH_OPEN'
+          echo 'G2=INFRA_GREEN_MATH_OPEN'
+          echo 'G3=INFRA_GREEN_MATH_OPEN'
+          echo 'FINAL=0/3'
