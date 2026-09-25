@@ -27,7 +27,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p MCore
-          lake build MCore.K10 MCore.K8 MCore.BealThreeLaneClosure
+          lake build MCore.PostT36EConductorBridge MCore.B01ConductorLevel MCore.K10 MCore.K8 MCore.BealThreeLaneClosure
           cp ../lean/MCore/B01ExactConductorLevelCertificate.lean MCore/B01ExactConductorLevelCertificate.lean
           lake env lean MCore/B01ExactConductorLevelCertificate.lean -o .lake/build/lib/lean/MCore/B01ExactConductorLevelCertificate.olean
           cp ../lean/MCore/BealFinalMathematicalChain.lean MCore/BealFinalMathematicalChain.lean
