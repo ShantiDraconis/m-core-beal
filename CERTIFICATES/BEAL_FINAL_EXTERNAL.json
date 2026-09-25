@@ -1,30 +1,58 @@
 {
-  "schema": "atk.beal-final-external.v1",
+  "schema": "atk.beal-final-external.v2",
   "problem": "BEAL",
-  "status": "SOURCE",
+  "status": "PREPARATORY",
+  "preparatory_external_ready": true,
   "infrastructure": {
     "fast_endpoint_sha": "7e6732d81ee93a7bca7818771c50f0d48fe46450",
     "fast_endpoint_run": 36187202050,
-    "state": "GREEN_FROZEN_CERTIFIED"
+    "state": "GREEN_FROZEN_CERTIFIED",
+    "frozen_ref": "frozen/beal-fast-endpoint-green-7e6732d8",
+    "certified_ref": "cert/beal-fast-endpoint-7e6732d8"
   },
-  "claims": [
-    {
-      "id": "BEAL-INFRASTRUCTURE",
-      "state": "GREEN",
-      "evidence": "cert/beal-fast-endpoint-7e6732d8"
-    },
-    {
-      "id": "BEAL-COMMON-DIVISOR-PRODUCER",
-      "state": "OPEN_MATH",
-      "object": "MCore.BealCommonDivisorProducer"
-    },
-    {
-      "id": "BEAL-CONJECTURE",
-      "state": "OPEN_MATH",
-      "object": "MCore.BealConjecture"
-    }
-  ],
-  "promotion_rule": "Only an inhabitant of BealExternalProofPayload may promote the proof claim.",
+  "claims": {
+    "infrastructure": [
+      {
+        "id": "K10-COMMON-PRIME-COMMON-DIVISOR",
+        "state": "GREEN"
+      },
+      {
+        "id": "T60-T36E-ODD-MULTIPLICATIVE-REDUCTION",
+        "state": "GREEN"
+      },
+      {
+        "id": "FAST-ENDPOINT-COMMON-DIVISOR-REDUCTION",
+        "state": "GREEN"
+      },
+      {
+        "id": "PROOF-REFUTATION-EXCLUSIVITY",
+        "state": "GREEN"
+      }
+    ],
+    "scientific": [
+      {
+        "id": "B01-EXACT-CONDUCTOR-LOWERED-LEVEL",
+        "state": "OPEN_MATH"
+      },
+      {
+        "id": "B02-RESIDUAL-NEWFORM-ELIMINATION",
+        "state": "OPEN_MATH"
+      },
+      {
+        "id": "UNIVERSAL-COMMON-DIVISOR-PRODUCER",
+        "state": "OPEN_MATH",
+        "object": "MCore.BealCommonDivisorProducer"
+      },
+      {
+        "id": "BEAL-CONJECTURE",
+        "state": "OPEN_MATH",
+        "object": "MCore.BealConjecture"
+      }
+    ]
+  },
+  "minimal_proof_object": "MCore.BealCommonDivisorProducer",
+  "promotion_rule": "Only a genuine BealExternalProofPayload or BealExternalRefutationPayload may issue the scientific final external certificate.",
+  "promotion_allowed": false,
   "proof_claimed": false,
   "refutation_claimed": false,
   "final_external_issued": false
