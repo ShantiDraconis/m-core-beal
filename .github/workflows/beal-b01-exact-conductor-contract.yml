@@ -17,9 +17,11 @@ jobs:
       - uses: actions/checkout@v4
       - uses: leanprover/lean-action@v1
         with:
+          lake-package-directory: t36e_mathlib
           build: false
           test: false
           lint: false
+          use-mathlib-cache: true
       - name: Source hygiene
         run: |
           set -euo pipefail
@@ -27,12 +29,15 @@ jobs:
           if grep -n -E '(^|[^[:alnum:]_])(sorry|admit)([^[:alnum:]_]|$)' "$f"; then exit 1; fi
           if grep -n -E '^[[:space:]]*(@\[[^]]*\][[:space:]]*)?(axiom|constant|constants)[[:space:]]' "$f"; then exit 1; fi
       - name: Build dependencies
+        working-directory: t36e_mathlib
         run: |
           lake build MCore.PostT36EConductorBridge MCore.B01ConductorLevel
       - name: Kernel check B01 dense contract
+        working-directory: t36e_mathlib
         run: |
           set -euo pipefail
-          lake env lean lean/MCore/B01ExactConductorLevelCertificate.lean 2>&1 | tee B01ExactConductorLevelCertificate.log
+          cp ../lean/MCore/B01ExactConductorLevelCertificate.lean MCore/B01ExactConductorLevelCertificate.lean
+          lake env lean MCore/B01ExactConductorLevelCertificate.lean 2>&1 | tee B01ExactConductorLevelCertificate.log
           if grep -E 'sorryAx|Classical\.choice' B01ExactConductorLevelCertificate.log; then exit 1; fi
       - name: Boundary
         run: |
