@@ -1,0 +1,66 @@
+{
+  "schema": "atk.beal-final-math-chain.v1",
+  "problem": "BEAL",
+  "status": "SOURCE",
+  "process_closed": false,
+  "promotion_allowed": false,
+  "chain": [
+    {
+      "id": "B01",
+      "object": "MCore.B01ExactConductorLevelCertificate",
+      "status": "OPEN_MATH_INHABITANT",
+      "requires": [
+        "exact local conductor exponent",
+        "exact global conductor including 2-adic place",
+        "exact lowered level"
+      ]
+    },
+    {
+      "id": "B02",
+      "object": "MCore.B02ResidualEliminationCertificate",
+      "status": "OPEN_MATH_INHABITANT",
+      "requires": [
+        "actual five-family residual/newform eliminators"
+      ]
+    },
+    {
+      "id": "ENDPOINT",
+      "object": "MCore.BealUniversalCommonPrimeCertificate",
+      "status": "OPEN_MATH_INHABITANT",
+      "requires": [
+        "forall BealData, CommonPrime"
+      ]
+    },
+    {
+      "id": "FINAL_PROOF",
+      "object": "MCore.BealProofCertificate",
+      "status": "DERIVABLE_IF_ENDPOINT_INHABITED"
+    },
+    {
+      "id": "REFUTATION",
+      "object": "MCore.BealRefutationCertificate",
+      "status": "OPEN_MATH_INHABITANT",
+      "requires": [
+        "one explicit BealData counterexample"
+      ]
+    },
+    {
+      "id": "MIDDLE",
+      "object": "MCore.BealFinalMathematicalState",
+      "status": "UNRESOLVED_FAIL_CLOSED"
+    }
+  ],
+  "reused_green": [
+    "frozen/t52-t58-level-elimination-green-b9e77ce",
+    "frozen/t59-candidate-level-key-green-4899771",
+    "frozen/t60-odd-local-arithmetic-green-cdac34c",
+    "frozen/t36e-master-green-98bd5f05",
+    "frozen/post-t36e-conductor-bridge-green-1d9217aa",
+    "frozen/b01-conductor-level-interface-green-b6667e63",
+    "frozen/k9-green-e3b8598",
+    "frozen/atk-terminal-certificate-beal-0a0819ea"
+  ],
+  "theorem_not_claimed": true,
+  "refutation_not_claimed": true,
+  "final_mathematical_certificate_issued": false
+}
