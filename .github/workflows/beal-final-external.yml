@@ -60,6 +60,7 @@ jobs:
           python3 - <<'PY'
           import json
           x=json.load(open('CERTIFICATES/BEAL_FINAL_EXTERNAL.json'))
+          assert x['schema']=='atk.beal-final-external.v2'
           assert x['preparatory_external_ready'] is True
           assert x['final_external_issued'] is False
           assert x['proof_claimed'] is False
