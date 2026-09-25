@@ -1,0 +1,98 @@
+name: BEAL gate full batch
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - attack/beal-open-math-inhabitants-v1
+
+permissions:
+  contents: read
+
+jobs:
+  gate-full-batch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: leanprover/lean-action@v1
+        with:
+          lake-package-directory: t36e_mathlib
+          build: false
+          test: false
+          lint: false
+          use-mathlib-cache: true
+      - name: Build certified prefix once
+        working-directory: t36e_mathlib
+        run: |
+          set -euo pipefail
+          lake build MCore.PostT36EConductorBridge MCore.B01ConductorLevel MCore.K10 MCore.K8 MCore.K7 MCore.BealThreeLaneClosure MCore.T58
+          mkdir -p MCore
+      - name: Mirror gate files
+        working-directory: t36e_mathlib
+        run: |
+          set -euo pipefail
+          for f in \
+            B01ExactConductorLevelCertificate \
+            BealFinalMathematicalChain \
+            B01ScientificInhabitant \
+            B01DenseScientificFrontier \
+            B02DenseScientificFrontier \
+            BealEndpointDenseFrontier \
+            BealDenseOpenMathPackage \
+            BealAtomicOpenMathObligations \
+            BealMasterExternalProof \
+            BealFastExternalEndpoint \
+            BealFinalExternalAggregator
+          do
+            cp "../lean/MCore/${f}.lean" "MCore/${f}.lean"
+          done
+      - name: Compile entire gate in dependency order
+        working-directory: t36e_mathlib
+        run: |
+          set -euo pipefail
+          files=(
+            B01ExactConductorLevelCertificate
+            BealFinalMathematicalChain
+            B01ScientificInhabitant
+            B01DenseScientificFrontier
+            B02DenseScientificFrontier
+            BealEndpointDenseFrontier
+            BealDenseOpenMathPackage
+            BealAtomicOpenMathObligations
+            BealMasterExternalProof
+            BealFastExternalEndpoint
+            BealFinalExternalAggregator
+          )
+          : > BEAL_GATE_FULL_BATCH.log
+          for f in "${files[@]}"; do
+            echo "=== ${f} ===" | tee -a BEAL_GATE_FULL_BATCH.log
+            lake env lean "MCore/${f}.lean" -o ".lake/build/lib/lean/MCore/${f}.olean" 2>&1 | tee -a BEAL_GATE_FULL_BATCH.log
+          done
+          if grep -E 'sorryAx|declaration uses .sorry|error:' BEAL_GATE_FULL_BATCH.log; then
+            exit 1
+          fi
+      - name: Validate gate manifests together
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          paths = [
+            'CERTIFICATES/BEAL_B01_DENSE_FRONTIER.json',
+            'CERTIFICATES/BEAL_DENSE_OPEN_MATH_PACKAGE.json',
+            'CERTIFICATES/BEAL_ATOMIC_OPEN_MATH.json',
+            'CERTIFICATES/BEAL_MASTER_LEDGER.json',
+            'CERTIFICATES/BEAL_FAST_EXTERNAL_ENDPOINT.json',
+            'CERTIFICATES/BEAL_FINAL_EXTERNAL.json',
+          ]
+          for p in paths:
+              with open(p) as f: json.load(f)
+          x=json.load(open('CERTIFICATES/BEAL_FINAL_EXTERNAL.json'))
+          assert x['final_external_issued'] is False
+          assert x['proof_claimed'] is False
+          PY
+      - name: Gate batch summary
+        run: |
+          echo 'BEAL_GATE_BATCH=GREEN'
+          echo 'FILES=11'
+          echo 'FINAL_EXTERNAL_ISSUED=false'
