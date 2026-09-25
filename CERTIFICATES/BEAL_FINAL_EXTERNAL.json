@@ -1,76 +1,31 @@
 {
-  "schema": "elyon.beal.final-external.v1",
-  "certificate_type": "FAIL_CLOSED_FINAL_EXTERNAL",
-  "scope": "m-core-beal/all-enabled-claims",
+  "schema": "atk.beal-final-external.v1",
+  "problem": "BEAL",
+  "status": "SOURCE",
   "infrastructure": {
-    "state": "GREEN_FROZEN_CERTIFIED_PREFIX",
-    "frozen_sha": "7e6732d81ee93a7bca7818771c50f0d48fe46450",
+    "fast_endpoint_sha": "7e6732d81ee93a7bca7818771c50f0d48fe46450",
     "fast_endpoint_run": 36187202050,
-    "open_math_audit_run": 36187201973,
-    "certificate_run": 36187202037
+    "state": "GREEN_FROZEN_CERTIFIED"
   },
-  "claims": {
-    "infrastructure": [
-      {
-        "id": "K10_COMMON_DIVISOR_EQ_COMMON_PRIME",
-        "state": "GREEN_CERTIFIED"
-      },
-      {
-        "id": "T60_T36E_ODD_MULTIPLICATIVE_REDUCTION",
-        "state": "GREEN_REUSED"
-      },
-      {
-        "id": "B01_DENSE_DAG",
-        "state": "GREEN_INFRASTRUCTURE"
-      },
-      {
-        "id": "B02_FIVE_FAMILY_DAG",
-        "state": "GREEN_INFRASTRUCTURE"
-      },
-      {
-        "id": "FAST_ENDPOINT_EQUIVALENCE",
-        "state": "GREEN_CERTIFIED"
-      },
-      {
-        "id": "PROOF_REFUTATION_EXCLUSIVITY",
-        "state": "GREEN_CERTIFIED"
-      }
-    ],
-    "scientific": [
-      {
-        "id": "B01_EXACT_CONDUCTOR_LEVEL",
-        "state": "OPEN_MATH"
-      },
-      {
-        "id": "B02_RESIDUAL_ELIMINATION",
-        "state": "OPEN_MATH"
-      },
-      {
-        "id": "UNIVERSAL_COMMON_DIVISOR_PRODUCER",
-        "state": "OPEN_MATH"
-      },
-      {
-        "id": "BEAL_CONJECTURE",
-        "state": "OPEN_MATH"
-      }
-    ]
-  },
-  "minimal_external_proof_object": "MCore.BealCommonDivisorProducer",
-  "proof_path": [
-    "BealCommonDivisorProducer",
-    "commonPrime_iff_commonDivisor",
-    "BealUniversalCommonPrimeCertificate",
-    "BealProofCertificate",
-    "BealFinalExternalCertificate.proof"
+  "claims": [
+    {
+      "id": "BEAL-INFRASTRUCTURE",
+      "state": "GREEN",
+      "evidence": "cert/beal-fast-endpoint-7e6732d8"
+    },
+    {
+      "id": "BEAL-COMMON-DIVISOR-PRODUCER",
+      "state": "OPEN_MATH",
+      "object": "MCore.BealCommonDivisorProducer"
+    },
+    {
+      "id": "BEAL-CONJECTURE",
+      "state": "OPEN_MATH",
+      "object": "MCore.BealConjecture"
+    }
   ],
-  "refutation_path": [
-    "BealCounterexampleWitness",
-    "BealRefutationCertificate",
-    "BealFinalExternalCertificate.refutation"
-  ],
-  "final_external_issued": false,
-  "preparatory_external_ready": true,
+  "promotion_rule": "Only an inhabitant of BealExternalProofPayload may promote the proof claim.",
   "proof_claimed": false,
   "refutation_claimed": false,
-  "promotion_allowed": false
+  "final_external_issued": false
 }
