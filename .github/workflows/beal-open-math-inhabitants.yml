@@ -1,0 +1,63 @@
+name: BEAL open math inhabitants
+
+on:
+  push:
+    branches:
+      - attack/beal-open-math-inhabitants-v1
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  open-math:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: leanprover/lean-action@v1
+        with:
+          lake-package-directory: t36e_mathlib
+          build: false
+          test: false
+          lint: false
+          use-mathlib-cache: true
+      - name: Hygiene
+        run: |
+          set -euo pipefail
+          f=lean/MCore/BealOpenMathInhabitants.lean
+          if grep -n -E '(^|[^[:alnum:]_])(sorry|admit)([^[:alnum:]_]|$)' "$f"; then exit 1; fi
+          if grep -n -E '^[[:space:]]*(@\[[^]]*\][[:space:]]*)?(axiom|constant|constants)[[:space:]]' "$f"; then exit 1; fi
+      - name: Build final-chain dependency
+        working-directory: t36e_mathlib
+        run: |
+          set -euo pipefail
+          mkdir -p MCore
+          cp ../lean/MCore/B01ExactConductorLevelCertificate.lean MCore/B01ExactConductorLevelCertificate.lean
+          cp ../lean/MCore/BealFinalMathematicalChain.lean MCore/BealFinalMathematicalChain.lean
+          lake build MCore.PostT36EConductorBridge MCore.B01ConductorLevel MCore.T58 MCore.K8 MCore.BealThreeLaneClosure
+          lake env lean MCore/B01ExactConductorLevelCertificate.lean -o .lake/build/lib/lean/MCore/B01ExactConductorLevelCertificate.olean
+          lake env lean MCore/BealFinalMathematicalChain.lean -o .lake/build/lib/lean/MCore/BealFinalMathematicalChain.olean
+      - name: Kernel check exact inhabitants frontier
+        working-directory: t36e_mathlib
+        run: |
+          set -euo pipefail
+          cp ../lean/MCore/BealOpenMathInhabitants.lean MCore/BealOpenMathInhabitants.lean
+          lake env lean MCore/BealOpenMathInhabitants.lean 2>&1 | tee BealOpenMathInhabitants.log
+          if grep -F 'sorryAx' BealOpenMathInhabitants.log; then exit 1; fi
+      - name: Validate fail-closed state
+        run: |
+          python3 - <<'PY'
+          import json
+          x=json.load(open('CERTIFICATES/BEAL_OPEN_MATH_INHABITANTS.json'))
+          assert x['proof_claimed'] is False
+          assert x['refutation_claimed'] is False
+          assert x['final_mathematical_certificate_issued'] is False
+          assert x['promotion_allowed'] is False
+          assert all(i['state']=='OPEN_MATH' for i in x['exact_remaining'])
+          PY
+      - name: Boundary
+        run: |
+          echo 'BEAL_OPEN_MATH_FRONTIER=GREEN_IF_JOB_SUCCEEDS'
+          echo 'EXACT_REMAINING=3'
+          echo 'FINAL_MATH_CERTIFICATE_ISSUED=false'
