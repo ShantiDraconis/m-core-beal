@@ -1,0 +1,33 @@
+{
+  "schema": "atk.beal-master-ledger.v1",
+  "head_branch": "attack/beal-open-math-inhabitants-v1",
+  "infrastructure_state": "SOURCE",
+  "mathematical_state": "OPEN_MATH",
+  "proof_lane": {
+    "master_type": "MCore.BealMasterProofPackage",
+    "atomic_missing": 12,
+    "obligations": [
+      "B01O1Certificate",
+      "B01O2Certificate",
+      "B01O3Certificate",
+      "B01O4Certificate",
+      "B01O5Certificate",
+      "B02CoverageAtomic",
+      "B02T53Atomic",
+      "B02T54Atomic",
+      "B02T55Atomic",
+      "B02T56Atomic",
+      "B02T57Atomic",
+      "BealEndpointAtomic"
+    ],
+    "promotion_allowed": false,
+    "proof_claimed": false
+  },
+  "refutation_lane": {
+    "master_type": "MCore.BealMasterRefutationPackage",
+    "required": "explicit BealCounterexampleWitness",
+    "refutation_claimed": false
+  },
+  "exclusivity_theorem": "MCore.beal_master_proof_refutation_exclusive",
+  "current_state": "UNRESOLVED_FAIL_CLOSED"
+}
