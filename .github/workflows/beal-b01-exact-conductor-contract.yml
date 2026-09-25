@@ -36,8 +36,7 @@ jobs:
         working-directory: t36e_mathlib
         run: |
           set -euo pipefail
-          cp ../lean/MCore/B01ExactConductorLevelCertificate.lean MCore/B01ExactConductorLevelCertificate.lean
-          lake env lean MCore/B01ExactConductorLevelCertificate.lean 2>&1 | tee B01ExactConductorLevelCertificate.log
+          lake env lean ../lean/MCore/B01ExactConductorLevelCertificate.lean 2>&1 | tee B01ExactConductorLevelCertificate.log
           if grep -E 'sorryAx|Classical\.choice' B01ExactConductorLevelCertificate.log; then exit 1; fi
       - name: Boundary
         run: |
