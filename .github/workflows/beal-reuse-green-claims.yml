@@ -32,6 +32,7 @@ jobs:
         working-directory: t36e_mathlib
         run: |
           set -euo pipefail
+          lake build MCore.K10 MCore.PostT36EConductorBridge MCore.B01ConductorLevel
           lake env lean ../lean/MCore/BealReusableGreenClaims.lean 2>&1 | tee BealReusableGreenClaims.log
           if grep -F 'sorryAx' BealReusableGreenClaims.log; then exit 1; fi
       - name: Validate scope
