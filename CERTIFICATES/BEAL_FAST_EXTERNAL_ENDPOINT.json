@@ -1,0 +1,26 @@
+{
+  "schema": "atk.beal-fast-external-endpoint.v1",
+  "problem": "BEAL",
+  "route": "COMMON_DIVISOR_PRODUCER",
+  "status": "SOURCE",
+  "key_theorems": [
+    "MCore.commonPrime_iff_commonDivisor",
+    "MCore.commonDivisorProducer_to_commonPrime",
+    "MCore.commonDivisorProducer_closes_beal",
+    "MCore.beal_iff_commonDivisorProducer",
+    "MCore.BealFastExternalProof.closes"
+  ],
+  "minimal_required_object": "MCore.BealCommonDivisorProducer",
+  "per_datum_payload": [
+    "g : Nat",
+    "1 < g",
+    "g ∣ a",
+    "g ∣ b",
+    "g ∣ c"
+  ],
+  "relation_to_beal": "exact_equivalence",
+  "scientific_state": "OPEN_MATH",
+  "proof_claimed": false,
+  "promotion_allowed": false,
+  "note": "Fastest exact endpoint: produce any nontrivial common divisor for every Beal datum; K10 constructively extracts a common prime."
+}
