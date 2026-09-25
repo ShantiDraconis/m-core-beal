@@ -1,0 +1,44 @@
+{
+  "schema": "atk.beal-three-lane-final.v1",
+  "problem": "BEAL",
+  "repository": "ShantiDraconis/m-core-beal",
+  "base_sha": "3d8da613f46201c8750df3c5f2ea96ce144a1770",
+  "proof_lane": {
+    "required_object": "MCore.BealProofCertificate",
+    "mathematical_claim": "MCore.BealConjecture",
+    "status": "OPEN_MATH",
+    "claimed": false
+  },
+  "refutation_lane": {
+    "required_object": "MCore.BealRefutationCertificate",
+    "mathematical_claim": "exists admissible BealData with BealCounterexample",
+    "status": "OPEN_MATH",
+    "claimed": false
+  },
+  "middle_lane": {
+    "object": "MCore.currentBealResolution",
+    "constructor": "unresolved",
+    "meaning": "PROCESS_CLOSED_FAIL_CLOSED_ONLY",
+    "mathematical_third_truth": false,
+    "status": "SOURCE"
+  },
+  "known_certified_anchors": {
+    "terminal_source_sha": "73f1fd7b2a692ea857acaea70e18745f08878c2a",
+    "terminal_package_sha": "0a0819ea3800d1a9cf40c2888eb971ad35dda188",
+    "previous_final_fail_sha": "3d8da613f46201c8750df3c5f2ea96ce144a1770"
+  },
+  "blocking_frontier": [
+    "genuine local elliptic-curve conductor exponent",
+    "exact global conductor including the 2-adic place",
+    "verified level-lowering hypotheses",
+    "exact lowered level",
+    "residual elimination producing CommonPrime for every admissible datum"
+  ],
+  "final_certificate": {
+    "process_closed": true,
+    "mathematical_endpoint_proved": false,
+    "mathematical_endpoint_refuted": false,
+    "final_mathematical_certificate_issued": false,
+    "promotion_allowed": false
+  }
+}
