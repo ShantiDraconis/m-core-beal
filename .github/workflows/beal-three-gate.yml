@@ -72,6 +72,10 @@ jobs:
           lake env lean MCore/B01ExactConductorLevelCertificate.lean -o .lake/build/lib/lean/MCore/B01ExactConductorLevelCertificate.olean
           cp ../lean/MCore/BealFinalMathematicalChain.lean MCore/BealFinalMathematicalChain.lean
           lake env lean MCore/BealFinalMathematicalChain.lean -o .lake/build/lib/lean/MCore/BealFinalMathematicalChain.olean
+          cp ../lean/MCore/B01ScientificInhabitant.lean MCore/B01ScientificInhabitant.lean
+          lake env lean MCore/B01ScientificInhabitant.lean -o .lake/build/lib/lean/MCore/B01ScientificInhabitant.olean
+          cp ../lean/MCore/B01DenseScientificFrontier.lean MCore/B01DenseScientificFrontier.lean
+          lake env lean MCore/B01DenseScientificFrontier.lean -o .lake/build/lib/lean/MCore/B01DenseScientificFrontier.olean
           cp ../lean/MCore/B02DenseScientificFrontier.lean MCore/B02DenseScientificFrontier.lean
           lake env lean MCore/B02DenseScientificFrontier.lean -o .lake/build/lib/lean/MCore/B02DenseScientificFrontier.olean
       - name: G2 boundary
@@ -102,6 +106,12 @@ jobs:
           lake env lean MCore/B01ExactConductorLevelCertificate.lean -o .lake/build/lib/lean/MCore/B01ExactConductorLevelCertificate.olean
           cp ../lean/MCore/BealFinalMathematicalChain.lean MCore/BealFinalMathematicalChain.lean
           lake env lean MCore/BealFinalMathematicalChain.lean -o .lake/build/lib/lean/MCore/BealFinalMathematicalChain.olean
+          cp ../lean/MCore/B01ScientificInhabitant.lean MCore/B01ScientificInhabitant.lean
+          lake env lean MCore/B01ScientificInhabitant.lean -o .lake/build/lib/lean/MCore/B01ScientificInhabitant.olean
+          cp ../lean/MCore/B01DenseScientificFrontier.lean MCore/B01DenseScientificFrontier.lean
+          lake env lean MCore/B01DenseScientificFrontier.lean -o .lake/build/lib/lean/MCore/B01DenseScientificFrontier.olean
+          cp ../lean/MCore/B02DenseScientificFrontier.lean MCore/B02DenseScientificFrontier.lean
+          lake env lean MCore/B02DenseScientificFrontier.lean -o .lake/build/lib/lean/MCore/B02DenseScientificFrontier.olean
           cp ../lean/MCore/BealEndpointDenseFrontier.lean MCore/BealEndpointDenseFrontier.lean
           lake env lean MCore/BealEndpointDenseFrontier.lean -o .lake/build/lib/lean/MCore/BealEndpointDenseFrontier.olean
       - name: G3 boundary
