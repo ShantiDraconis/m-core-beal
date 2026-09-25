@@ -1,0 +1,102 @@
+{
+  "schema": "atk.beal-boundary-evidence-map.v1",
+  "problem": "BEAL",
+  "purpose": "Connect already-certified reusable evidence to each mathematical frontier and to the shortest exact external endpoint.",
+  "patterns": [
+    {
+      "id": "P1_GREEN_PREFIX_TO_OPEN_SEMANTIC_DELTA",
+      "source_path": "lean/MCore/PostT36EConductorBridge.lean",
+      "evidence": [
+        "MCore.T60_packet_to_genuine_multiplicative_reduction",
+        "MCore.T60_every_candidate_has_genuine_odd_multiplicative_reduction"
+      ],
+      "target": "B01 conductor exponent / exact lowered level",
+      "state": "GREEN_PREFIX_REUSED__OPEN_MATH_DELTA"
+    },
+    {
+      "id": "P2_COVERAGE_PLUS_FAMILY_ELIMINATION",
+      "source_path": "lean/MCore/T58.lean",
+      "evidence": [
+        "MCore.T58ResidualSurvivorDomain",
+        "MCore.T58MixedEliminationBundle",
+        "MCore.T58_five_family_bundle_eliminates_residual_survivors"
+      ],
+      "target": "B02 residual/newform elimination",
+      "state": "GLUE_GREEN__FAMILY_CONTENT_OPEN_MATH"
+    },
+    {
+      "id": "P3_COMMON_DIVISOR_TO_COMMON_PRIME",
+      "source_path": "lean/MCore/K10.lean",
+      "evidence": [
+        "MCore.primeDivisorProperty_core",
+        "MCore.primeDivisorProperty_proved",
+        "MCore.commonPrime_iff_commonDivisor"
+      ],
+      "target": "terminal Beal endpoint",
+      "state": "GREEN"
+    },
+    {
+      "id": "P4_FAIL_CLOSED_NO_PROMOTION",
+      "source_path": "lean/MCore/K5.lean",
+      "evidence": [
+        "MCore.k5_openBridge_cannot_certify"
+      ],
+      "target": "all OPEN_MATH boundaries",
+      "state": "GREEN_FIREWALL"
+    },
+    {
+      "id": "P5_TERMINAL_PRODUCER_INDEX",
+      "source_path": "audit/ATK_TERMINAL_PRODUCER_INDEX.md",
+      "evidence": [
+        "GREEN downstream consumers are reused and never counted as producer closure",
+        "terminal producer must be kernel-checked without sorry/admit/oracle"
+      ],
+      "target": "external certificate promotion",
+      "state": "POLICY_REUSED"
+    }
+  ],
+  "boundaries": [
+    {
+      "id": "G1_CONDUCTOR_LEVEL",
+      "input": "T60GenuineOddMultiplicativeReduction",
+      "exact_frontier": "MCore.B01DenseUniversal",
+      "open_math": [
+        "odd conductor exponent one",
+        "exact 2-adic conductor",
+        "exact global conductor",
+        "residual/level-lowering hypotheses",
+        "exact lowered level"
+      ]
+    },
+    {
+      "id": "G2_RESIDUAL_NEWFORM",
+      "input": "MCore.B02DenseScientificInhabitant",
+      "output": "MCore.T44AllNewformsEliminated",
+      "open_math": [
+        "coverage",
+        "T53",
+        "T54",
+        "T55",
+        "T56",
+        "T57"
+      ]
+    },
+    {
+      "id": "G3_TERMINAL",
+      "exact_frontier": "MCore.BealCommonDivisorProducer",
+      "green_adapter": "MCore.commonPrime_iff_commonDivisor",
+      "output": "MCore.BealProofCertificate",
+      "open_math": [
+        "universal nontrivial common divisor producer"
+      ]
+    }
+  ],
+  "shortest_exact_route": [
+    "MCore.BealCommonDivisorProducer",
+    "MCore.commonDivisorProducer_to_commonPrime",
+    "MCore.commonDivisorProducer_closes_beal",
+    "MCore.BealProofCertificate"
+  ],
+  "mathematical_state": "OPEN_MATH",
+  "final_external_issued": false
+}
