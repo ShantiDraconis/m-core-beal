@@ -1,0 +1,38 @@
+{
+  "schema": "atk.beal-atomic-open-math.v1",
+  "problem": "BEAL",
+  "package": "MCore.BealAtomicOpenMathPackage",
+  "status": "SOURCE",
+  "atomic_obligations": {
+    "B01": [
+      "B01O1Certificate",
+      "B01O2Certificate",
+      "B01O3Certificate",
+      "B01O4Certificate",
+      "B01O5Certificate"
+    ],
+    "B02": [
+      "B02CoverageAtomic",
+      "B02T53Atomic",
+      "B02T54Atomic",
+      "B02T55Atomic",
+      "B02T56Atomic",
+      "B02T57Atomic"
+    ],
+    "ENDPOINT": [
+      "BealEndpointAtomic"
+    ]
+  },
+  "conversions": [
+    "B01AtomicStack.toDense",
+    "B01AtomicUniversal.toDenseUniversal",
+    "B02AtomicStack.toDense",
+    "BealEndpointAtomic.toProducer",
+    "BealAtomicOpenMathPackage.toDense",
+    "beal_atomic_package_closes"
+  ],
+  "mathematical_state": "OPEN_MATH",
+  "proof_claimed": false,
+  "promotion_allowed": false,
+  "exact_missing_count": 12
+}
