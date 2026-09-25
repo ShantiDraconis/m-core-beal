@@ -1,0 +1,19 @@
+{
+  "schema": "atk.beal-fast-closure-audit.v1",
+  "problem": "BEAL",
+  "route": "FAST_COMMON_DIVISOR",
+  "infrastructure_state": "SOURCE",
+  "mathematical_state": "OPEN_MATH",
+  "exact_remaining_count": 1,
+  "exact_remaining_object": "MCore.BealCommonDivisorProducer",
+  "equivalence_theorem": "MCore.beal_fast_gap_iff_beal",
+  "certificate_constructor": "MCore.beal_fast_gap_to_proofCertificate",
+  "current_state": "OPEN_MATH",
+  "proof_claimed": false,
+  "promotion_allowed": false,
+  "bypassed_as_nonblocking_provenance": [
+    "B01 conductor/level route",
+    "B02 residual/newform route"
+  ],
+  "note": "B01/B02 remain mathematically open but are not logically required for the shortest exact endpoint once a universal nontrivial common-divisor producer is supplied."
+}
