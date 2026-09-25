@@ -1,0 +1,37 @@
+{
+  "schema": "atk.beal-open-math-inhabitants.v1",
+  "problem": "BEAL",
+  "route": "Frey/local-conductor/level-lowering/residual-elimination",
+  "status": "SOURCE",
+  "exact_remaining": [
+    {
+      "id": "B01_INHABITANT",
+      "object": "forall d : T59ResidualCandidate, B01ExactConductorLevelCertificate d",
+      "state": "OPEN_MATH"
+    },
+    {
+      "id": "B02_INHABITANT",
+      "object": "exists Survives, B02ResidualEliminationCertificate Survives",
+      "state": "OPEN_MATH"
+    },
+    {
+      "id": "ENDPOINT_INHABITANT",
+      "object": "BealUniversalCommonPrimeCertificate",
+      "state": "OPEN_MATH"
+    }
+  ],
+  "logical_minimum": {
+    "object": "BealUniversalCommonPrimeCertificate",
+    "closes": "BealConjecture",
+    "theorem": "MCore.beal_endpoint_is_logically_sufficient"
+  },
+  "scientific_route_minimum": [
+    "B01_INHABITANT",
+    "B02_INHABITANT",
+    "ENDPOINT_INHABITANT"
+  ],
+  "proof_claimed": false,
+  "refutation_claimed": false,
+  "final_mathematical_certificate_issued": false,
+  "promotion_allowed": false
+}
