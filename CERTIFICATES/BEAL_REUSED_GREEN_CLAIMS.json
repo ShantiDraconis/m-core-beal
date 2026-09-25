@@ -1,0 +1,72 @@
+{
+  "schema": "atk.beal-reuse-green.v1",
+  "problem": "BEAL",
+  "purpose": "Reuse certified GREEN subclaims without mathematical over-promotion.",
+  "reused": [
+    {
+      "sha": "b9e77ce6600a1d5af808f87ca04f0784b9478de9",
+      "branch": "frozen/t52-t58-level-elimination-green-b9e77ce",
+      "claim": "T58 conditional five-family elimination glue",
+      "class": "CONDITIONAL_GREEN"
+    },
+    {
+      "sha": "489977197a82f867b34d63c23015e688d6dac6c9",
+      "branch": "frozen/t59-candidate-level-key-green-4899771",
+      "claim": "candidate-keyed residual level frontier infrastructure",
+      "class": "GREEN_INFRA"
+    },
+    {
+      "sha": "cdac34c68eb500330f2aa5be66ae3a646ad12006",
+      "branch": "frozen/t60-odd-local-arithmetic-green-cdac34c",
+      "claim": "odd-prime local arithmetic packet for every residual candidate",
+      "class": "GREEN_PROVED_LOGIC"
+    },
+    {
+      "sha": "98bd5f05c6a4245319cc65b84242f6c2a8997ade",
+      "branch": "frozen/t36e-master-green-98bd5f05",
+      "claim": "genuine Mathlib multiplicative-reduction theorem prefix",
+      "class": "GREEN_PROVED_PREFIX"
+    },
+    {
+      "sha": "1d9217aa79afa92410a48fd8ef3d570f4b28edee",
+      "branch": "frozen/post-t36e-conductor-bridge-green-1d9217aa",
+      "claim": "candidate arithmetic packet to genuine multiplicative reduction",
+      "class": "GREEN_PROVED_PREFIX"
+    },
+    {
+      "sha": "b6667e63a2c28c32cee0ab17714f9d772a0b4768",
+      "branch": "frozen/b01-conductor-level-interface-green-b6667e63",
+      "claim": "B01 conductor/level bookkeeping interface",
+      "class": "GREEN_INFRA"
+    },
+    {
+      "sha": "e3b8598a2513b539b285dfb31dc383b770ab840f",
+      "branch": "frozen/k9-green-e3b8598",
+      "claim": "CommonPrime/common-divisor equivalence infrastructure",
+      "class": "GREEN_PROVED_LOGIC"
+    },
+    {
+      "sha": "0a0819ea3800d1a9cf40c2888eb971ad35dda188",
+      "branch": "frozen/atk-terminal-certificate-beal-0a0819ea",
+      "claim": "terminal frontier package",
+      "class": "GREEN_FROZEN_TERMINAL_FRONTIER"
+    }
+  ],
+  "active_claims": [
+    "beal_reuse_candidate_five_family",
+    "beal_reuse_odd_local_packet",
+    "beal_reuse_all_odd_local_arithmetic",
+    "beal_reuse_genuine_odd_multiplicative_reduction",
+    "beal_reuse_five_family_elimination",
+    "beal_reuse_commonPrime_iff_commonDivisor",
+    "beal_reuse_b01_prime_support"
+  ],
+  "not_claimed": [
+    "BealConjecture",
+    "not BealConjecture",
+    "B01ExactConductorLevelCertificate inhabitant",
+    "T58MixedEliminationBundle inhabitant"
+  ],
+  "mathematical_status": "OPEN_MATH",
+  "promotion_allowed": false
+}
