@@ -1,0 +1,43 @@
+{
+  "schema": "atk.beal-dense-open-math-package.v1",
+  "problem": "BEAL",
+  "status": "SOURCE",
+  "package": "MCore.BealDenseOpenMathPackage",
+  "chain": [
+    "B01DenseUniversal",
+    "B02DenseScientificInhabitant",
+    "BealUniversalWitnessProducer",
+    "BealDenseOpenMathPackage",
+    "BealFinalMathematicalPackage",
+    "BealProofCertificate",
+    "BealConjecture"
+  ],
+  "b01_obligations": [
+    "B01-O1",
+    "B01-O2",
+    "B01-O3",
+    "B01-O4",
+    "B01-O5"
+  ],
+  "b02_obligations": [
+    "B02-COVERAGE",
+    "B02-T53-twoFourPrime",
+    "B02-T54-oneFourEqualPrimes",
+    "B02-T55-oneFourDistinctPrimes",
+    "B02-T56-twoEqualOddPrimes",
+    "B02-T57-threeDistinctOddPrimes"
+  ],
+  "endpoint_obligation": "For every BealData, construct one prime p dividing a,b,c.",
+  "process_state": "FULL_STRUCTURE_FORMALIZED",
+  "mathematical_state": "OPEN_MATH",
+  "proof_claimed": false,
+  "refutation_claimed": false,
+  "promotion_allowed": false,
+  "anti_shortcuts": [
+    "No sorry/admit.",
+    "No new axiom/constant.",
+    "No True/Bool/process marker may inhabit a scientific certificate.",
+    "No signature-only level promotion.",
+    "No final proof promotion without actual universal CommonPrime producer."
+  ]
+}
