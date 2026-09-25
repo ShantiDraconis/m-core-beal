@@ -42,10 +42,10 @@ jobs:
           lake env lean MCore/BealEndpointDenseFrontier.lean -o .lake/build/lib/lean/MCore/BealEndpointDenseFrontier.olean
           cp ../lean/MCore/BealFastExternalEndpoint.lean MCore/BealFastExternalEndpoint.lean
           lake env lean MCore/BealFastExternalEndpoint.lean -o .lake/build/lib/lean/MCore/BealFastExternalEndpoint.olean
-          cp ../lean/MCore/BealAtomicOpenMathObligations.lean MCore/BealAtomicOpenMathObligations.lean
-          lake env lean MCore/BealAtomicOpenMathObligations.lean -o .lake/build/lib/lean/MCore/BealAtomicOpenMathObligations.olean
           cp ../lean/MCore/BealDenseOpenMathPackage.lean MCore/BealDenseOpenMathPackage.lean
           lake env lean MCore/BealDenseOpenMathPackage.lean -o .lake/build/lib/lean/MCore/BealDenseOpenMathPackage.olean
+          cp ../lean/MCore/BealAtomicOpenMathObligations.lean MCore/BealAtomicOpenMathObligations.lean
+          lake env lean MCore/BealAtomicOpenMathObligations.lean -o .lake/build/lib/lean/MCore/BealAtomicOpenMathObligations.olean
           cp ../lean/MCore/BealMasterExternalProof.lean MCore/BealMasterExternalProof.lean
           lake env lean MCore/BealMasterExternalProof.lean -o .lake/build/lib/lean/MCore/BealMasterExternalProof.olean
       - name: Kernel check final external aggregator
@@ -60,11 +60,13 @@ jobs:
           python3 - <<'PY'
           import json
           x=json.load(open('CERTIFICATES/BEAL_FINAL_EXTERNAL.json'))
+          assert x['preparatory_external_ready'] is True
           assert x['infrastructure']['state']=='GREEN_FROZEN_CERTIFIED'
           assert x['proof_claimed'] is False
           assert x['refutation_claimed'] is False
+          assert x['promotion_allowed'] is False
           assert x['final_external_issued'] is False
-          assert any(c['state']=='OPEN_MATH' for c in x['claims'])
+          assert all(c['state']=='OPEN_MATH' for c in x['claims']['scientific'])
           PY
       - name: Boundary
         run: |
