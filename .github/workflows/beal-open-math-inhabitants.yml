@@ -1,9 +1,6 @@
 name: BEAL open math inhabitants
 
 on:
-  push:
-    branches:
-      - attack/beal-open-math-inhabitants-v1
   workflow_dispatch:
 
 permissions:
