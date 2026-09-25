@@ -1,0 +1,54 @@
+name: BEAL three-lane final claim
+
+on:
+  push:
+    branches:
+      - claim/beal-three-lane-final-v1
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  three-lane:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install pinned Lean toolchain
+        uses: leanprover/lean-action@v1
+        with:
+          build: false
+          test: false
+          lint: false
+      - name: Fail-closed source hygiene
+        run: |
+          set -euo pipefail
+          if grep -n -E '(^|[^[:alnum:]_])(sorry|admit)([^[:alnum:]_]|$)' lean/MCore/BealThreeLaneClosure.lean; then exit 1; fi
+          if grep -n -E '^[[:space:]]*(@\[[^]]*\][[:space:]]*)?(axiom|constant|constants)[[:space:]]' lean/MCore/BealThreeLaneClosure.lean; then exit 1; fi
+      - name: Kernel-check three-lane closure
+        run: |
+          set -euo pipefail
+          lake env lean lean/MCore/BealThreeLaneClosure.lean 2>&1 | tee BealThreeLaneClosure.log
+          if grep -E 'sorryAx|Classical\.choice' BealThreeLaneClosure.log; then exit 1; fi
+      - name: Validate claim record
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          x=json.load(open('CERTIFICATES/BEAL_THREE_LANE_FINAL.json'))
+          assert x['schema'] == 'atk.beal-three-lane-final.v1'
+          assert x['proof_lane']['claimed'] is False
+          assert x['refutation_lane']['claimed'] is False
+          assert x['middle_lane']['mathematical_third_truth'] is False
+          assert x['final_certificate']['process_closed'] is True
+          assert x['final_certificate']['mathematical_endpoint_proved'] is False
+          assert x['final_certificate']['mathematical_endpoint_refuted'] is False
+          assert x['final_certificate']['final_mathematical_certificate_issued'] is False
+          assert x['final_certificate']['promotion_allowed'] is False
+          PY
+      - name: Boundary
+        run: |
+          echo 'BEAL_THREE_LANE_PROCESS=GREEN_IF_JOB_SUCCEEDS'
+          echo 'BEAL_MATH_STATUS=OPEN_MATH'
+          echo 'FINAL_MATHEMATICAL_CERTIFICATE_ISSUED=false'
