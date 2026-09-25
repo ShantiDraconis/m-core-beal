@@ -29,6 +29,7 @@ jobs:
       - name: Kernel-check three-lane closure
         run: |
           set -euo pipefail
+          lake build MCore.BealSpecification
           lake env lean lean/MCore/BealThreeLaneClosure.lean 2>&1 | tee BealThreeLaneClosure.log
           if grep -E 'sorryAx|Classical\.choice' BealThreeLaneClosure.log; then exit 1; fi
       - name: Validate claim record
