@@ -25,7 +25,7 @@ jobs:
       - name: Hygiene
         run: |
           set -euo pipefail
-          for f in lean/MCore/BealOpenMathInhabitants.lean lean/MCore/B01ScientificInhabitant.lean lean/MCore/B01DenseScientificFrontier.lean lean/MCore/B02DenseScientificFrontier.lean lean/MCore/BealEndpointDenseFrontier.lean lean/MCore/BealDenseOpenMathPackage.lean lean/MCore/BealAtomicOpenMathObligations.lean; do
+          for f in lean/MCore/BealOpenMathInhabitants.lean lean/MCore/B01ScientificInhabitant.lean lean/MCore/B01DenseScientificFrontier.lean lean/MCore/B02DenseScientificFrontier.lean lean/MCore/BealEndpointDenseFrontier.lean lean/MCore/BealDenseOpenMathPackage.lean lean/MCore/BealAtomicOpenMathObligations.lean lean/MCore/BealMasterExternalProof.lean; do
             if grep -n -E '(^|[^[:alnum:]_])(sorry|admit)([^[:alnum:]_]|$)' "$f"; then exit 1; fi
             if grep -n -E '^[[:space:]]*(@\[[^]]*\][[:space:]]*)?(axiom|constant|constants)[[:space:]]' "$f"; then exit 1; fi
           done
@@ -61,6 +61,9 @@ jobs:
           cp ../lean/MCore/BealAtomicOpenMathObligations.lean MCore/BealAtomicOpenMathObligations.lean
           lake env lean MCore/BealAtomicOpenMathObligations.lean -o .lake/build/lib/lean/MCore/BealAtomicOpenMathObligations.olean 2>&1 | tee BealAtomicOpenMathObligations.log
           if grep -F 'sorryAx' BealAtomicOpenMathObligations.log; then exit 1; fi
+          cp ../lean/MCore/BealMasterExternalProof.lean MCore/BealMasterExternalProof.lean
+          lake env lean MCore/BealMasterExternalProof.lean -o .lake/build/lib/lean/MCore/BealMasterExternalProof.olean 2>&1 | tee BealMasterExternalProof.log
+          if grep -F 'sorryAx' BealMasterExternalProof.log; then exit 1; fi
           cp ../lean/MCore/BealOpenMathInhabitants.lean MCore/BealOpenMathInhabitants.lean
           lake env lean MCore/BealOpenMathInhabitants.lean 2>&1 | tee BealOpenMathInhabitants.log
           if grep -F 'sorryAx' BealOpenMathInhabitants.log; then exit 1; fi
@@ -72,6 +75,7 @@ jobs:
           y=json.load(open('CERTIFICATES/BEAL_B01_DENSE_FRONTIER.json'))
           z=json.load(open('CERTIFICATES/BEAL_DENSE_OPEN_MATH_PACKAGE.json'))
           a=json.load(open('CERTIFICATES/BEAL_ATOMIC_OPEN_MATH.json'))
+          m=json.load(open('CERTIFICATES/BEAL_MASTER_LEDGER.json'))
           assert x['proof_claimed'] is False
           assert x['refutation_claimed'] is False
           assert x['final_mathematical_certificate_issued'] is False
@@ -88,6 +92,12 @@ jobs:
           assert a['promotion_allowed'] is False
           assert a['proof_claimed'] is False
           assert a['exact_missing_count']==12
+          assert m['mathematical_state']=='OPEN_MATH'
+          assert m['proof_lane']['atomic_missing']==12
+          assert m['proof_lane']['promotion_allowed'] is False
+          assert m['proof_lane']['proof_claimed'] is False
+          assert m['refutation_lane']['refutation_claimed'] is False
+          assert m['current_state']=='UNRESOLVED_FAIL_CLOSED'
           PY
       - name: Boundary
         run: |
