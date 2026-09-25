@@ -25,9 +25,10 @@ jobs:
       - name: Hygiene
         run: |
           set -euo pipefail
-          f=lean/MCore/BealOpenMathInhabitants.lean
-          if grep -n -E '(^|[^[:alnum:]_])(sorry|admit)([^[:alnum:]_]|$)' "$f"; then exit 1; fi
-          if grep -n -E '^[[:space:]]*(@\[[^]]*\][[:space:]]*)?(axiom|constant|constants)[[:space:]]' "$f"; then exit 1; fi
+          for f in lean/MCore/BealOpenMathInhabitants.lean lean/MCore/B01ScientificInhabitant.lean; do
+            if grep -n -E '(^|[^[:alnum:]_])(sorry|admit)([^[:alnum:]_]|$)' "$f"; then exit 1; fi
+            if grep -n -E '^[[:space:]]*(@\[[^]]*\][[:space:]]*)?(axiom|constant|constants)[[:space:]]' "$f"; then exit 1; fi
+          done
       - name: Build final-chain dependency
         working-directory: t36e_mathlib
         run: |
@@ -42,6 +43,9 @@ jobs:
         working-directory: t36e_mathlib
         run: |
           set -euo pipefail
+          cp ../lean/MCore/B01ScientificInhabitant.lean MCore/B01ScientificInhabitant.lean
+          lake env lean MCore/B01ScientificInhabitant.lean -o .lake/build/lib/lean/MCore/B01ScientificInhabitant.olean 2>&1 | tee B01ScientificInhabitant.log
+          if grep -F 'sorryAx' B01ScientificInhabitant.log; then exit 1; fi
           cp ../lean/MCore/BealOpenMathInhabitants.lean MCore/BealOpenMathInhabitants.lean
           lake env lean MCore/BealOpenMathInhabitants.lean 2>&1 | tee BealOpenMathInhabitants.log
           if grep -F 'sorryAx' BealOpenMathInhabitants.log; then exit 1; fi
