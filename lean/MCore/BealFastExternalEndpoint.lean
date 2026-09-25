@@ -1,5 +1,6 @@
 import MCore.K10
-import MCore.BealEndpointDenseFrontier
+import MCore.K8
+import MCore.BealThreeLaneClosure
 
 namespace MCore
 
@@ -31,11 +32,6 @@ theorem commonDivisorProducer_to_commonPrime
     (P : BealCommonDivisorProducer)
     (d : BealData) : CommonPrime d.a d.b d.c :=
   (commonPrime_iff_commonDivisor).2 (P.produce d).toExists
-
-def BealCommonDivisorProducer.toEndpoint
-    (P : BealCommonDivisorProducer) :
-    BealUniversalCommonPrimeCertificate :=
-  { witness := commonDivisorProducer_to_commonPrime P }
 
 theorem commonDivisorProducer_closes_beal
     (P : BealCommonDivisorProducer) : BealConjecture :=
@@ -75,7 +71,7 @@ theorem BealFastExternalProof.closes
 
 def BealFastExternalProof.toCertificate
     (P : BealFastExternalProof) : BealProofCertificate :=
-  universalCommonPrime_to_proofCertificate P.endpoint.toEndpoint
+  ⟨P.closes⟩
 
 #print axioms MCore.commonDivisorProducer_to_commonPrime
 #print axioms MCore.commonDivisorProducer_closes_beal
