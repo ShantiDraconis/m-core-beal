@@ -40,18 +40,19 @@ theorem commonDivisorProducer_closes_beal
 
 /-- Converse: Beal itself provides the common-divisor producer.  Hence this
     endpoint is not weaker or stronger than Beal; it is an exact reformulation. -/
-def beal_to_commonDivisorProducer
+noncomputable def beal_to_commonDivisorProducer
     (H : BealConjecture) : BealCommonDivisorProducer :=
   { produce := fun d =>
       let hDiv : ∃ g : Nat, CommonDivisor g d.a d.b d.c :=
         (commonPrime_iff_commonDivisor).1 (H d)
-      match hDiv with
-      | ⟨g, hg, hga, hgb, hgc⟩ =>
-          { divisor := g
-            nontrivial := hg
-            dvdA := hga
-            dvdB := hgb
-            dvdC := hgc } }
+      let g : Nat := Classical.choose hDiv
+      let hg : CommonDivisor g d.a d.b d.c :=
+        Classical.choose_spec hDiv
+      { divisor := g
+        nontrivial := hg.1
+        dvdA := hg.2.1
+        dvdB := hg.2.2.1
+        dvdC := hg.2.2.2 } }
 
 theorem beal_iff_commonDivisorProducer :
     BealConjecture ↔ Nonempty BealCommonDivisorProducer := by
