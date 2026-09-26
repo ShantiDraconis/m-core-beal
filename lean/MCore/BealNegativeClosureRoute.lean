@@ -57,7 +57,7 @@ theorem beal_negative_closure_inhabitant_closes
 
 /-- Exact current state: the route is fully formalized, while the inhabitant
     of the elimination implication remains mathematical content. -/
-def BealNegativeClosureFrontier : Type :=
+def BealNegativeClosureFrontier : Prop :=
   BealNegativeClosureInhabitant
 
 #print axioms MCore.beal_iff_negative_elimination
