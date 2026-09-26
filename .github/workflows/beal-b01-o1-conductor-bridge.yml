@@ -35,6 +35,7 @@ jobs:
           lake env lean lean/MCore/B01O1ConductorBridge.lean
           lake env lean lean/MCore/BealUnifiedClosureRouter.lean
           lake env lean lean/MCore/BealUnconditionalClaimCertificate.lean
+          lake env lean lean/MCore/BealUnconditionalClaimAttack.lean
           if grep -n -E '(^|[^[:alnum:]_])(sorry|admit)([^[:alnum:]_]|$)' lean/MCore/B01O1ConductorBridge.lean; then exit 1; fi
           if grep -n -E '^[[:space:]]*(axiom|constant|constants)[[:space:]]' lean/MCore/B01O1ConductorBridge.lean; then exit 1; fi
           printf 'import MCore.B01O1ConductorBridge\n#print axioms MCore.b01_o1_from_genuine_multiplicative_conductor_theorem\n' > B01O1AxiomAudit.lean
