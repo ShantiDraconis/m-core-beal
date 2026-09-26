@@ -1,0 +1,20 @@
+{
+  "project": "Beal",
+  "parent": "AXM-CROSS-SIGNATURE-002",
+  "state": "PREPARATORY_BUILD_PENDING",
+  "signature": [
+    "B",
+    "U"
+  ],
+  "local_claims": [
+    {
+      "id": "BEAL-TERMINAL-BRIDGE",
+      "status": "OPEN_BRIDGE",
+      "source_sha": "fe1e5027dbe051cecdf4750ada197a57defae816",
+      "needs_to_appear": [
+        "verified_common_prime_endpoint_producer",
+        "exact_hypothesis_instantiation"
+      ]
+    }
+  ]
+}
