@@ -1,0 +1,23 @@
+name: beal-b01-o1-conductor-bridge
+
+on:
+  push:
+    branches:
+      - attack/beal-b01-o1-conductor-bridge-20260926
+  workflow_dispatch:
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: leanprover/lean-action@v1
+      - name: Build B01 O1 conductor bridge
+        run: |
+          set -euo pipefail
+          lake env lean lean/MCore/B01O1ConductorBridge.lean
+          if grep -n -E '(^|[^[:alnum:]_])(sorry|admit)([^[:alnum:]_]|$)' lean/MCore/B01O1ConductorBridge.lean; then exit 1; fi
+          if grep -n -E '^[[:space:]]*(axiom|constant|constants)[[:space:]]' lean/MCore/B01O1ConductorBridge.lean; then exit 1; fi
+          printf 'import MCore.B01O1ConductorBridge\n#print axioms MCore.b01_o1_from_genuine_multiplicative_conductor_theorem\n' > B01O1AxiomAudit.lean
+          lake env lean B01O1AxiomAudit.lean 2>&1 | tee B01O1AxiomAudit.log
+          if grep -E 'sorryAx|Classical\.choice' B01O1AxiomAudit.log; then exit 1; fi
