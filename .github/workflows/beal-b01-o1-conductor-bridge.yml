@@ -15,6 +15,7 @@ jobs:
       - name: Build B01 O1 conductor bridge
         run: |
           set -euo pipefail
+          lake update mathlib
           lake build MCore.B01DenseScientificFrontier
           lake env lean lean/MCore/B01O1ConductorBridge.lean
           if grep -n -E '(^|[^[:alnum:]_])(sorry|admit)([^[:alnum:]_]|$)' lean/MCore/B01O1ConductorBridge.lean; then exit 1; fi
