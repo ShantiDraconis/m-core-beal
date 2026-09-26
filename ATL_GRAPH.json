@@ -1,0 +1,146 @@
+{
+  "schema": "atl.graph.v3",
+  "nodes": [
+    {
+      "id": "BEAL.STATEMENT",
+      "version": 1,
+      "superseded_by": null,
+      "area": "BEAL",
+      "kind": "statement",
+      "formal_statement": "MCore.BealConjecture",
+      "semantic_statement": "Every admissible Beal datum has a common prime divisor.",
+      "source_files": [
+        "lean/MCore/BealSpecification.lean",
+        "lean/MCore/BealStatementFrozen.lean"
+      ],
+      "theorem_names": [
+        "MCore.beal_statement_frozen_exact"
+      ],
+      "repo": "ShantiDraconis/m-core-beal",
+      "branch": "attack/beal-open-math-inhabitants-v1",
+      "commit": "89d4956a9a9857788be336e7c7b3b7125083044b",
+      "evidence": [],
+      "open_math_reason": null,
+      "provenance_state": "SOURCE_VERIFIED",
+      "classification": "CLOSED"
+    },
+    {
+      "id": "BEAL.G1",
+      "version": 1,
+      "superseded_by": null,
+      "area": "BEAL",
+      "kind": "producer",
+      "formal_statement": "MCore.B01DenseUniversal",
+      "semantic_statement": "Exact conductor and level-lowering package for every residual candidate.",
+      "source_files": [
+        "lean/MCore/B01DenseScientificFrontier.lean"
+      ],
+      "theorem_names": [
+        "MCore.b01_dense_green_prefix"
+      ],
+      "repo": "ShantiDraconis/m-core-beal",
+      "branch": "attack/beal-open-math-inhabitants-v1",
+      "commit": "89d4956a9a9857788be336e7c7b3b7125083044b",
+      "evidence": [],
+      "open_math_reason": "uniform mixed-exponent conductor/level lowering requires new mathematics",
+      "provenance_state": "GREEN_PREFIX_REUSED",
+      "classification": "OPEN_MATH_RESEARCH"
+    },
+    {
+      "id": "BEAL.G2",
+      "version": 1,
+      "superseded_by": null,
+      "area": "BEAL",
+      "kind": "producer",
+      "formal_statement": "MCore.B02DenseScientificInhabitant",
+      "semantic_statement": "Coverage plus elimination of all five residual mixed families.",
+      "source_files": [
+        "lean/MCore/B02DenseScientificFrontier.lean",
+        "lean/MCore/T58.lean"
+      ],
+      "theorem_names": [
+        "MCore.b02_dense_eliminates_all",
+        "MCore.T58_five_family_bundle_eliminates_residual_survivors"
+      ],
+      "repo": "ShantiDraconis/m-core-beal",
+      "branch": "attack/beal-open-math-inhabitants-v1",
+      "commit": "89d4956a9a9857788be336e7c7b3b7125083044b",
+      "evidence": [],
+      "open_math_reason": "family eliminators remain mathematical content",
+      "provenance_state": "GLUE_GREEN",
+      "classification": "OPEN_MATH_RESEARCH"
+    },
+    {
+      "id": "BEAL.G3",
+      "version": 1,
+      "superseded_by": null,
+      "area": "BEAL",
+      "kind": "terminal_producer",
+      "formal_statement": "MCore.BealCommonDivisorProducer",
+      "semantic_statement": "Every Beal datum has a nontrivial common divisor.",
+      "source_files": [
+        "lean/MCore/BealFastExternalEndpoint.lean"
+      ],
+      "theorem_names": [
+        "MCore.commonDivisorProducer_closes_beal"
+      ],
+      "repo": "ShantiDraconis/m-core-beal",
+      "branch": "attack/beal-open-math-inhabitants-v1",
+      "commit": "89d4956a9a9857788be336e7c7b3b7125083044b",
+      "evidence": [],
+      "open_math_reason": "universal common-divisor producer is equivalent to Beal",
+      "provenance_state": "EXACT_ENDPOINT_TYPED",
+      "classification": "OPEN_MATH_RESEARCH"
+    },
+    {
+      "id": "BEAL.ABC",
+      "version": 1,
+      "superseded_by": null,
+      "area": "BEAL",
+      "kind": "conditional_route",
+      "formal_statement": "MCore.BealABCConditionalProof",
+      "semantic_statement": "ABC statement plus effective reduction plus finite check implies Beal.",
+      "source_files": [
+        "lean/MCore/BealViaABC.lean"
+      ],
+      "theorem_names": [
+        "MCore.Beal_of_ABC_and_finite_check"
+      ],
+      "repo": "ShantiDraconis/m-core-beal",
+      "branch": "attack/beal-open-math-inhabitants-v1",
+      "commit": "89d4956a9a9857788be336e7c7b3b7125083044b",
+      "evidence": [],
+      "open_math_reason": "canonical ABC implication to effective bound and finite check not inhabited",
+      "provenance_state": "TYPED_CONDITIONAL_COMPOSITION",
+      "classification": "OPEN_MATH_EXTERNAL"
+    }
+  ],
+  "edges": [
+    {
+      "from": "BEAL.G1",
+      "to": "BEAL.G2",
+      "kind": "scientific_route"
+    },
+    {
+      "from": "BEAL.G2",
+      "to": "BEAL.G3",
+      "kind": "scientific_route"
+    },
+    {
+      "from": "BEAL.G3",
+      "to": "BEAL.STATEMENT",
+      "kind": "exact_closure"
+    },
+    {
+      "from": "BEAL.ABC",
+      "to": "BEAL.STATEMENT",
+      "kind": "conditional_closure"
+    }
+  ],
+  "downstream_unlock": {
+    "BEAL.G1": 2,
+    "BEAL.G2": 1,
+    "BEAL.G3": 1,
+    "BEAL.ABC": 1
+  }
+}
