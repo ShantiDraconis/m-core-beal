@@ -25,7 +25,7 @@ def BealExclusion : Prop :=
   ∀ x : BealXBad, False
 
 /-- The unique material producer for the F6 lane. -/
-structure BealExclusionCertificate where
+structure BealExclusionCertificate : Type where
   exclude : BealExclusion
 
 /-- Beal immediately gives exclusion of every bad point. -/
@@ -66,14 +66,6 @@ def BealExclusionCertificate.toProofCertificate
     (C : BealExclusionCertificate) :
     BealProofCertificate :=
   (BealUnconditionalClaimCertificate.ofExclusion C).toProofCertificate
-
-/-- F6 certificate -> final external proof payload. -/
-noncomputable def BealExclusionCertificate.toExternalProofPayload
-    (C : BealExclusionCertificate) :
-    BealExternalProofPayload :=
-  { producer :=
-      beal_to_commonDivisorProducer
-        (beal_of_exclusion C) }
 
 /-- Single material producer type for the Beal F6 lane. -/
 abbrev OpenMathProducerBeal : Type :=
