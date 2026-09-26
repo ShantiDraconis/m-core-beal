@@ -1,0 +1,44 @@
+{
+  "schema": "atk.beal-evidence.v1",
+  "statement": {
+    "definition": "MCore.BealConjecture",
+    "frozen_alias": "MCore.BealStatementFrozen",
+    "source_path": "lean/MCore/BealSpecification.lean",
+    "source_blob_sha": "1bd06babd269e9ccfa88c5eefbc0041bbfc88673",
+    "canonical_text": "MCore.BealConjecture := ∀ d : MCore.BealData, MCore.CommonPrime d.a d.b d.c",
+    "sha256": "2ce8dea6d919667be370fb7c4a9174f3f90452da6a5401385a00a422c96834a7",
+    "state": "FROZEN_SOURCE"
+  },
+  "conditional_routes": [
+    {
+      "id": "ABC_EFFECTIVE_FINITE_REDUCTION",
+      "theorem": "MCore.Beal_of_ABC_and_finite_check",
+      "requires": [
+        "ABCStatement",
+        "MCore.ABCBealFiniteReduction ABCStatement",
+        "MCore.BealFiniteCheck reduction.bound"
+      ],
+      "status": "TYPED_CONDITIONAL_COMPOSITION",
+      "scientific_state": "OPEN_MATH",
+      "note": "No claim that canonical abc currently supplies the effective reduction or finite check."
+    }
+  ],
+  "barriers": [
+    {
+      "id": "D7-DARMON-GRANVILLE-1995",
+      "status": "SCOPE_LIMITED",
+      "coverage": "fixed exponent signatures in the hyperbolic generalized-Fermat regime",
+      "limitation": "not a uniform effective Beal proof over all exponent triples"
+    },
+    {
+      "id": "D7-FREY-MIXED-EXPONENT",
+      "status": "OPEN_MATH",
+      "limitation": "uniform conductor/level/newform elimination for arbitrary mixed exponents not present"
+    }
+  ],
+  "computational": [],
+  "unconditional_proof": null,
+  "unconditional_refutation": null,
+  "egc_status": "OPEN",
+  "final_external_issued": false
+}
