@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ATL EGC v3",
+  "type": "object",
+  "required": [
+    "problem",
+    "statement",
+    "statement_hash",
+    "status",
+    "conditionalOn",
+    "axiomsUsed",
+    "provenance"
+  ],
+  "properties": {
+    "problem": {
+      "type": "string"
+    },
+    "statement": {
+      "type": "string"
+    },
+    "statement_hash": {
+      "type": "string"
+    },
+    "term_hash": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "axiomsUsed": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "status": {
+      "enum": [
+        "PROVED",
+        "CONDITIONAL",
+        "FALSIFIED",
+        "OPEN",
+        "INFRA_ONLY"
+      ]
+    },
+    "conditionalOn": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "barriers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "computational": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "provenance": {
+      "type": "string"
+    },
+    "final_root": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "issued": {
+      "type": "boolean"
+    }
+  }
+}
