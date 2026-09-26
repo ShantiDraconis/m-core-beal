@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ATL Canonical Node v3",
+  "type": "object",
+  "required": [
+    "id",
+    "version",
+    "area",
+    "kind",
+    "formal_statement",
+    "semantic_statement",
+    "source_files",
+    "theorem_names",
+    "repo",
+    "branch",
+    "commit",
+    "evidence",
+    "provenance_state"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "superseded_by": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "area": {
+      "type": "string"
+    },
+    "kind": {
+      "type": "string"
+    },
+    "formal_statement": {
+      "type": "string"
+    },
+    "semantic_statement": {
+      "type": "string"
+    },
+    "source_files": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "theorem_names": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "repo": {
+      "type": "string"
+    },
+    "branch": {
+      "type": "string"
+    },
+    "commit": {
+      "type": "string"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "open_math_reason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "provenance_state": {
+      "type": "string"
+    },
+    "classification": {
+      "enum": [
+        "CLOSED",
+        "OPEN_MATH_ATTACKABLE",
+        "OPEN_MATH_RESEARCH",
+        "OPEN_MATH_EXTERNAL",
+        "FORMULATION_FALSIFIED",
+        "UNKNOWN"
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "description": "Persist only primitive fields and append-only log/classification. Derived graph/build/certificate state is computed by the loader."
+}
