@@ -16,7 +16,7 @@ No scientific inhabitant is fabricated.
 universal Beal producer itself. -/
 structure BealCertifiedRouteInputs where
   b01 : ∀ d : T59ResidualCandidate, B01ExactConductorLevelCertificate d
-  survives : T59ResidualCandidate → Prop
+  survives : T44LoweredNewformCase → Prop
   b02 : B02ResidualEliminationCertificate survives
 
 /-- Minimal terminal payload.  By K10 this is exactly equivalent to Beal. -/
