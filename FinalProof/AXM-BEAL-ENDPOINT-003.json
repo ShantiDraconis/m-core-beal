@@ -24,5 +24,11 @@
     "PreservationOperator(P)",
     "UniformizationOperator(N)",
     "verified_common_prime_endpoint_producer"
-  ]
+  ],
+  "proof_target": {
+    "path": "FinalProof/EndpointProofTarget.lean",
+    "requirements_structure": "Beal003Requirements",
+    "closure_theorem": "beal003_closes_from_requirements",
+    "status": "UNINHABITED"
+  }
 }
