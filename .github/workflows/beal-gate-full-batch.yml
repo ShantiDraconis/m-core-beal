@@ -84,6 +84,10 @@ jobs:
           if grep -E 'sorryAx|declaration uses .sorry|error:' BEAL_GATE_FULL_BATCH.log; then
             exit 1
           fi
+      - name: Validate ATL v3 graph/router
+        run: |
+          set -euo pipefail
+          python3 scripts/atl_validate.py
       - name: Validate gate manifests together
         run: |
           set -euo pipefail
