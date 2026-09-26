@@ -27,6 +27,14 @@ theorem BealFamilyControlCertificate.excludes
   intro d hd hcounter
   exact hcounter (C.witness d hd)
 
+/-- Universal control object for the canonical Beal endpoint. -/
+structure BealUniversalControl where
+  witness : ∀ d : BealData, CommonPrime d.a d.b d.c
+
+theorem BealUniversalControl.closes
+    (C : BealUniversalControl) : BealConjecture :=
+  C.witness
+
 /-- Universal coverage turns family control into the canonical Beal endpoint. -/
 structure BealCoveredControlCertificate (Family : BealFamily) where
   control : BealFamilyControlCertificate Family
@@ -35,8 +43,8 @@ structure BealCoveredControlCertificate (Family : BealFamily) where
 def BealCoveredControlCertificate.toUniversal
     {Family : BealFamily}
     (C : BealCoveredControlCertificate Family) :
-    BealUniversalCommonPrimeCertificate :=
-  { witness := fun d => C.control.witness d (C.coverage d) }
+    BealUniversalControl :=
+  ⟨fun d => C.control.witness d (C.coverage d)⟩
 
 /-- Generic semantics for a modular/Frey route.  These are predicates, not
 assertions that the corresponding mathematics has already been proved. -/
@@ -187,14 +195,14 @@ structure BealUniversalProducer where
 
 def BealUniversalProducer.toEndpoint
     (P : BealUniversalProducer) :
-    BealUniversalCommonPrimeCertificate :=
-  { witness := fun d =>
-      P.producer.toFamilyControl.witness d (P.coverage d) }
+    BealUniversalControl :=
+  ⟨fun d =>
+      P.producer.toFamilyControl.witness d (P.coverage d)⟩
 
 theorem producer_closes_beal
     (P : BealUniversalProducer) :
     BealConjecture :=
-  universalCommonPrime_closes_beal P.toEndpoint
+  P.toEndpoint.closes
 
 /-- Multiple partial routes may be combined.  Each datum must be routed to
 one producer whose declared family contains it. -/
@@ -215,15 +223,15 @@ structure BealProducerSelector (C : BealProducerCover) where
 def BealProducerSelector.toEndpoint
     {C : BealProducerCover}
     (S : BealProducerSelector C) :
-    BealUniversalCommonPrimeCertificate :=
-  { witness := fun d =>
-      (S.select d).toFamilyControl.witness d (S.handles d) }
+    BealUniversalControl :=
+  ⟨fun d =>
+      (S.select d).toFamilyControl.witness d (S.handles d)⟩
 
 theorem producer_cover_closes_beal
     {C : BealProducerCover}
     (S : BealProducerSelector C) :
     BealConjecture :=
-  universalCommonPrime_closes_beal S.toEndpoint
+  S.toEndpoint.closes
 
 #print axioms MCore.BealFamilyControlCertificate.excludes
 #print axioms MCore.producer_closes_beal
