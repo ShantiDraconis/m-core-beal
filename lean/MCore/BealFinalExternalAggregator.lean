@@ -10,70 +10,70 @@ All external claims are represented by typed evidence. Infrastructure GREEN
 never promotes a mathematical OPEN_MATH claim.
 -/
 
-inductive BealExternalClaimState
+inductive BealAggregatorClaimState
   | greenInfrastructure
   | openMath
   | proved
   | refuted
   deriving DecidableEq, Repr
 
-structure BealExternalClaim where
+structure BealAggregatorClaim where
   id : String
-  state : BealExternalClaimState
+  state : BealAggregatorClaimState
   statement : Prop
 
-def BealClaimInfrastructure : BealExternalClaim :=
+def BealClaimInfrastructure : BealAggregatorClaim :=
   { id := "BEAL-INFRASTRUCTURE"
     state := .greenInfrastructure
     statement := True }
 
-def BealClaimFastEndpoint : BealExternalClaim :=
+def BealClaimFastEndpoint : BealAggregatorClaim :=
   { id := "BEAL-COMMON-DIVISOR-PRODUCER"
     state := .openMath
     statement := Nonempty BealCommonDivisorProducer }
 
-def BealClaimConjecture : BealExternalClaim :=
+def BealClaimConjecture : BealAggregatorClaim :=
   { id := "BEAL-CONJECTURE"
     state := .openMath
     statement := BealConjecture }
 
 /-- Proof-side external payload. It can only be built from the real minimal
     endpoint inhabitant; no status flag can manufacture this object. -/
-structure BealExternalProofPayload where
+structure BealAggregatorProofPayload where
   producer : BealCommonDivisorProducer
 
-def BealExternalProofPayload.toBeal
-    (P : BealExternalProofPayload) : BealConjecture :=
+def BealAggregatorProofPayload.toBeal
+    (P : BealAggregatorProofPayload) : BealConjecture :=
   commonDivisorProducer_closes_beal P.producer
 
-def BealExternalProofPayload.toKernelCertificate
-    (P : BealExternalProofPayload) : ProofCertificate provedBealNode :=
+def BealAggregatorProofPayload.toKernelCertificate
+    (P : BealAggregatorProofPayload) : ProofCertificate provedBealNode :=
   certifyBeal P.toBeal
 
 /-- Refutation-side external payload. -/
-structure BealExternalRefutationPayload where
+structure BealAggregatorRefutationPayload where
   witness : BealCounterexampleWitness
 
-def BealExternalRefutationPayload.toCertificate
-    (R : BealExternalRefutationPayload) : BealRefutationCertificate :=
+def BealAggregatorRefutationPayload.toCertificate
+    (R : BealAggregatorRefutationPayload) : BealRefutationCertificate :=
   R.witness.toRefutation
 
 theorem beal_external_payloads_exclusive
-    (P : BealExternalProofPayload)
-    (R : BealExternalRefutationPayload) : False :=
+    (P : BealAggregatorProofPayload)
+    (R : BealAggregatorRefutationPayload) : False :=
   proof_refutation_exclusive
     ⟨commonDivisorProducer_closes_beal P.producer⟩
     R.toCertificate
 
-inductive BealFinalExternalResolution
+inductive BealAggregatorExternalResolution
   | openMath
-  | proved (payload : BealExternalProofPayload)
-  | refuted (payload : BealExternalRefutationPayload)
+  | proved (payload : BealAggregatorProofPayload)
+  | refuted (payload : BealAggregatorRefutationPayload)
 
-def BealFinalExternalCurrent : BealFinalExternalResolution := .openMath
+def BealAggregatorExternalCurrent : BealAggregatorExternalResolution := .openMath
 
-#print axioms MCore.BealExternalProofPayload.toBeal
-#print axioms MCore.BealExternalProofPayload.toKernelCertificate
+#print axioms MCore.BealAggregatorProofPayload.toBeal
+#print axioms MCore.BealAggregatorProofPayload.toKernelCertificate
 #print axioms MCore.beal_external_payloads_exclusive
 
 end MCore
