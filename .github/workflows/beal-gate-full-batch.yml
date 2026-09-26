@@ -107,6 +107,22 @@ jobs:
           assert x['final_external_issued'] is False
           assert x['proof_claimed'] is False
           PY
+      - name: Validate ATL v3 graph discipline
+        run: |
+          set -euo pipefail
+          python3 scripts/atl_loader.py ATL_GRAPH.json > /tmp/atl-derived.json
+          python3 scripts/atl_cut.py ATL_GRAPH.json cost_history.json > /tmp/atl-cut.json
+          python3 - <<'PY'
+          import json
+          g=json.load(open('ATL_GRAPH.json'))
+          assert g['schema']=='atl.graph.v3'
+          for n in g['nodes']:
+              forbidden={'proof_state','build_state','kernel_state','axiom_state','semantic_state','certificate_state','dependencies','consumers','replacement_route'}
+              assert not (forbidden & set(n)), (n['id'], forbidden & set(n))
+          e=json.load(open('CERTIFICATES/BEAL_FINAL_EXTERNAL.json'))
+          assert e['final_external_issued'] is False
+          assert e['promotion_allowed'] is False
+          PY
       - name: Gate batch summary
         run: |
           echo 'BEAL_GATE_BATCH=GREEN'
