@@ -1,7 +1,7 @@
 {
   "project": "Beal",
   "parent": "AXM-CROSS-SIGNATURE-002",
-  "state": "PREPARATORY_BUILD_PENDING",
+  "state": "CENTRAL_CERTIFIED_REFERENCE",
   "signature": [
     "B",
     "U"
@@ -16,5 +16,12 @@
         "exact_hypothesis_instantiation"
       ]
     }
-  ]
+  ],
+  "central_certificate": {
+    "id": "AXM-CROSS-SIGNATURE-002",
+    "status": "GREEN_FROZEN_CERTIFIED",
+    "certified_source_sha": "08a2894eba8c71779fb44a3583135038a64c96f5",
+    "green_run": 36206406118,
+    "certificate_commit": "4068a82118573fa7ae6a2457d940251e970ebe07"
+  }
 }
