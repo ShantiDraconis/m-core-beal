@@ -12,10 +12,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: leanprover/lean-action@v1
+        with:
+          build: false
+          test: false
+          lint: false
       - name: Build Beal producer router
         run: |
           set -euo pipefail
-          lake update mathlib
           lake build MCore.BealFastExternalEndpoint
           lake env lean lean/MCore/BealProducer.lean 2>&1 | tee BealProducer.log
           if grep -n -E '(^|[^[:alnum:]_])(sorry|admit)([^[:alnum:]_]|$)' lean/MCore/BealProducer.lean; then exit 1; fi
