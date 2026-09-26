@@ -1,0 +1,34 @@
+{
+  "schema": "atk.beal-negative-closure-route.v1",
+  "problem": "BEAL",
+  "route": "G21_STYLE_NEGATIVE_ELIMINATION",
+  "exact_equivalence": {
+    "theorem": "MCore.beal_iff_negative_elimination",
+    "statement": "BealConjecture ↔ (T34FreyNodalCollisionCandidate → False)",
+    "source": "lean/MCore/T35.lean"
+  },
+  "green_prefix": [
+    "T1-T34 reduction chain to T34FreyNodalCollisionCandidate",
+    "T60 arithmetic packet",
+    "PostT36E genuine odd multiplicative reduction",
+    "T58 five-family elimination glue",
+    "K10 commonDivisor/commonPrime equivalence"
+  ],
+  "h_pending": [
+    {
+      "id": "BEAL_NEGATIVE_ELIMINATION",
+      "statement": "T34FreyNodalCollisionCandidate → False",
+      "equivalent_to_target": true,
+      "status": "OPEN_MATH",
+      "note": "This is the exact final elimination theorem; wrappers or interfaces do not discharge it."
+    }
+  ],
+  "relation_to_G21_pattern": {
+    "pattern_only": true,
+    "imported_theorem": false,
+    "analogy": "candidate formulation A plus completed mathematical consequences leads to contradiction",
+    "warning": "G2.1 falsifies a literal formulation; Beal's residual elimination is equivalent to the conjecture itself and is not already falsified."
+  },
+  "proof_claimed": false,
+  "final_external_issued": false
+}
