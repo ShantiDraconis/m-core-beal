@@ -17,4 +17,14 @@ theorem beal003_closes_from_requirements
     (h : r.closed) :
     r.closed := h
 
+theorem beal003_assemble
+    (r : Beal003Requirements)
+    (h1 : r.PreservationOperator_P)
+    (h2 : r.UniformizationOperator_N)
+    (h3 : r.verified_common_prime_endpoint_producer)
+    (h4 : r.exact_hypothesis_instantiation) :
+    r.closed :=
+  ⟨h1, h2, h3, h4⟩
+
+
 end FinalProof
