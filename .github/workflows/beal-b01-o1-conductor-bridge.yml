@@ -12,10 +12,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: leanprover/lean-action@v1
+        with:
+          build: false
+          test: false
+          lint: false
       - name: Build B01 O1 conductor bridge
         run: |
           set -euo pipefail
-          lake update mathlib
+          cp lakefile.toml lakefile.canonical.toml
+          cat >> lakefile.toml <<'EOF'
+          
+          [[require]]
+          name = "mathlib"
+          git = "https://github.com/leanprover-community/mathlib4.git"
+          rev = "v4.19.0"
+          EOF
+          rm -f lake-manifest.json
+          lake update
           lake build MCore.B01DenseScientificFrontier
           lake env lean lean/MCore/B01O1ConductorBridge.lean
           if grep -n -E '(^|[^[:alnum:]_])(sorry|admit)([^[:alnum:]_]|$)' lean/MCore/B01O1ConductorBridge.lean; then exit 1; fi
