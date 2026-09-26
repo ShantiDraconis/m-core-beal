@@ -41,14 +41,14 @@ def B01O1IrreducibleScientificDelta : Type :=
   { S : B01ConductorExponentSemantics //
       B01GenuineMultiplicativeConductorTheorem S }
 
-/-- A real inhabitant of the irreducible delta issues the exact O1
-certificate consumed by the atomic B01 DAG. -/
-def B01O1IrreducibleScientificDelta.toCertificate
+/-- A real inhabitant of the irreducible delta issues the exact odd-exponent
+scientific payload.  The atomic O1 wrapper is constructed downstream, avoiding
+an unnecessary import cycle here. -/
+def B01O1IrreducibleScientificDelta.toOddLaw
     (H : B01O1IrreducibleScientificDelta) :
-    B01O1Certificate :=
-  B01O1Certificate.mk
-    H.1
-    (b01_o1_from_genuine_multiplicative_conductor_theorem H.1 H.2)
+    B01OddScientificDelta :=
+  ⟨H.1,
+    b01_o1_from_genuine_multiplicative_conductor_theorem H.1 H.2⟩
 
 #print axioms MCore.b01_o1_from_genuine_multiplicative_conductor_theorem
 
