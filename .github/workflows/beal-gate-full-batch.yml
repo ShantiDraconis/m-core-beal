@@ -46,7 +46,8 @@ jobs:
             BealFinalExternalAggregator \
             BealBoundaryConnectivity \
             BealFastEliminationEndpoint \
-            BealNegativeClosureRoute
+            BealNegativeClosureRoute \
+            BealStatementFrozen
           do
             cp "../lean/MCore/${f}.lean" "MCore/${f}.lean"
           done
@@ -90,6 +91,7 @@ jobs:
             'CERTIFICATES/BEAL_BOUNDARY_EVIDENCE_MAP.json',
             'CERTIFICATES/BEAL_FASTLANE_V2.json',
             'CERTIFICATES/BEAL_NEGATIVE_CLOSURE_ROUTE.json',
+            'CERTIFICATES/BEAL_EVIDENCE.json',
           ]
           for p in paths:
               with open(p) as f: json.load(f)
@@ -100,5 +102,5 @@ jobs:
       - name: Gate batch summary
         run: |
           echo 'BEAL_GATE_BATCH=GREEN'
-          echo 'FILES=13'
+          echo 'FILES=16'
           echo 'FINAL_EXTERNAL_ISSUED=false'
