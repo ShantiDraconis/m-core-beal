@@ -1,0 +1,17 @@
+{
+  "schema": "finalproof.local-frontier-reds.v1",
+  "project": "Beal",
+  "records": [
+    {
+      "id": "BEAL-TERMINAL-BRIDGE",
+      "A": "certified infrastructure lemmas",
+      "T": "derive common-prime endpoint",
+      "P": [
+        "verified_common_prime_endpoint_producer",
+        "exact_hypothesis_instantiation"
+      ],
+      "B": "Beal common-prime endpoint",
+      "status": "OPEN_BRIDGE"
+    }
+  ]
+}
