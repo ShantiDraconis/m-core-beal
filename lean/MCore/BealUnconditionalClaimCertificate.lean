@@ -1,7 +1,6 @@
 import MCore.BealFastExternalEndpoint
 import MCore.BealFastEliminationEndpoint
 import MCore.BealNegativeClosureRoute
-import MCore.BealFinalExternalCertificate
 
 namespace MCore
 
