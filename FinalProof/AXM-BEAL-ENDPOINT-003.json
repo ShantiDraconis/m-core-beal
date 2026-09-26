@@ -12,5 +12,17 @@
     "exact_hypothesis_instantiation",
     "dependency_closure audit GREEN"
   ],
-  "issuance_rule": "CLOSED only after the exact common-prime endpoint is kernel-checked."
+  "issuance_rule": "CLOSED only after the exact common-prime endpoint is kernel-checked.",
+  "dependencies": [
+    "4068a82118573fa7ae6a2457d940251e970ebe07"
+  ],
+  "core": [
+    "B"
+  ],
+  "surviving_route": [
+    "EndpointBridge(B)",
+    "PreservationOperator(P)",
+    "UniformizationOperator(N)",
+    "verified_common_prime_endpoint_producer"
+  ]
 }
