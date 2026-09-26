@@ -1,0 +1,32 @@
+{
+  "schema": "atk.beal-fastlane-v2",
+  "problem": "BEAL",
+  "primary_exact_endpoint": {
+    "object": "MCore.BealGlobalEliminationProducer",
+    "proposition": "MCore.T35GlobalEliminationBridge",
+    "equivalence": "MCore.T35_beal_iff_global_elimination_bridge",
+    "state": "OPEN_MATH"
+  },
+  "alternate_exact_endpoint": {
+    "object": "MCore.BealCommonDivisorProducer",
+    "equivalence": "MCore.beal_iff_commonDivisorProducer",
+    "state": "OPEN_MATH"
+  },
+  "closed_negative_route": {
+    "id": "BEAL_SINGLE_RESIDUAL_PRIME_UNIVERSAL_FORMULATION",
+    "candidate": "MCore.T43UniversalSingleResidualPrimeRule",
+    "required_condition": "MCore.BealSingleResidualRequiredCondition",
+    "need": "MCore.singleResidualRule_requires_345",
+    "break": "MCore.singleResidualRule_breaks_345",
+    "contradiction": "MCore.beal_single_residual_claim_contradiction",
+    "status": "CLOSED_BY_FALSIFICATION",
+    "scope": "route formulation only; does not refute Beal"
+  },
+  "reuse_priority": [
+    "T60/PostT36E genuine odd multiplicative reduction",
+    "T35 exact Beal/global-elimination equivalence",
+    "T58 five-family aggregation",
+    "K10 common-divisor/common-prime equivalence"
+  ],
+  "final_external_issued": false
+}
