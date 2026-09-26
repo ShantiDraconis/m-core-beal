@@ -1,0 +1,15 @@
+schema: finalproof.frontier-map.v1
+project: Beal
+central_formalization: ShantiDraconis/axiomatic-millenium:AxiomaticMillenium/FrontierRED.lean
+finalproof_parts:
+  common_prime_endpoint:
+    status: OPEN_BRIDGE
+    patterns: [U, B]
+    source_sha: fe1e5027dbe051cecdf4750ada197a57defae816
+    A: "certified infrastructure lemmas"
+    T: "derive common-prime endpoint for A^x + B^y = C^z"
+    P:
+      - verified_common_prime_endpoint_producer
+      - exact_hypothesis_instantiation
+    B: "Beal common-prime endpoint"
+publication_rule: "Infrastructure does not promote to the Beal conjecture without the endpoint producer."
