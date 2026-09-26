@@ -1,0 +1,24 @@
+{
+  "schema": "atl.retry-policy.v1",
+  "roles": [
+    "PLANNER",
+    "RECOVERY",
+    "PROVER",
+    "AUDITOR",
+    "CERTIFIER"
+  ],
+  "prover": {
+    "max_attempts": 3,
+    "on_failure": [
+      "alternate_tactic",
+      "decompose_target",
+      "reuse_search"
+    ],
+    "after_max_attempts": "ESCALATE_TO_PLANNER"
+  },
+  "planner": {
+    "attackable_to_cut": true,
+    "research_to_conditionalOn": true,
+    "external_to_conditionalOn": true
+  }
+}
