@@ -45,9 +45,10 @@ def B01O1IrreducibleScientificDelta : Type :=
 certificate consumed by the atomic B01 DAG. -/
 def B01O1IrreducibleScientificDelta.toCertificate
     (H : B01O1IrreducibleScientificDelta) :
-    B01O1Certificate where
-  semantics := H.1
-  law := b01_o1_from_genuine_multiplicative_conductor_theorem H.1 H.2
+    B01O1Certificate :=
+  B01O1Certificate.mk
+    H.1
+    (b01_o1_from_genuine_multiplicative_conductor_theorem H.1 H.2)
 
 #print axioms MCore.b01_o1_from_genuine_multiplicative_conductor_theorem
 
