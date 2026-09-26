@@ -15,6 +15,8 @@ jobs:
       - name: Build Beal producer router
         run: |
           set -euo pipefail
+          lake update mathlib
+          lake build MCore.BealFastExternalEndpoint
           lake env lean lean/MCore/BealProducer.lean 2>&1 | tee BealProducer.log
           if grep -n -E '(^|[^[:alnum:]_])(sorry|admit)([^[:alnum:]_]|$)' lean/MCore/BealProducer.lean; then exit 1; fi
           if grep -n -E '^[[:space:]]*(axiom|constant|constants)[[:space:]]' lean/MCore/BealProducer.lean; then exit 1; fi
