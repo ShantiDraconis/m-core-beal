@@ -13,7 +13,7 @@ Every accepted proof route must end here.
 -/
 
 /-- The exact unconditional mathematical claim. -/
-structure BealUnconditionalClaimCertificate where
+structure BealUnconditionalClaimCertificate : Type where
   theoremProof : BealConjecture
 
 /-- Direct theorem enablement. -/
