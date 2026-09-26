@@ -55,5 +55,19 @@
   "promotion_allowed": false,
   "proof_claimed": false,
   "refutation_claimed": false,
-  "final_external_issued": false
+  "final_external_issued": false,
+  "conditional_routes": [
+    {
+      "id": "ABC_EFFECTIVE_FINITE_REDUCTION",
+      "status": "OPEN_MATH",
+      "theorem": "MCore.Beal_of_ABC_and_finite_check",
+      "conditionalOn": [
+        "ABCStatement",
+        "MCore.ABCBealFiniteReduction ABCStatement",
+        "MCore.BealFiniteCheck reduction.bound"
+      ],
+      "note": "Typed composition exists; canonical ABC-to-effective-bound reduction and finite check are not yet inhabited."
+    }
+  ],
+  "evidence_index": "CERTIFICATES/BEAL_EVIDENCE.json"
 }
