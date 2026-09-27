@@ -1,0 +1,21 @@
+{
+  "schema":"atk.beal-common-divisor-endpoint-certified.v1",
+  "problem":"BEAL",
+  "state":"GREEN_FROZEN_CERTIFIED",
+  "source_sha":"2968f8907dd8b19c53bc182c25d19c9d879742f5",
+  "frozen_branch":"frozen/beal-common-divisor-endpoint-green-20260927",
+  "runs":{
+    "source":36336777273,
+    "certificate_register":36336779533,
+    "root_build":36336791101
+  },
+  "certified_reduction":"Universal nontrivial CommonDivisor -> K10 CommonPrime -> AcceptedClosure -> ProofCertificate -> FinalExternalCertificate -> FinalRoot",
+  "open_math":{
+    "object":"MCore.BealCommonDivisorEndpoint",
+    "statement":"forall d : BealData, exists q : Nat, CommonDivisor q d.a d.b d.c",
+    "status":"OPEN_MATH_INHABITANT"
+  },
+  "final_proof_issued":false,
+  "external_certificate_issued":false,
+  "final_root":null
+}
