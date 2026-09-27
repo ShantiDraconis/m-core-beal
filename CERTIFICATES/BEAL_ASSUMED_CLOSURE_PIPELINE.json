@@ -1,0 +1,43 @@
+{
+  "schema": "atk.beal-assumed-closure-pipeline.v1",
+  "problem": "BEAL",
+  "repository": "ShantiDraconis/m-core-beal",
+  "branch": "attack/beal-final-math-chain-v1",
+  "mode": "ASSUMPTION_CONTRACT_FAIL_CLOSED",
+  "accepted_object": {
+    "lean_object": "MCore.BealAcceptedClosureObject",
+    "semantic_payload": "MCore.BealUniversalCommonPrimeCertificate",
+    "status": "INTERFACE_DEFINED_INHABITANT_NOT_SUPPLIED"
+  },
+  "derivation_chain": [
+    "BealAcceptedClosureObject",
+    "BealUniversalCommonPrimeCertificate",
+    "BealProofCertificate",
+    "BealFinalExternalCertificate",
+    "BealFinalRoot",
+    "BealConjecture"
+  ],
+  "gates": {
+    "G0_SOURCE_HYGIENE": "PENDING_CI",
+    "G1_BUILD": "PENDING_CI",
+    "G2_AXIOM_AUDIT": "PENDING_CI",
+    "G3_NEGATIVE_PROMOTION_CONTROL": "PENDING_CI",
+    "G4_EXTERNAL_CERTIFICATE": "BLOCKED_NO_INHABITANT",
+    "G5_FINAL_ROOT": "BLOCKED_NO_INHABITANT"
+  },
+  "open_math_point": {
+    "id": "BEAL-COMMON-PRIME-ENDPOINT",
+    "statement": "forall admissible BealData, CommonPrime d.a d.b d.c",
+    "required_inhabitant": "MCore.BealAcceptedClosureObject"
+  },
+  "final_proof": {
+    "issued": false,
+    "reason": "No kernel inhabitant of BealAcceptedClosureObject has been supplied."
+  },
+  "external_certificate": {
+    "issued": false
+  },
+  "final_root": null,
+  "promotion_policy": "GREEN -> FROZEN -> CERTIFIED only after build and axiom audit; theorem issuance additionally requires a real kernel inhabitant. RED must be repaired and rerun.",
+  "forbidden_shortcuts": ["axiom", "constant", "sorry", "admit", "Classical.choice", "hidden oracle"]
+}
