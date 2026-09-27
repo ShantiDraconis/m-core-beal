@@ -72,3 +72,5 @@ import MCore.Audit
 
 import MCore.B01ConductorLevel
 import MCore.BealAcceptedClosurePipeline
+
+import MCore.BealCommonDivisorEndpoint
