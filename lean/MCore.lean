@@ -74,3 +74,5 @@ import MCore.B01ConductorLevel
 import MCore.BealAcceptedClosurePipeline
 
 import MCore.BealCommonDivisorEndpoint
+
+import MCore.BealGcdEndpoint
