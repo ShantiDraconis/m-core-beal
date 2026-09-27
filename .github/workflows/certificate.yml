@@ -29,13 +29,10 @@ jobs:
           set -euo pipefail
           printf 'import MCore.K10\n#print axioms MCore.primeDivisorProperty_core\n#print axioms MCore.primeDivisorProperty_proved\n#print axioms MCore.commonPrime_iff_commonDivisor\n' > K10AxiomAudit.lean
           lake env lean K10AxiomAudit.lean 2>&1 | tee K10AxiomAudit.log
-          # Fail closed on incomplete proofs, choice, or project/user axioms.
           if grep -E 'sorryAx|Classical\.choice' K10AxiomAudit.log; then exit 1; fi
-          # Per-theorem exact foundation contract. Do not replace this with a global allowlist.
           grep -F "'MCore.primeDivisorProperty_core' depends on axioms: [propext, Quot.sound]" K10AxiomAudit.log
           grep -F "'MCore.primeDivisorProperty_proved' depends on axioms: [propext, Quot.sound]" K10AxiomAudit.log
           grep -F "'MCore.commonPrime_iff_commonDivisor' depends on axioms: [propext, Quot.sound]" K10AxiomAudit.log
-          # Any additional axiom name changes the exact line above and fails the contract.
           echo 'K10 epistemic class: LEAN_STANDARD_FOUNDATION / CHOICE_FREE'
       - name: G4 K9 zero-axiom regression
         run: |
@@ -48,6 +45,25 @@ jobs:
         run: |
           printf 'import MCore.K10\nopen MCore\nexample : ¬ Nonempty (ProofCertificate bealEndpointNode) := k7_endpoint_not_certified\n' > NegativeK10.lean
           lake env lean NegativeK10.lean
+      - name: G5A accepted-closure pipeline build
+        run: |
+          set -euo pipefail
+          lake build MCore.BealAcceptedClosurePipeline
+      - name: G5B accepted-closure foundation audit
+        run: |
+          set -euo pipefail
+          printf 'import MCore.BealAcceptedClosurePipeline\n#print axioms MCore.acceptedClosureObject_closes_beal\n#print axioms MCore.finalRoot_closes_beal\n#print axioms MCore.finalRoot_refutation_exclusive\n#print axioms MCore.BealAcceptedClosurePipelineState_is_unresolved\n' > BealAcceptedClosureAxiomAudit.lean
+          lake env lean BealAcceptedClosureAxiomAudit.lean 2>&1 | tee BealAcceptedClosureAxiomAudit.log
+          if grep -E 'sorryAx|Classical\.choice' BealAcceptedClosureAxiomAudit.log; then exit 1; fi
+          if grep -E 'depends on axioms:.*MCore\.' BealAcceptedClosureAxiomAudit.log; then exit 1; fi
+          echo 'Accepted closure pipeline: SOURCE_GREEN candidate; no theorem inhabitant issued by CI.'
+      - name: G5C negative promotion control
+        run: |
+          set -euo pipefail
+          printf 'import MCore.BealAcceptedClosurePipeline\nopen MCore\nexample : BealAcceptedClosurePipelineState = .unresolved := BealAcceptedClosurePipelineState_is_unresolved\n' > BealAcceptedClosureNegative.lean
+          lake env lean BealAcceptedClosureNegative.lean
+          grep -F '"G4_EXTERNAL_CERTIFICATE": "BLOCKED_NO_INHABITANT"' CERTIFICATES/BEAL_ASSUMED_CLOSURE_PIPELINE.json
+          grep -F '"G5_FINAL_ROOT": "BLOCKED_NO_INHABITANT"' CERTIFICATES/BEAL_ASSUMED_CLOSURE_PIPELINE.json
       - name: Backward oracle A-B test
         run: |
           set -euo pipefail
