@@ -1,0 +1,32 @@
+{
+  "schema": "atk.beal-accepted-closure-certified.v1",
+  "problem": "BEAL",
+  "state": "GREEN_FROZEN_CERTIFIED",
+  "source_sha": "7a228b8a2ae08eb59d73b064b019004c4ed937ef",
+  "frozen_branch": "frozen/beal-accepted-closure-pipeline-green-20260927",
+  "runs": {
+    "certificate": 36326614634,
+    "final_chain": 36326614722
+  },
+  "gates": {
+    "G0_SOURCE_HYGIENE": "GREEN",
+    "G1_K9_REGRESSION": "GREEN",
+    "G2_K10_BUILD": "GREEN",
+    "G3_AXIOM_AUDIT": "GREEN",
+    "G4_K9_ZERO_AXIOM_REGRESSION": "GREEN",
+    "G5_ENDPOINT_FAIL_CLOSED": "GREEN",
+    "G5A_ACCEPTED_CLOSURE_BUILD": "GREEN",
+    "G5B_FOUNDATION_AUDIT": "GREEN",
+    "G5C_NEGATIVE_PROMOTION": "GREEN",
+    "G6_CLEAN_REPRODUCTION": "GREEN",
+    "FINAL_CHAIN": "GREEN"
+  },
+  "certified_claim": "The accepted-closure interface and its derivation to proof/external/root objects compile and pass fail-closed audits.",
+  "mathematical_endpoint": {
+    "status": "OPEN_MATH_INHABITANT",
+    "required_object": "MCore.BealAcceptedClosureObject",
+    "final_proof_issued": false,
+    "external_certificate_issued": false,
+    "final_root": null
+  }
+}
