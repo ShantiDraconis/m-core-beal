@@ -1,0 +1,29 @@
+name: Direct Endpoint Rule Guard
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  policy-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify locked universal policy
+        shell: bash
+        run: |
+          set -euo pipefail
+          POLICY="POLICY/DIRECT_ENDPOINT_RULE.md"
+          LEAN="formal/DirectEndpointRule.lean"
+          test -f "$POLICY"
+          test -f "$LEAN"
+          echo "7ebc74aa23ecb851c6a2ba47fd717e957210adb9a9d77ae08051cedc9efa0703  $POLICY" | sha256sum -c -
+          echo "f4321711bf19de85f93cb9c49aa8bf1f089bdda436aa9bde09fd03a6bb729cab  $LEAN" | sha256sum -c -
+      - name: Fail closed on proof placeholders in direct endpoint rule
+        shell: bash
+        run: |
+          set -euo pipefail
+          if grep -nE '\b(sorry|admit|axiom)\b' formal/DirectEndpointRule.lean; then
+            echo "DIRECT_ENDPOINT_RULE rejected: placeholder/axiom detected"
+            exit 1
+          fi
