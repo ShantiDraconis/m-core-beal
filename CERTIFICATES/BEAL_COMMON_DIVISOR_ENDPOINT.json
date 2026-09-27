@@ -1,0 +1,11 @@
+{
+  "schema":"atk.beal-common-divisor-endpoint.v1",
+  "problem":"BEAL",
+  "state":"SOURCE",
+  "reduction":"CommonDivisor universal -> K10 commonPrime_iff_commonDivisor -> AcceptedClosure -> Proof -> External -> FinalRoot",
+  "open_math":"forall d : BealData, exists q : Nat, CommonDivisor q d.a d.b d.c",
+  "promotion_allowed":false,
+  "final_proof_issued":false,
+  "external_certificate_issued":false,
+  "final_root":null
+}
