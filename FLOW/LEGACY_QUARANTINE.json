@@ -1,0 +1,12 @@
+{
+  "schema": "ATK_LEGACY_QUARANTINE_V1",
+  "repository": "ShantiDraconis/m-core-beal",
+  "note": "Legacy files remain at existing paths to preserve imports. Their class is authoritative here until compatibility-preserving migration.",
+  "entries": [
+    {
+      "path": "lean/MCore/BackwardAudit/HypotheticalClosureOracle.lean",
+      "class": "HYPOTHETICAL",
+      "proof_promotion_allowed": false
+    }
+  ]
+}
