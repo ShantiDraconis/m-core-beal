@@ -1,0 +1,13 @@
+{
+  "schema": "ATK_CANONICAL_STABLE_HOLE_V1",
+  "problem": "BEAL",
+  "type": "∀ d : BealData, ∃ q : Nat, CommonDivisor q d.a d.b d.c",
+  "standard_binding": "repo canonical BealData and arithmetic equation",
+  "forbidden_shortcuts": [
+    "CommonPrimeWitnessContract.witness",
+    "CommonPrime supplied as hypothesis",
+    "aliasing the endpoint without constructing q"
+  ],
+  "exact_producer": "for every BealData construct a nontrivial common divisor q; reuse commonPrime_iff_commonDivisor to recover the common-prime endpoint",
+  "material_status": "OPEN_MATH"
+}
