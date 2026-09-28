@@ -1,0 +1,22 @@
+{
+  "schema": "ATK_MATERIAL_RECLASSIFICATION_V1",
+  "problem": "BEAL",
+  "endpoint_packaging_found": {
+    "type": "MCore.BackwardAudit.CommonPrimeWitnessContract",
+    "field": "witness : ∀ d : BealData, CommonPrime d.a d.b d.c",
+    "classification": "CONDITIONAL_WRAPPER"
+  },
+  "green_but_not_material": [
+    "witness_contract_closes_beal",
+    "commonPrimeWitness_is_endpoint_projection"
+  ],
+  "stable_hole": "∀ d : BealData, CommonPrime d.a d.b d.c",
+  "fences": [
+    "no CommonPrime witness field counts as producer",
+    "no endpoint-equivalent hypothesis counts as producer",
+    "the proof must derive CommonPrime from BealData arithmetic"
+  ],
+  "audit_status": "GREEN",
+  "material_status": "OPEN_MATH",
+  "material_green": false
+}
