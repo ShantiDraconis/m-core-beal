@@ -1,12 +1,14 @@
-import MCore.BealSpecification
+import MCore.BealMinimalProducer
 
 namespace MCore.BealMaterialProbe
 
 /-
 EXPECTED FAILURE TARGET.
-No CommonPrimeWitnessContract or endpoint-equivalent hypothesis is supplied.
+No CommonPrimeWitnessContract, BealConjecture hypothesis, or endpoint-equivalent
+oracle is supplied. The reduced target is the universal nontrivial common
+divisor producer.
 -/
 
-example : ∀ d : BealData, CommonPrime d.a d.b d.c := by
+example : CommonDivisorProducer := by
 
 end MCore.BealMaterialProbe
