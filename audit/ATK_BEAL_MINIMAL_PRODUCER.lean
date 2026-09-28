@@ -25,6 +25,26 @@ theorem bealConjecture_iff_commonDivisorProducer :
   · intro h d
     exact (commonPrime_iff_commonDivisor).mpr (h d)
 
+/-- Smallest scalar producer currently exposed by the arithmetic kernel. -/
+def GCDLowerBoundProducer : Prop :=
+  ∀ d : BealData, 1 < Nat.gcd d.a (Nat.gcd d.b d.c)
+
+theorem commonDivisorProducer_iff_gcdLowerBoundProducer :
+    CommonDivisorProducer ↔ GCDLowerBoundProducer := by
+  constructor
+  · intro h d
+    exact (commonDivisor_iff_one_lt_nestedGCD d).mp (h d)
+  · intro h d
+    exact (commonDivisor_iff_one_lt_nestedGCD d).mpr (h d)
+
+theorem bealConjecture_iff_gcdLowerBoundProducer :
+    BealConjecture ↔ GCDLowerBoundProducer := by
+  rw [bealConjecture_iff_commonDivisorProducer,
+      commonDivisorProducer_iff_gcdLowerBoundProducer]
+
+#print axioms MCore.commonDivisor_iff_one_lt_nestedGCD
+#print axioms MCore.commonPrime_iff_one_lt_nestedGCD
 #print axioms MCore.bealConjecture_iff_commonDivisorProducer
+#print axioms MCore.bealConjecture_iff_gcdLowerBoundProducer
 
 end MCore
