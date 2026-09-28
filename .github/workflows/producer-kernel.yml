@@ -20,8 +20,10 @@ jobs:
           curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y
           echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
       - name: Resolve dependencies
+        working-directory: t36e_mathlib
         run: lake update
       - name: Build exact producer frontier
+        working-directory: t36e_mathlib
         run: lake build MCore.PostT36EConductorBridge
       - name: Reject proof escapes in producer sources
         run: |
