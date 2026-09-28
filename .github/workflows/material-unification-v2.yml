@@ -17,6 +17,7 @@ jobs:
       - run: lake update
       - run: lake exe cache get || true
       - run: lake build MCore.BealSpecification MCore.BackwardAudit.WithoutOracle
+      - run: lake build MCore.BealMinimalProducer
       - run: lake env lean lean/MCore/MinimalInhabitant.lean
       - run: lake env lean lean/MCore/BackwardAudit/BealMaterialProducerGate.lean
       - name: Expected material failure
