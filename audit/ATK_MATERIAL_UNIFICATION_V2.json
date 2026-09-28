@@ -1,8 +1,8 @@
 {
   "schema": "ATK_MATERIAL_UNIFICATION_V2",
   "problem": "BEAL",
-  "canonical_type": "∀ d : BealData, CommonPrime d.a d.b d.c",
-  "canonical_type_status": "TYPED",
+  "canonical_type": "CommonDivisorProducer := ∀ d : BealData, ∃ q : Nat, CommonDivisor q d.a d.b d.c",
+  "canonical_type_status": "TYPED_REDUCED_BY_KERNEL_EQUIVALENCE",
   "standard_object_binding": "REPO_CANONICAL_BEALDATA",
   "direct_probe": "probe/BealMaterialExpectedFailure.lean",
   "direct_probe_expected": "FAIL_UNTIL_INHABITED",
@@ -27,9 +27,8 @@
     "T3-T60 arithmetic/Frey/conductor/level-elimination family"
   ],
   "next_material_producer": [
-    "for every BealData construct q with CommonDivisor q a b c",
-    "reuse PrimeDivisorProperty to extract CommonPrime",
-    "close BealConjecture without CommonPrimeWitnessContract"
+    "construct q > 1 dividing a,b,c for every BealData",
+    "reuse commonPrime_iff_commonDivisor to recover BealConjecture"
   ],
   "red_incorporation_policy": {
     "RED_INFRA": "DISCARD_AFTER_FIX",
