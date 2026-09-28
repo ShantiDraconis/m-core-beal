@@ -5,7 +5,7 @@
   "hard_composite_remaining": 2,
   "hard_atomic_remaining": 2,
   "current_gate": "B01",
-  "current_head": "b6667e63a2c28c32cee0ab17714f9d772a0b4768",
+  "current_head": "51de3aa044ac45da1e15f26557446d6a60af6d96",
   "canonical_hard_base": {
     "state": "GREEN_FROZEN_REUSED",
     "branch": "frozen/b01-conductor-level-interface-green-b6667e63",
@@ -14,8 +14,19 @@
   },
   "state_ci": "GREEN_PREFIX_REUSED",
   "state_math": "OPEN_MATH",
-  "next": "define/prove exact local conductor exponent and exact lowered level, then discharge the residual universal CommonPrime families",
+  "next": "construct CommonDivisorProducer directly; conductor/lowered-level machinery remains an admissible strategy, not an additional terminal obligation",
   "progress_metric": "FROZEN_HARD/TOTAL_HARD",
   "tests_are_progress_metric": false,
-  "frozen_prefix_decrements_hard": false
+  "frozen_prefix_decrements_hard": false,
+  "direct_producer": {
+    "state": "GREEN_FROZEN_TYPED_OPEN_MATH",
+    "branch": "frozen/beal-direct-common-divisor-green-51de3aa0",
+    "sha": "51de3aa044ac45da1e15f26557446d6a60af6d96",
+    "theorem": "bealConjecture_iff_commonDivisorProducer",
+    "target": "CommonDivisorProducer := ∀ d : BealData, ∃ q : Nat, CommonDivisor q d.a d.b d.c",
+    "equivalent_to": "BealConjecture",
+    "ci_run": 36492633205,
+    "ci_conclusion": "SUCCESS",
+    "inhabitant_state": "OPEN_MATH"
+  }
 }
