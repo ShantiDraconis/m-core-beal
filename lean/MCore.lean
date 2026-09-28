@@ -2,7 +2,6 @@ import MCore.Signature
 import MCore.Boundary
 import MCore.BealSpecification
 import MCore.GCDSignature
-import MCore.PostT36EConductorBridge
 import MCore.DiscreteBoundary
 import MCore.K0
 import MCore.K1
