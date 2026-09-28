@@ -13,5 +13,28 @@
   ],
   "dependency_closure": "REQUIRED",
   "provenance": "REQUIRED",
-  "material_status": "OPEN_MATH"
+  "material_status": "OPEN_MATH",
+  "reuse_proved": [
+    "BealData",
+    "CommonDivisor",
+    "CommonPrime",
+    "PrimeDivisorProperty",
+    "commonPrime_to_commonDivisor",
+    "commonDivisor_to_commonPrime_of_primeDivisor",
+    "commonPrime_iff_commonDivisor",
+    "GCDSignature",
+    "triple-GCD equivalence",
+    "T3-T60 arithmetic/Frey/conductor/level-elimination family"
+  ],
+  "next_material_producer": [
+    "for every BealData construct q with CommonDivisor q a b c",
+    "reuse PrimeDivisorProperty to extract CommonPrime",
+    "close BealConjecture without CommonPrimeWitnessContract"
+  ],
+  "red_incorporation_policy": {
+    "RED_INFRA": "DISCARD_AFTER_FIX",
+    "RED_FALSIFIED_ROUTE": "PERMANENT_FENCE",
+    "RED_CONCRETE_LEMMA": "REUSE_PROVED",
+    "RED_STABLE_HOLE_REFINEMENT": "REPLACE_WITH_SMALLER_CANONICAL_TARGET"
+  }
 }
