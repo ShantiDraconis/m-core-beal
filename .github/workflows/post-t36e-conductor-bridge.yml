@@ -1,7 +1,7 @@
 name: post-t36e-conductor-bridge
 on:
   push:
-    branches: [atk/next-beal-exact-lowered-level-20260928]
+    branches: [atk/next-beal-genuine-level-lowering-20260928]
     paths:
       - 'lean/MCore/PostT36EConductorBridge.lean'
       - 'lean/MCore/B01ConductorLevel.lean'
