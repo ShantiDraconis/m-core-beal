@@ -1,5 +1,4 @@
 import Mathlib.AlgebraicGeometry.EllipticCurve.LFunction
-import Mathlib.Tactic.ComputeDegree
 
 namespace MCore
 
