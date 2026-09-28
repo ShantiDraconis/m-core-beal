@@ -37,9 +37,11 @@ theorem localPolynomial_natDegree_eq_one_of_multiplicative
     (W.localPolynomial R).natDegree = 1 := by
   rcases localPolynomial_eq_one_sub_or_add_X_of_multiplicative R W hmult with h | h
   · rw [h]
-    simp
+    have hp : (1 - X : ℤ[X]) = -(X - C 1) := by ring
+    rw [hp, natDegree_neg, natDegree_X_sub_C]
   · rw [h]
-    simp
+    have hp : (1 + X : ℤ[X]) = X - C (-1) := by ring
+    rw [hp, natDegree_X_sub_C]
 
 #print axioms MCore.localPolynomial_eq_one_sub_or_add_X_of_multiplicative
 #print axioms MCore.localPolynomial_natDegree_eq_one_of_multiplicative
