@@ -14,18 +14,25 @@
   },
   "state_ci": "GREEN_PREFIX_REUSED",
   "state_math": "OPEN_MATH",
-  "next": "construct CommonDivisorProducer directly; conductor/lowered-level machinery remains an admissible strategy, not an additional terminal obligation",
+  "next": "construct GCDLowerBoundProducer directly: ∀ d : BealData, 1 < gcd(d.a, gcd(d.b,d.c)); do not reopen CommonPrime/CommonDivisor wrappers or conductor routes unless they prove this scalar target",
   "progress_metric": "FROZEN_HARD/TOTAL_HARD",
   "tests_are_progress_metric": false,
   "frozen_prefix_decrements_hard": false,
   "direct_producer": {
     "state": "GREEN_FROZEN_TYPED_OPEN_MATH",
-    "branch": "frozen/beal-direct-common-divisor-green-51de3aa0",
-    "sha": "51de3aa044ac45da1e15f26557446d6a60af6d96",
-    "theorem": "bealConjecture_iff_commonDivisorProducer",
-    "target": "CommonDivisorProducer := ∀ d : BealData, ∃ q : Nat, CommonDivisor q d.a d.b d.c",
-    "equivalent_to": "BealConjecture",
-    "ci_run": 36492633205,
+    "branch": "frozen/gcd-lower-bound-producer-green-d6fe130c",
+    "sha": "d6fe130c44ef91e0f8ceb6b15a6548f186e381fd",
+    "theorem": "bealConjecture_iff_gcdLowerBoundProducer",
+    "target": "GCDLowerBoundProducer := ∀ d : BealData, 1 < Nat.gcd d.a (Nat.gcd d.b d.c)",
+    "equivalent_chain": [
+      "GCDLowerBoundProducer",
+      "CommonDivisorProducer",
+      "BealConjecture"
+    ],
+    "ci_runs": [
+      36493742792,
+      36493742928
+    ],
     "ci_conclusion": "SUCCESS",
     "inhabitant_state": "OPEN_MATH"
   }
