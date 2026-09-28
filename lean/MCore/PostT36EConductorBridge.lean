@@ -1,5 +1,6 @@
 import MCore.T60
 import MCore.T36E_MASTER
+import MCore.KernelLocalFactorFromMultiplicative
 
 namespace MCore
 
