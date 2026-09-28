@@ -1,10 +1,11 @@
 name: post-t36e-conductor-bridge
 on:
   push:
-    branches: [atk/next-beal-conductor-20260928]
+    branches: [atk/next-beal-exact-lowered-level-20260928]
     paths:
       - 'lean/MCore/PostT36EConductorBridge.lean'
       - 'lean/MCore/B01ConductorLevel.lean'
+      - 'lean/MCore/ATK_HARD_BEAL_CONDUCTOR_EXACT.lean'
       - 'lean/MCore/T36E_MASTER.lean'
       - 'lean/MCore/T60.lean'
       - 'lean/MCore/KernelLocalFactorFromMultiplicative.lean'
@@ -43,7 +44,7 @@ jobs:
         working-directory: t36e_mathlib
         run: |
           set -euo pipefail
-          lake build MCore.B01ConductorLevel MCore.PostT36EConductorBridge 2>&1 | tee PostT36EConductorBridge.log
+          lake build MCore.B01ConductorLevel MCore.PostT36EConductorBridge MCore.ATK_HARD_BEAL_CONDUCTOR_EXACT 2>&1 | tee PostT36EConductorBridge.log
           if grep -F 'sorryAx' PostT36EConductorBridge.log; then exit 1; fi
       - name: G2 endpoint remains non-promoted
         run: |
