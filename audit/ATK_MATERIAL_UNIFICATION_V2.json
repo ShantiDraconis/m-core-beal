@@ -27,13 +27,20 @@
     "T3-T60 arithmetic/Frey/conductor/level-elimination family"
   ],
   "next_material_producer": [
-    "construct q > 1 dividing a,b,c for every BealData",
-    "reuse commonPrime_iff_commonDivisor to recover BealConjecture"
+    "reuse genuine multiplicative reduction already proved for every odd bad prime",
+    "derive a genuine local conductor exponent from that same minimal/reduction data",
+    "derive exact global conductor and exact lowered level without assuming Beal/common-divisor endpoint",
+    "only then continue the modular contradiction route"
   ],
   "red_incorporation_policy": {
     "RED_INFRA": "DISCARD_AFTER_FIX",
     "RED_FALSIFIED_ROUTE": "PERMANENT_FENCE",
     "RED_CONCRETE_LEMMA": "REUSE_PROVED",
     "RED_STABLE_HOLE_REFINEMENT": "REPLACE_WITH_SMALLER_CANONICAL_TARGET"
+  },
+  "endpoint_equivalence_firewall": {
+    "rejected_as_progress": "MinimalBealInhabitant/CommonDivisorProducer",
+    "reason": "minimalBealInhabitant_iff_BealConjecture and bealConjecture_iff_commonDivisorProducer prove endpoint equivalence",
+    "counting_rule": "DO_NOT_COUNT_AS_PRODUCER_PROGRESS"
   }
 }
