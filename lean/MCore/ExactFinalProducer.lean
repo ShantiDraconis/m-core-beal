@@ -69,5 +69,34 @@ theorem FINAL_ROOT_of_no_parity_reduced_candidate
 #print axioms MCore.BealFinal.FINAL_ROOT_of_no_pairwise_reduced_candidate
 #print axioms MCore.BealFinal.FINAL_ROOT_of_no_parity_reduced_candidate
 
+
+/-- The first genuinely semantic Beal cut after the exact T7--T34 reductions. -/
+def finalExternal_of_global_elimination
+    (h : T35GlobalEliminationBridge) :
+    FinalExternalCertificate := by
+  have hBeal : BealConjecture :=
+    (T35_beal_iff_global_elimination_bridge).2 h
+  exact ⟨fun d => hBeal d⟩
+
+/-- Fully field-by-field T36--T42 route into FinalExternal. -/
+def finalExternal_of_T42_bundle
+    {G : T35GapLedger}
+    (b : T42FinalProofBundle G) :
+    FinalExternalCertificate := by
+  have hBeal : BealConjecture :=
+    T42_final_bundle_exports_beal b
+  exact ⟨fun d => hBeal d⟩
+
+theorem FINAL_ROOT_of_T42_bundle
+    {G : T35GapLedger}
+    (b : T42FinalProofBundle G) :
+    FINAL_ROOT :=
+  finalExternal_to_FINAL_ROOT
+    (finalExternal_of_T42_bundle b)
+
+#print axioms MCore.BealFinal.finalExternal_of_global_elimination
+#print axioms MCore.BealFinal.finalExternal_of_T42_bundle
+#print axioms MCore.BealFinal.FINAL_ROOT_of_T42_bundle
+
 end BealFinal
 end MCore
