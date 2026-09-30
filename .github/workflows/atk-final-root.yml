@@ -5,17 +5,21 @@ on:
     paths:
       - '.github/workflows/atk-final-root.yml'
       - 'lean/**'
+      - 't36e_mathlib/**'
   workflow_dispatch:
 jobs:
   final-root:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install Lean
-        run: |
-          curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y
-          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
-      - name: Resolve dependencies
-        run: lake update
+      - name: Install pinned Beal environment
+        uses: leanprover/lean-action@v1
+        with:
+          lake-package-directory: t36e_mathlib
+          build: false
+          test: false
+          lint: false
+          use-mathlib-cache: true
       - name: Build FINAL_ROOT
+        working-directory: t36e_mathlib
         run: lake build MCore.FinalRoot
