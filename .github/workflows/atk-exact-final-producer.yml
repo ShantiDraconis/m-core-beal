@@ -4,7 +4,6 @@ on:
     branches: [atk/auto-compose-terminal-20260930]
     paths:
       - 'lean/MCore/ExactFinalProducer.lean'
-      - 'lean/MCore/GCDLowerBoundProducer.lean'
       - '.github/workflows/atk-exact-final-producer.yml'
   workflow_dispatch:
 permissions:
@@ -15,7 +14,7 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
-      - name: Install pinned environment
+      - name: Install pinned Beal environment
         uses: leanprover/lean-action@v1
         with:
           lake-package-directory: t36e_mathlib
