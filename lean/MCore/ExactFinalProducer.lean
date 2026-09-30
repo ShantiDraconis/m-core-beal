@@ -34,5 +34,40 @@ theorem finalExternal_iff_gcdLowerBound :
 #print axioms MCore.BealFinal.FINAL_ROOT_of_gcdLowerBound
 #print axioms MCore.BealFinal.finalExternal_iff_gcdLowerBound
 
+
+/-- Equivalent primitive-candidate producer.  T11 already proves that Beal is
+    exactly the nonexistence of a pairwise-primitive reduced candidate. -/
+def finalExternal_of_no_pairwise_reduced_candidate
+    (h : ¬ T11PairwiseReducedCandidate) :
+    FinalExternalCertificate := by
+  have hBeal : BealConjecture :=
+    (T11_beal_iff_pairwise_frontier).2 h
+  exact ⟨fun d => hBeal d⟩
+
+/-- Parity-normalized version: T12 preserves the frontier exactly. -/
+def finalExternal_of_no_parity_reduced_candidate
+    (h : ¬ T12ParityReducedCandidate) :
+    FinalExternalCertificate := by
+  have hBeal : BealConjecture :=
+    (T12_beal_iff_parity_frontier).2 h
+  exact ⟨fun d => hBeal d⟩
+
+theorem FINAL_ROOT_of_no_pairwise_reduced_candidate
+    (h : ¬ T11PairwiseReducedCandidate) :
+    FINAL_ROOT :=
+  finalExternal_to_FINAL_ROOT
+    (finalExternal_of_no_pairwise_reduced_candidate h)
+
+theorem FINAL_ROOT_of_no_parity_reduced_candidate
+    (h : ¬ T12ParityReducedCandidate) :
+    FINAL_ROOT :=
+  finalExternal_to_FINAL_ROOT
+    (finalExternal_of_no_parity_reduced_candidate h)
+
+#print axioms MCore.BealFinal.finalExternal_of_no_pairwise_reduced_candidate
+#print axioms MCore.BealFinal.finalExternal_of_no_parity_reduced_candidate
+#print axioms MCore.BealFinal.FINAL_ROOT_of_no_pairwise_reduced_candidate
+#print axioms MCore.BealFinal.FINAL_ROOT_of_no_parity_reduced_candidate
+
 end BealFinal
 end MCore
