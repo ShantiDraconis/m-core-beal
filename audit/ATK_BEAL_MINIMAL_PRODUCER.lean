@@ -27,3 +27,4 @@ theorem commonDivisorProducer_iff_gcdLowerBoundProducer :
 #print axioms MCore.bealConjecture_iff_gcdLowerBoundProducer
 
 end MCore
+-- ATK DIRECT TERMINAL RUN 2026-09-30: no semantic change.
