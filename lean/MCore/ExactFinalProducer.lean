@@ -4,7 +4,8 @@ import MCore.GCDLowerBoundProducer
 namespace MCore
 namespace BealFinal
 
-/-- Exact final producer from the smallest scalar Beal obligation. -/
+/-- Exact conversion from the minimal scalar producer to the universal
+    common-prime certificate. -/
 def finalExternal_of_gcdLowerBound
     (h : GCDLowerBoundProducer) :
     FinalExternalCertificate :=
@@ -19,12 +20,13 @@ theorem FINAL_ROOT_of_gcdLowerBound
   finalExternal_to_FINAL_ROOT (finalExternal_of_gcdLowerBound h)
 
 theorem finalExternal_iff_gcdLowerBound :
-    FinalExternalCertificate ↔ GCDLowerBoundProducer := by
+    Nonempty FinalExternalCertificate ↔ GCDLowerBoundProducer := by
   constructor
-  · intro E d
+  · rintro ⟨E⟩
+    intro d
     exact (commonPrime_iff_one_lt_nestedGCD d).mp (E.witness d)
   · intro h
-    exact finalExternal_of_gcdLowerBound h
+    exact ⟨finalExternal_of_gcdLowerBound h⟩
 
 #print axioms MCore.BealFinal.finalExternal_of_gcdLowerBound
 #print axioms MCore.BealFinal.FINAL_ROOT_of_gcdLowerBound
