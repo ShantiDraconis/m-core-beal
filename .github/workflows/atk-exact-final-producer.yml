@@ -1,0 +1,28 @@
+name: ATK exact final producer
+on:
+  push:
+    branches: [atk/auto-compose-terminal-20260930]
+    paths:
+      - 'lean/MCore/ExactFinalProducer.lean'
+      - 'lean/MCore/GCDLowerBoundProducer.lean'
+      - '.github/workflows/atk-exact-final-producer.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exact-final:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install pinned environment
+        uses: leanprover/lean-action@v1
+        with:
+          lake-package-directory: t36e_mathlib
+          build: false
+          test: false
+          lint: false
+          use-mathlib-cache: true
+      - name: Build exact final producer
+        working-directory: t36e_mathlib
+        run: lake build MCore.ExactFinalProducer
