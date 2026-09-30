@@ -24,4 +24,4 @@ jobs:
           use-mathlib-cache: true
       - name: Mine Beal fields
         working-directory: t36e_mathlib
-        run: lake env lean ../lean/MCore/BealInhabitationMining.lean
+        run: lake build MCore.BealInhabitationMining
