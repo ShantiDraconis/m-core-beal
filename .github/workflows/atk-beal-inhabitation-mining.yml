@@ -1,0 +1,27 @@
+name: ATK Beal inhabitation mining
+on:
+  push:
+    branches: [atk/auto-compose-terminal-20260930]
+    paths:
+      - 'lean/MCore/BealInhabitationMining.lean'
+      - '.github/workflows/atk-beal-inhabitation-mining.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  mine:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install pinned Beal/Mathlib environment
+        uses: leanprover/lean-action@v1
+        with:
+          lake-package-directory: t36e_mathlib
+          build: false
+          test: false
+          lint: false
+          use-mathlib-cache: true
+      - name: Mine Beal fields
+        working-directory: t36e_mathlib
+        run: lake env lean ../lean/MCore/BealInhabitationMining.lean
