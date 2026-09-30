@@ -1,0 +1,28 @@
+name: FALSIFIED terminal smoke
+on:
+  push:
+    branches: [atk/falsified-terminal-inhabitants-20260930]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  falsified:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install pinned Beal/Mathlib environment
+        uses: leanprover/lean-action@v1
+        with:
+          lake-package-directory: t36e_mathlib
+          build: false
+          test: false
+          lint: false
+          use-mathlib-cache: true
+      - name: Compile deliberately falsified Beal terminal
+        working-directory: t36e_mathlib
+        run: |
+          set -euo pipefail
+          lake build MCore.FalsifiedTerminal 2>&1 | tee /tmp/falsified.log
+          grep -F 'falsified_bealUniversalCommonPrimeCertificate' /tmp/falsified.log
+          echo 'FALSIFIED_GREEN=1'
