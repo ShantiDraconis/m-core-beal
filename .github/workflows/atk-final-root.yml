@@ -4,6 +4,8 @@ on:
     branches: [atk/auto-compose-terminal-20260930]
     paths:
       - 'lean/MCore/FinalExternal.lean'
+      - 'lean/MCore/ExactFinalProducer.lean'
+      - 'lean/MCore/Attack/GCDTerminalProducer.lean'
       - '.github/workflows/atk-final-root.yml'
   workflow_dispatch:
 permissions:
@@ -22,6 +24,6 @@ jobs:
           test: false
           lint: false
           use-mathlib-cache: true
-      - name: Build FINAL_EXTERNAL -> FINAL_ROOT
+      - name: Build exact FINAL_EXTERNAL -> FINAL_ROOT producer
         working-directory: t36e_mathlib
-        run: lake build MCore.FinalExternal
+        run: lake build MCore.ExactFinalProducer
