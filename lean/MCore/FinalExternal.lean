@@ -3,7 +3,7 @@ import MCore.BealFinalMathematicalChain
 namespace MCore
 namespace BealFinal
 
-abbrev FinalExternalCertificate : Type :=
+abbrev FinalExternalCertificate : Prop :=
   BealUniversalCommonPrimeCertificate
 
 def FINAL_ROOT : Prop :=
