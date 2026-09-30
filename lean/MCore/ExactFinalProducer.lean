@@ -1,36 +1,29 @@
 import MCore.FinalExternal
-import MCore.GCDLowerBoundProducer
+import MCore.Attack.GCDTerminalProducer
 
 namespace MCore
 namespace BealFinal
 
-/-- Exact conversion from the minimal scalar producer to the universal
-    common-prime certificate. -/
-def finalExternal_of_gcdLowerBound
-    (h : GCDLowerBoundProducer) :
+/-- Exact bridge from the canonical triple-gcd lower bound to the
+    common-prime certificate consumed by FinalExternal. -/
+def finalExternal_of_universalTripleGCDLowerBound
+    (h : Attack.UniversalTripleGCDLowerBound) :
     FinalExternalCertificate :=
   {
-    witness := fun d =>
-      (commonPrime_iff_one_lt_nestedGCD d).mpr (h d)
+    witness := by
+      intro d
+      exact (commonPrime_iff_commonDivisor).2
+        (Attack.tripleGCD_gt_one_closes_commonDivisor d (h d))
   }
 
-theorem FINAL_ROOT_of_gcdLowerBound
-    (h : GCDLowerBoundProducer) :
+theorem FINAL_ROOT_of_universalTripleGCDLowerBound
+    (h : Attack.UniversalTripleGCDLowerBound) :
     FINAL_ROOT :=
-  finalExternal_to_FINAL_ROOT (finalExternal_of_gcdLowerBound h)
+  finalExternal_to_FINAL_ROOT
+    (finalExternal_of_universalTripleGCDLowerBound h)
 
-theorem finalExternal_iff_gcdLowerBound :
-    Nonempty FinalExternalCertificate ↔ GCDLowerBoundProducer := by
-  constructor
-  · rintro ⟨E⟩
-    intro d
-    exact (commonPrime_iff_one_lt_nestedGCD d).mp (E.witness d)
-  · intro h
-    exact ⟨finalExternal_of_gcdLowerBound h⟩
-
-#print axioms MCore.BealFinal.finalExternal_of_gcdLowerBound
-#print axioms MCore.BealFinal.FINAL_ROOT_of_gcdLowerBound
-#print axioms MCore.BealFinal.finalExternal_iff_gcdLowerBound
+#print axioms MCore.BealFinal.finalExternal_of_universalTripleGCDLowerBound
+#print axioms MCore.BealFinal.FINAL_ROOT_of_universalTripleGCDLowerBound
 
 end BealFinal
 end MCore
