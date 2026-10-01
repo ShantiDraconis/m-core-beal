@@ -63,42 +63,47 @@ theorem T59_xz_four_add_quadratic_odd_prime_disjoint
     ¬ (p ∣ d.c + d.a ∧ p ∣ d.c ^ 2 + d.a ^ 2) := by
   intro h
   rcases h with ⟨hadd, hquad⟩
-  have h2a2 : p ∣ 2 * (d.a ^ 2) := by
-    have hcneg :
-        p ∣ (d.c + d.a) * (d.c + d.a) :=
-      T32_dvd_mul_of_dvd_left hadd
-    have hsqsum :
-        (d.c + d.a) * (d.c + d.a) =
-          d.c ^ 2 + 2 * d.c * d.a + d.a ^ 2 := by
-      ring
-    have hmid :
-        p ∣ d.c ^ 2 + 2 * d.c * d.a + d.a ^ 2 := by
-      simpa [hsqsum] using hcneg
-    have htwoca :
-        p ∣ 2 * d.c * d.a := by
-      have hsub :
-          p ∣ (d.c ^ 2 + 2 * d.c * d.a + d.a ^ 2) -
+  have hsq :
+      p ∣ (d.c + d.a) * (d.c + d.a) :=
+    T32_dvd_mul_of_dvd_left hadd
+  have hsumSq :
+      (d.c + d.a) * (d.c + d.a) =
+        d.c ^ 2 + 2 * d.c * d.a + d.a ^ 2 := by
+    ring
+  have hfull :
+      p ∣ d.c ^ 2 + 2 * d.c * d.a + d.a ^ 2 := by
+    simpa [hsumSq] using hsq
+  have h2ca :
+      p ∣ 2 * d.c * d.a := by
+    have hsub :
+        p ∣
+          (d.c ^ 2 + 2 * d.c * d.a + d.a ^ 2) -
             (d.c ^ 2 + d.a ^ 2) :=
-        Nat.dvd_sub hmid hquad
-      simpa [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using hsub
-    rcases T29_prime_dvd_mul hp htwoca with h2c | ha
-    · rcases T29_prime_dvd_mul hp h2c with htwo | hc
-      · have hle : p ≤ 2 := Nat.le_of_dvd (by decide : 0 < (2 : Nat)) htwo
-        have heq : p = 2 := Nat.le_antisymm hle hp.two_le
-        exact False.elim (hp2 heq)
-      ·
-        have hpc : p ∣ d.c := hc
-        have hpa : p ∣ d.a := by
-          have hsub : p ∣ (d.c + d.a) - d.c := Nat.dvd_sub hadd hpc
-          simpa using hsub
-        exact False.elim (d.pairwisePrimitive.2.1 ⟨p, hp.1, hpa, hpc⟩)
+      Nat.dvd_sub hfull hquad
+    have hid :
+        (d.c ^ 2 + 2 * d.c * d.a + d.a ^ 2) -
+            (d.c ^ 2 + d.a ^ 2) =
+          2 * d.c * d.a := by
+      omega
+    simpa [hid] using hsub
+  rcases T29_prime_dvd_mul hp h2ca with h2c | hpa
+  · rcases T29_prime_dvd_mul hp h2c with htwo | hpc
+    · have hle : p ≤ 2 :=
+        Nat.le_of_dvd (by decide : 0 < (2 : Nat)) htwo
+      have heq : p = 2 := Nat.le_antisymm hle hp.two_le
+      exact hp2 heq
     ·
-      have hpa : p ∣ d.a := ha
-      have hpc : p ∣ d.c := by
-        have hsub : p ∣ (d.c + d.a) - d.a := Nat.dvd_sub hadd hpa
+      have hpa' : p ∣ d.a := by
+        have hsub : p ∣ (d.c + d.a) - d.c :=
+          Nat.dvd_sub hadd hpc
         simpa using hsub
-      exact False.elim (d.pairwisePrimitive.2.1 ⟨p, hp.1, hpa, hpc⟩)
-  exact h2a2.elim
+      exact d.pairwisePrimitive.2.1 ⟨p, hp.1, hpa', hpc⟩
+  ·
+    have hpc : p ∣ d.c := by
+      have hsub : p ∣ (d.c + d.a) - d.a :=
+        Nat.dvd_sub hadd hpa
+      simpa using hsub
+    exact d.pairwisePrimitive.2.1 ⟨p, hp.1, hpa, hpc⟩
 
 /--
 Symmetric separation on y=z=4.
@@ -146,6 +151,61 @@ theorem T59_yz_four_sub_quadratic_odd_prime_disjoint
   exact d.pairwisePrimitive.2.2 ⟨p, hp.1, hpb, hpc⟩
 
 /--
+On y=z=4, no odd prime divides both c+b and c^2+b^2.
+-/
+theorem T59_yz_four_add_quadratic_odd_prime_disjoint
+    (d : T59ResidualCandidate)
+    (hy : d.y = 4)
+    (hz : d.z = 4)
+    {p : Nat}
+    (hp : IsPrime p)
+    (hp2 : p ≠ 2) :
+    ¬ (p ∣ d.c + d.b ∧ p ∣ d.c ^ 2 + d.b ^ 2) := by
+  intro h
+  rcases h with ⟨hadd, hquad⟩
+  have hsq :
+      p ∣ (d.c + d.b) * (d.c + d.b) :=
+    T32_dvd_mul_of_dvd_left hadd
+  have hsumSq :
+      (d.c + d.b) * (d.c + d.b) =
+        d.c ^ 2 + 2 * d.c * d.b + d.b ^ 2 := by
+    ring
+  have hfull :
+      p ∣ d.c ^ 2 + 2 * d.c * d.b + d.b ^ 2 := by
+    simpa [hsumSq] using hsq
+  have h2cb :
+      p ∣ 2 * d.c * d.b := by
+    have hsub :
+        p ∣
+          (d.c ^ 2 + 2 * d.c * d.b + d.b ^ 2) -
+            (d.c ^ 2 + d.b ^ 2) :=
+      Nat.dvd_sub hfull hquad
+    have hid :
+        (d.c ^ 2 + 2 * d.c * d.b + d.b ^ 2) -
+            (d.c ^ 2 + d.b ^ 2) =
+          2 * d.c * d.b := by
+      omega
+    simpa [hid] using hsub
+  rcases T29_prime_dvd_mul hp h2cb with h2c | hpb
+  · rcases T29_prime_dvd_mul hp h2c with htwo | hpc
+    · have hle : p ≤ 2 :=
+        Nat.le_of_dvd (by decide : 0 < (2 : Nat)) htwo
+      have heq : p = 2 := Nat.le_antisymm hle hp.two_le
+      exact hp2 heq
+    ·
+      have hpb' : p ∣ d.b := by
+        have hsub : p ∣ (d.c + d.b) - d.c :=
+          Nat.dvd_sub hadd hpc
+        simpa using hsub
+      exact d.pairwisePrimitive.2.2 ⟨p, hp.1, hpb', hpc⟩
+  ·
+    have hpc : p ∣ d.c := by
+      have hsub : p ∣ (d.c + d.b) - d.b :=
+        Nat.dvd_sub hadd hpb
+      simpa using hsub
+    exact d.pairwisePrimitive.2.2 ⟨p, hp.1, hpb, hpc⟩
+
+/--
 Three-block odd-prime separation packet for quartic residuals.
 -/
 structure T59QuarticThreeBlockSeparation
@@ -170,9 +230,14 @@ structure T59QuarticThreeBlockSeparation
     d.y = 4 -> d.z = 4 ->
     ∀ p, IsPrime p -> p ≠ 2 ->
       ¬ (p ∣ d.c - d.b ∧ p ∣ d.c ^ 2 + d.b ^ 2)
+  yz_add_quad :
+    d.y = 4 -> d.z = 4 ->
+    ∀ p, IsPrime p -> p ≠ 2 ->
+      ¬ (p ∣ d.c + d.b ∧ p ∣ d.c ^ 2 + d.b ^ 2)
 
 #print axioms MCore.T59_xz_four_sub_quadratic_odd_prime_disjoint
 #print axioms MCore.T59_xz_four_add_quadratic_odd_prime_disjoint
 #print axioms MCore.T59_yz_four_sub_quadratic_odd_prime_disjoint
+#print axioms MCore.T59_yz_four_add_quadratic_odd_prime_disjoint
 
 end MCore
