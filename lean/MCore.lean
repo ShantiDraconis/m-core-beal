@@ -92,3 +92,5 @@ import MCore.BealQuarticThreeBlockSeparation
 import MCore.BealQuarticCompleteOddSupport
 import MCore.BealQuarticValuationLaw
 import MCore.BealQuarticValuationPacket
+import MCore.BealQuarticBilateralClosure
+import MCore.BealQuarticOddPartPowers
