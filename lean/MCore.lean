@@ -88,3 +88,5 @@ import MCore.BealQuarticFactorization
 
 import MCore.BealQuarticOddPrimeSeparation
 import MCore.BealQuarticPrimeSupport
+import MCore.BealQuarticThreeBlockSeparation
+import MCore.BealQuarticCompleteOddSupport
