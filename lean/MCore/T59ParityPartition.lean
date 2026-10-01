@@ -145,6 +145,8 @@ theorem T59_residual_is_only_remaining_branch
 end MCore
 
 
+namespace MCore
+
 /-- Remaining FLT content after using Mathlib's certified exponent 3 branch. -/
 def T59FLTBeyondThree : Prop :=
   ∀ ell : Nat,
@@ -203,3 +205,5 @@ theorem T59_beyondThree_and_residual_close_beal
 #print axioms MCore.T59_allFourEliminator_proved
 #print axioms MCore.T59_equalOddPrimeEliminator_of_beyondThree
 #print axioms MCore.T59_beyondThree_and_residual_close_beal
+
+end MCore
