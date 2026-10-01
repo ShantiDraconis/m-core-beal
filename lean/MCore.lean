@@ -94,3 +94,8 @@ import MCore.BealQuarticValuationLaw
 import MCore.BealQuarticValuationPacket
 import MCore.BealQuarticBilateralClosure
 import MCore.BealQuarticOddPartPowers
+import MCore.BealQuarticFullPowerForms
+import MCore.BealQuarticParityPowerForms
+import MCore.BealQuarticPurePowerParametrization
+import MCore.BealQuarticGeneralizedFermatReduction
+import MCore.BealQuarticDenesAdapter
