@@ -85,3 +85,6 @@ import MCore.BealResidualMod16
 import MCore.BealTwoFourSharpResidues
 
 import MCore.BealQuarticFactorization
+
+import MCore.BealQuarticOddPrimeSeparation
+import MCore.BealQuarticPrimeSupport
