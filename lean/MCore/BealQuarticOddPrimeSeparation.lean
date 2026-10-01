@@ -30,7 +30,9 @@ theorem T59_xz_four_linear_factors_odd_prime_disjoint
     simpa [hid] using hsub
   have hpa : p ∣ d.a := by
     rcases T29_prime_dvd_mul hp h2a with htwo | ha
-    · exact False.elim (hp2 (hp.dvd_of_dvd_pow htwo))
+    · have hle : p ≤ 2 := Nat.le_of_dvd (by decide : 0 < (2 : Nat)) htwo
+      have heq : p = 2 := Nat.le_antisymm hle hp.two_le
+      exact False.elim (hp2 heq)
     · exact ha
   have hpc : p ∣ d.c := by
     have hsub : p ∣ (d.c + d.a) - d.a :=
@@ -62,7 +64,9 @@ theorem T59_yz_four_linear_factors_odd_prime_disjoint
     simpa [hid] using hsub
   have hpb : p ∣ d.b := by
     rcases T29_prime_dvd_mul hp h2b with htwo | hb
-    · exact False.elim (hp2 (hp.dvd_of_dvd_pow htwo))
+    · have hle : p ≤ 2 := Nat.le_of_dvd (by decide : 0 < (2 : Nat)) htwo
+      have heq : p = 2 := Nat.le_antisymm hle hp.two_le
+      exact False.elim (hp2 heq)
     · exact hb
   have hpc : p ∣ d.c := by
     have hsub : p ∣ (d.c + d.b) - d.b :=
