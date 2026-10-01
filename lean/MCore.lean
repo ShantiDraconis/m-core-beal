@@ -90,3 +90,5 @@ import MCore.BealQuarticOddPrimeSeparation
 import MCore.BealQuarticPrimeSupport
 import MCore.BealQuarticThreeBlockSeparation
 import MCore.BealQuarticCompleteOddSupport
+import MCore.BealQuarticValuationLaw
+import MCore.BealQuarticValuationPacket
