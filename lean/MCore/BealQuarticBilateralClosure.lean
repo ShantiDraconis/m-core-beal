@@ -3,71 +3,85 @@ import MCore.BealTwoSidedResolution
 
 namespace MCore
 
-/--
-Positive-side quartic contradiction producer.
+/-- The concrete residual two-four family. -/
+def T59TwoFourResidualExists : Prop :=
+  ∃ d : T59ResidualCandidate,
+    T51TwoFourPrime d.x d.y d.z
 
-This does NOT assume Beal.  It says that every fully reduced T59 residual
-candidate is impossible once its unconditional quartic arithmetic packet is
-taken into account.
+/--
+Positive producer for the local two-four frontier:
+every residual candidate in that family is impossible.
 -/
-structure QuarticResidualContradictionProducer : Prop where
+structure TwoFourResidualEliminationProducer : Prop where
   eliminate :
     ∀ d : T59ResidualCandidate,
+      T51TwoFourPrime d.x d.y d.z →
       False
 
-/-- Any such producer closes Beal positively because T59 is the exact residual
-counterexample class. -/
-theorem quarticResidualContradictionProducer_closes_beal
-    (h : QuarticResidualContradictionProducer) :
-    BealConjecture := by
-  apply bealConjecture_iff_gcdLowerBoundProducer.mpr
-  intro d
-  exfalso
-  exact h.eliminate d
+/-- Negative producer for the local two-four frontier: one concrete survivor. -/
+structure TwoFourResidualSurvivorProducer where
+  candidate : T59ResidualCandidate
+  family : T51TwoFourPrime candidate.x candidate.y candidate.z
+
+theorem twoFourElimination_closes_local_positive
+    (h : TwoFourResidualEliminationProducer) :
+    ¬ T59TwoFourResidualExists := by
+  rintro ⟨d, hd⟩
+  exact h.eliminate d hd
+
+theorem twoFourSurvivor_closes_local_negative
+    (h : TwoFourResidualSurvivorProducer) :
+    T59TwoFourResidualExists :=
+  ⟨h.candidate, h.family⟩
 
 /--
-Negative-side producer remains one concrete residual candidate.
+A concrete survivor of the two-four residual family is also a genuine Beal
+counterexample, so the local negative route transports to the global negative
+Beal endpoint.
 -/
-abbrev QuarticResidualCounterexampleProducer := T59ResidualCandidate
+theorem twoFourSurvivor_refutes_beal
+    (h : TwoFourResidualSurvivorProducer) :
+    ¬ BealConjecture :=
+  h.candidate.refutesBeal
 
-/--
-Bilateral quartic resolution object.  Neither side stores Beal as an input.
--/
-def BealQuarticBilateralResolved : Prop :=
-  Nonempty QuarticResidualContradictionProducer ∨
-  Nonempty QuarticResidualCounterexampleProducer
+/-- Exact bilateral resolution of the local two-four residual frontier. -/
+def TwoFourResidualMateriallyResolved : Prop :=
+  Nonempty TwoFourResidualEliminationProducer ∨
+  Nonempty TwoFourResidualSurvivorProducer
 
-theorem beal_quartic_bilateral_outcome
-    (h : BealQuarticBilateralResolved) :
-    BealConjecture ∨ ¬ BealConjecture := by
+theorem twoFourResidual_bilateral_outcome
+    (h : TwoFourResidualMateriallyResolved) :
+    (¬ T59TwoFourResidualExists) ∨ T59TwoFourResidualExists := by
   rcases h with hp | hn
   · rcases hp with ⟨p⟩
-    exact Or.inl (quarticResidualContradictionProducer_closes_beal p)
-  · rcases hn with ⟨d⟩
-    exact Or.inr d.refutesBeal
+    exact Or.inl (twoFourElimination_closes_local_positive p)
+  · rcases hn with ⟨n⟩
+    exact Or.inr (twoFourSurvivor_closes_local_negative n)
 
-theorem beal_quartic_both_routes_contradict
-    (hp : Nonempty QuarticResidualContradictionProducer)
-    (hn : Nonempty QuarticResidualCounterexampleProducer) :
+theorem twoFourResidual_both_routes_contradict
+    (hp : Nonempty TwoFourResidualEliminationProducer)
+    (hn : Nonempty TwoFourResidualSurvivorProducer) :
     False := by
   rcases hp with ⟨p⟩
-  rcases hn with ⟨d⟩
-  exact d.refutesBeal
-    (quarticResidualContradictionProducer_closes_beal p)
+  rcases hn with ⟨n⟩
+  exact (twoFourElimination_closes_local_positive p)
+    (twoFourSurvivor_closes_local_negative n)
 
 /--
-Every residual candidate automatically carries the complete unconditional
-quartic valuation packet proved so far. This makes the next positive attack
-strictly smaller: eliminate candidates satisfying these already-proved laws.
+Every residual candidate already carries the unconditional quartic valuation
+packet.  For non-two-four families its quartic fields are vacuous implications;
+for the two-four family they become concrete arithmetic constraints.
 -/
 theorem every_T59_has_quartic_valuation_packet
     (d : T59ResidualCandidate) :
     T59QuarticValuationPacket d :=
   T59_quartic_valuation_packet d
 
-#print axioms MCore.quarticResidualContradictionProducer_closes_beal
-#print axioms MCore.beal_quartic_bilateral_outcome
-#print axioms MCore.beal_quartic_both_routes_contradict
+#print axioms MCore.twoFourElimination_closes_local_positive
+#print axioms MCore.twoFourSurvivor_closes_local_negative
+#print axioms MCore.twoFourSurvivor_refutes_beal
+#print axioms MCore.twoFourResidual_bilateral_outcome
+#print axioms MCore.twoFourResidual_both_routes_contradict
 #print axioms MCore.every_T59_has_quartic_valuation_packet
 
 end MCore
