@@ -79,3 +79,5 @@ import MCore.ExactFinalProducer
 import MCore.BealTwoSidedResolution
 
 import MCore.BealResidualMod8
+
+import MCore.BealResidualMod16
