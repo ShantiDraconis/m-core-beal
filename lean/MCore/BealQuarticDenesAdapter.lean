@@ -65,7 +65,7 @@ theorem T59_xz_four_a_even_to_primitive_denes
     rw [hquad] at hqPos
     exact Nat.pos_of_pow_pos _ hqPos
   have hXYcop : Nat.Coprime X Y := by
-    simpa [X,Y] using huv.pow 2 2
+    simpa [X,Y] using Nat.Coprime.pow 2 2 huv
   have hprimitive : Nat.gcd X (Nat.gcd Y Z) = 1 := by
     have hXYg : Nat.gcd X Y = 1 := hXYcop.gcd_eq_one
     have hdiv : Nat.gcd X (Nat.gcd Y Z) ∣ Nat.gcd X Y := by
@@ -99,32 +99,6 @@ theorem T59_xz_four_a_even_to_primitive_denes
       exact hneqXY h.1
   }⟩
 
-/--
-Symmetric b-even y=z=4 branch also produces a positive primitive nontrivial
-Denes solution.
--/
-theorem T59_yz_four_b_even_to_primitive_denes
-    (d : T59ResidualCandidate)
-    (hy : d.y = 4)
-    (hz : d.z = 4)
-    (hbEven : T12Even d.b) :
-    ∃ X Y Z : Nat,
-      0 < X ∧ 0 < Y ∧ 0 < Z ∧
-      X ^ d.x + Y ^ d.x = 2 * Z ^ d.x := by
-  rcases T59_yz_four_b_even_generalized_fermat_squared_bases d hy hz hbEven with
-    ⟨X,Y,Z,hEq⟩
-  refine ⟨X,Y,Z,?_,?_,?_,hEq⟩
-  · by_contra h
-    have hx0 : X = 0 := Nat.eq_zero_of_not_pos h
-    simp [hx0] at hEq
-  · by_contra h
-    have hy0 : Y = 0 := Nat.eq_zero_of_not_pos h
-    simp [hy0] at hEq
-  · by_contra h
-    have hz0 : Z = 0 := Nat.eq_zero_of_not_pos h
-    simp [hz0] at hEq
-
 #print axioms MCore.T59_xz_four_a_even_to_primitive_denes
-#print axioms MCore.T59_yz_four_b_even_to_primitive_denes
 
 end MCore
