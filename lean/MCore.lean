@@ -83,3 +83,5 @@ import MCore.BealResidualMod8
 import MCore.BealResidualMod16
 
 import MCore.BealTwoFourSharpResidues
+
+import MCore.BealQuarticFactorization
