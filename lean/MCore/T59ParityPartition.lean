@@ -1,4 +1,6 @@
 import MCore.T59
+import MCore.T47
+import MCore.T50
 
 namespace MCore
 
@@ -141,3 +143,63 @@ theorem T59_residual_is_only_remaining_branch
 #print axioms MCore.T59_residual_is_only_remaining_branch
 
 end MCore
+
+
+/-- Remaining FLT content after using Mathlib's certified exponent 3 branch. -/
+def T59FLTBeyondThree : Prop :=
+  ∀ ell : Nat,
+    IsPrime ell →
+    3 < ell →
+    T47FLTAt ell
+
+/-- Mathlib FLT(3) plus a certificate for all odd primes above 3 yields the
+full equal-odd-prime family certificate required by T47. -/
+def T59_equalPrimeFamily_of_beyondThree
+    (hBeyond : T59FLTBeyondThree) :
+    T47FLTFamilyCertificate where
+  closes := by
+    intro ell hp h2
+    by_cases h3 : ell = 3
+    · subst ell
+      exact T50_mathlib_flt3
+    · have hgt3 : 3 < ell := by
+        omega
+      exact hBeyond ell hp hgt3
+
+/-- The all-four branch is already discharged by the frozen Mathlib FLT(4)
+bridge; no additional Beal-specific material is required here. -/
+theorem T59_allFourEliminator_proved :
+    T59AllFourEliminator := by
+  intro a b c ha hb hc heq hpw hpar
+  exact T50_mathlib_flt4 a b c ha hb hc heq
+
+/-- The only equal-prime material not supplied by the current Mathlib bridge
+is FLT at odd prime exponents strictly above 3. -/
+theorem T59_equalOddPrimeEliminator_of_beyondThree
+    (hBeyond : T59FLTBeyondThree) :
+    T59EqualOddPrimeEliminator := by
+  intro a b c x y z ha hb hc hx hy hz heq hpw hpar hsig
+  exact T47_family_certificate_eliminates_equal_prime_signature
+    ha hb hc hx hy hz heq hsig
+    (T59_equalPrimeFamily_of_beyondThree hBeyond)
+
+/--
+Compressed Beal modular frontier:
+after certified exponent reduction, primitiveness/parity normalization,
+Mathlib FLT(3), and Mathlib FLT(4), only two independent materials remain:
+1. FLT for odd prime exponents > 3 on the equal-prime branch;
+2. elimination of every T59 mixed residual candidate.
+-/
+theorem T59_beyondThree_and_residual_close_beal
+    (hBeyond : T59FLTBeyondThree)
+    (hResidual : T59ResidualEliminator) :
+    BealConjecture :=
+  T59_three_branch_elimination_closes_beal
+    (T59_equalOddPrimeEliminator_of_beyondThree hBeyond)
+    T59_allFourEliminator_proved
+    hResidual
+
+#print axioms MCore.T59_equalPrimeFamily_of_beyondThree
+#print axioms MCore.T59_allFourEliminator_proved
+#print axioms MCore.T59_equalOddPrimeEliminator_of_beyondThree
+#print axioms MCore.T59_beyondThree_and_residual_close_beal
