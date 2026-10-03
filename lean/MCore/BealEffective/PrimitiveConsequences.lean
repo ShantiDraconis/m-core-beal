@@ -132,7 +132,9 @@ theorem pairwisePrimitive_of_gcd3_eq_one
   have hNoCommon : ¬ ∃ p : Nat, CommonDivisor p d.a d.b d.c := by
     intro h
     have hlt := (commonDivisor_iff_one_lt_nestedGCD d).mp h
-    simpa [gcd3, hg] using hlt
+    unfold gcd3 at hg
+    rw [hg] at hlt
+    exact Nat.lt_irrefl 1 hlt
   constructor
   · intro hpair
     exact hNoCommon (ab_pair_forces_common d hpair)
@@ -172,24 +174,30 @@ private theorem odd_pow_mod_two
 
 theorem some_base_even (d : BealData) :
     Even d.a ∨ Even d.b ∨ Even d.c := by
-  by_cases ha : Even d.a
-  · exact Or.inl ha
-  by_cases hb : Even d.b
-  · exact Or.inr (Or.inl hb)
-  by_cases hc : Even d.c
-  · exact Or.inr (Or.inr hc)
-  have hoa := (not_even_iff_mod_two_eq_one d.a).mp ha
-  have hob := (not_even_iff_mod_two_eq_one d.b).mp hb
-  have hoc := (not_even_iff_mod_two_eq_one d.c).mp hc
-  have hax := odd_pow_mod_two (n := d.x) hoa
-  have hby := odd_pow_mod_two (n := d.y) hob
-  have hcz := odd_pow_mod_two (n := d.z) hoc
-  have heq := congrArg (fun n : Nat => n % 2) d.equation
-  have hleft : (d.a ^ d.x + d.b ^ d.y) % 2 = 0 := by
-    rw [Nat.add_mod, hax, hby]
-  change (d.a ^ d.x + d.b ^ d.y) % 2 = d.c ^ d.z % 2 at heq
-  rw [hleft, hcz] at heq
-  exact False.elim (Nat.zero_ne_one heq)
+  match Nat.decidable_dvd 2 d.a with
+  | isTrue ha =>
+      exact Or.inl ha
+  | isFalse ha =>
+      match Nat.decidable_dvd 2 d.b with
+      | isTrue hb =>
+          exact Or.inr (Or.inl hb)
+      | isFalse hb =>
+          match Nat.decidable_dvd 2 d.c with
+          | isTrue hc =>
+              exact Or.inr (Or.inr hc)
+          | isFalse hc =>
+              have hoa := (not_even_iff_mod_two_eq_one d.a).mp ha
+              have hob := (not_even_iff_mod_two_eq_one d.b).mp hb
+              have hoc := (not_even_iff_mod_two_eq_one d.c).mp hc
+              have hax := odd_pow_mod_two (n := d.x) hoa
+              have hby := odd_pow_mod_two (n := d.y) hob
+              have hcz := odd_pow_mod_two (n := d.z) hoc
+              have heq := congrArg (fun n : Nat => n % 2) d.equation
+              have hleft : (d.a ^ d.x + d.b ^ d.y) % 2 = 0 := by
+                rw [Nat.add_mod, hax, hby]
+              change (d.a ^ d.x + d.b ^ d.y) % 2 = d.c ^ d.z % 2 at heq
+              rw [hleft, hcz] at heq
+              exact False.elim (Nat.zero_ne_one heq)
 
 theorem exactlyOneEven_of_pairwise
     (d : BealData)
