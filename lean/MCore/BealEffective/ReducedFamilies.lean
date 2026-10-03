@@ -199,62 +199,94 @@ theorem reduced_signature_seven_family
   · by_cases hy4 : y = 4
     · by_cases hz4 : z = 4
       · exact Or.inl ⟨hx4, hy4, hz4⟩
-      · exact Or.inr (Or.inr (Or.inl
-          (Or.inl ⟨hx4, hy4, oddPrime_of_reduced_ne_four hz hz4⟩)))
+      ·
+        have hC : TwoFourPrime x y z :=
+          Or.inl ⟨hx4, hy4, oddPrime_of_reduced_ne_four hz hz4⟩
+        exact Or.inr (Or.inr (Or.inl hC))
     · by_cases hz4 : z = 4
-      · exact Or.inr (Or.inr (Or.inl
-          (Or.inr (Or.inl ⟨hx4, hz4, oddPrime_of_reduced_ne_four hy hy4⟩))))
-      · have hyp := oddPrime_of_reduced_ne_four hy hy4
+      ·
+        have hC : TwoFourPrime x y z :=
+          Or.inr (Or.inl ⟨hx4, hz4, oddPrime_of_reduced_ne_four hy hy4⟩)
+        exact Or.inr (Or.inr (Or.inl hC))
+      ·
+        have hyp := oddPrime_of_reduced_ne_four hy hy4
         have hzp := oddPrime_of_reduced_ne_four hz hz4
         by_cases hyz : y = z
-        · exact Or.inr (Or.inr (Or.inr
-            (Or.inl (Or.inl ⟨hx4, hyp, hyz.symm⟩))))
-        · exact Or.inr (Or.inr (Or.inr
-            (Or.inr (Or.inl ⟨hx4, hyp, hzp, hyz⟩))))
+        ·
+          have hD : OneFourEqualPrimes x y z :=
+            Or.inl ⟨hx4, hyp, hyz.symm⟩
+          exact Or.inr (Or.inr (Or.inr (Or.inl hD)))
+        ·
+          have hE : OneFourDistinctPrimes x y z :=
+            Or.inl ⟨hx4, hyp, hzp, hyz⟩
+          exact Or.inr (Or.inr (Or.inr (Or.inr (Or.inl hE))))
   · by_cases hy4 : y = 4
     · by_cases hz4 : z = 4
-      · exact Or.inr (Or.inr (Or.inl
-          (Or.inr (Or.inr ⟨hy4, hz4, oddPrime_of_reduced_ne_four hx hx4⟩))))
-      · have hxp := oddPrime_of_reduced_ne_four hx hx4
+      ·
+        have hC : TwoFourPrime x y z :=
+          Or.inr (Or.inr ⟨hy4, hz4, oddPrime_of_reduced_ne_four hx hx4⟩)
+        exact Or.inr (Or.inr (Or.inl hC))
+      ·
+        have hxp := oddPrime_of_reduced_ne_four hx hx4
         have hzp := oddPrime_of_reduced_ne_four hz hz4
         by_cases hxz : x = z
-        · exact Or.inr (Or.inr (Or.inr
-            (Or.inl (Or.inr (Or.inl ⟨hy4, hxp, hxz.symm⟩)))))
-        · exact Or.inr (Or.inr (Or.inr
-            (Or.inr (Or.inl ⟨hy4, hxp, hzp, hxz⟩))))
+        ·
+          have hD : OneFourEqualPrimes x y z :=
+            Or.inr (Or.inl ⟨hy4, hxp, hxz.symm⟩)
+          exact Or.inr (Or.inr (Or.inr (Or.inl hD)))
+        ·
+          have hE : OneFourDistinctPrimes x y z :=
+            Or.inr (Or.inl ⟨hy4, hxp, hzp, hxz⟩)
+          exact Or.inr (Or.inr (Or.inr (Or.inr (Or.inl hE))))
     · by_cases hz4 : z = 4
-      · have hxp := oddPrime_of_reduced_ne_four hx hx4
+      ·
+        have hxp := oddPrime_of_reduced_ne_four hx hx4
         have hyp := oddPrime_of_reduced_ne_four hy hy4
         by_cases hxy : x = y
-        · exact Or.inr (Or.inr (Or.inr
-            (Or.inl (Or.inr (Or.inr ⟨hz4, hxp, hxy.symm⟩)))))
-        · exact Or.inr (Or.inr (Or.inr
-            (Or.inr (Or.inl ⟨hz4, hxp, hyp, hxy⟩))))
-      · have hxp := oddPrime_of_reduced_ne_four hx hx4
+        ·
+          have hD : OneFourEqualPrimes x y z :=
+            Or.inr (Or.inr ⟨hz4, hxp, hxy.symm⟩)
+          exact Or.inr (Or.inr (Or.inr (Or.inl hD)))
+        ·
+          have hE : OneFourDistinctPrimes x y z :=
+            Or.inr (Or.inr ⟨hz4, hxp, hyp, hxy⟩)
+          exact Or.inr (Or.inr (Or.inr (Or.inr (Or.inl hE))))
+      ·
+        have hxp := oddPrime_of_reduced_ne_four hx hx4
         have hyp := oddPrime_of_reduced_ne_four hy hy4
         have hzp := oddPrime_of_reduced_ne_four hz hz4
         by_cases hxy : x = y
         · by_cases hyz : y = z
-          · have hxz : x = z := hxy.trans hyz
-            exact Or.inr (Or.inl
-              ⟨x, hxp, rfl, hxy, hxz⟩)
-          · have hxz : x ≠ z := by
+          ·
+            have hxz : x = z := hxy.trans hyz
+            have hB : EqualOddPrime x y z :=
+              ⟨x, hxp, rfl, hxy.symm, hxz.symm⟩
+            exact Or.inr (Or.inl hB)
+          ·
+            have hxz : x ≠ z := by
               intro hxz
               apply hyz
               exact hxy.symm.trans hxz
-            exact Or.inr (Or.inr (Or.inr (Or.inr (Or.inr
-              (Or.inl (Or.inl ⟨hxp, hxy.symm, hzp, hxz⟩))))))
+            have hF : TwoEqualOddPrimes x y z :=
+              Or.inl ⟨hxp, hxy.symm, hzp, hxz⟩
+            exact Or.inr (Or.inr (Or.inr (Or.inr (Or.inr (Or.inl hF)))))
         · by_cases hxz : x = z
-          · exact Or.inr (Or.inr (Or.inr (Or.inr (Or.inr
-              (Or.inl (Or.inr (Or.inl ⟨hxp, hxz.symm, hyp, hxy⟩)))))))
+          ·
+            have hF : TwoEqualOddPrimes x y z :=
+              Or.inr (Or.inl ⟨hxp, hxz.symm, hyp, hxy⟩)
+            exact Or.inr (Or.inr (Or.inr (Or.inr (Or.inr (Or.inl hF)))))
           · by_cases hyz : y = z
-            · have hyx : y ≠ x := by
+            ·
+              have hyx : y ≠ x := by
                 intro hyx
                 exact hxy hyx.symm
-              exact Or.inr (Or.inr (Or.inr (Or.inr (Or.inr
-                (Or.inl (Or.inr (Or.inr ⟨hyp, hyz.symm, hxp, hyx⟩)))))))
-            · exact Or.inr (Or.inr (Or.inr (Or.inr (Or.inr
-                (Or.inr ⟨hxp, hyp, hzp, hxy, hxz, hyz⟩)))))
+              have hF : TwoEqualOddPrimes x y z :=
+                Or.inr (Or.inr ⟨hyp, hyz.symm, hxp, hyx⟩)
+              exact Or.inr (Or.inr (Or.inr (Or.inr (Or.inr (Or.inl hF)))))
+            ·
+              have hG : ThreeDistinctOddPrimes x y z :=
+                ⟨hxp, hyp, hzp, hxy, hxz, hyz⟩
+              exact Or.inr (Or.inr (Or.inr (Or.inr (Or.inr (Or.inr hG)))))
 
 theorem failed_lowerBound_seven_family
     (d : BealData)
