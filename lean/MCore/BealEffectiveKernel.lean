@@ -76,17 +76,13 @@ theorem exact_remaining_closes_beal
   exact bealConjecture_iff_gcdLowerBoundProducer.mpr
     (exact_remaining_iff_gcdLowerBoundProducer.mp h)
 
-/-- And any failure of it yields a concrete negative witness. -/
-theorem not_exact_remaining_yields_counterexample
-    (h : ¬ ExactRemainingObligation) :
-    ∃ d : BealData, BealCounterexample d := by
-  classical
-  by_contra hnone
-  apply h
-  intro d
-  by_contra hbound
-  apply hnone
-  exact ⟨d, failed_lowerBound_gives_counterexample d hbound⟩
+/-- A concrete negative witness constructively refutes the remaining obligation. -/
+theorem concrete_counterexample_refutes_remaining
+    {d : BealData}
+    (h : BealCounterexample d) :
+    ¬ ExactRemainingObligation := by
+  intro hall
+  exact h ((lowerBound_iff_commonPrime d).mp (hall d))
 
 #print axioms MCore.BealEffective.gcd3_pos
 #print axioms MCore.BealEffective.gcd3_eq_one_of_not_lowerBound
@@ -96,7 +92,7 @@ theorem not_exact_remaining_yields_counterexample
 #print axioms MCore.BealEffective.terminal_pointwise_dichotomy
 #print axioms MCore.BealEffective.exact_remaining_iff_gcdLowerBoundProducer
 #print axioms MCore.BealEffective.exact_remaining_closes_beal
-#print axioms MCore.BealEffective.not_exact_remaining_yields_counterexample
+#print axioms MCore.BealEffective.concrete_counterexample_refutes_remaining
 
 end BealEffective
 end MCore
