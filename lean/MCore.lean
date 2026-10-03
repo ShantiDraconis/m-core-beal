@@ -25,3 +25,5 @@ import MCore.BealEffectiveKernel
 import MCore.BealEffective.ExactRemainingObligation
 
 import MCore.BealEffective.PrimitiveConsequences
+
+import MCore.BealEffective.ReducedFamilies
