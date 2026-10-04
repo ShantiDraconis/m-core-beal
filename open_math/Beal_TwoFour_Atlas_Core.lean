@@ -274,11 +274,111 @@ theorem twoFourPrime_forces_residue_pressure
   · exact Or.inr (Or.inr ⟨hyz.1, hyz.2.1, hyz.2.2,
       twoFour_yz_residue_atlas r hyz.1 hyz.2.1⟩)
 
+private theorem atlas_oddPrime_mod2_one
+    {p : Nat}
+    (hp : OddPrimeExponent p) :
+    p % 2 = 1 := by
+  have hnot : ¬ 2 ∣ p := by
+    intro h2
+    rcases hp.1.2 2 h2 with h1 | h2eq
+    · cases h1
+    · have hlt : 2 < 2 := by simpa [h2eq] using hp.2
+      exact Nat.lt_irrefl 2 hlt
+  have hpos : 0 < p % 2 := Nat.emod_pos_of_not_dvd hnot
+  have hlt : p % 2 < 2 := Nat.mod_lt p (by decide)
+  omega
+
+private theorem atlas_odd_exp_mod4_split
+    {e : Nat}
+    (he : e % 2 = 1) :
+    e % 4 = 1 ∨ e % 4 = 3 := by
+  have hpar : (e % 4) % 2 = 1 :=
+    (Nat.mod_mod_of_dvd e (by decide : 2 ∣ 4)).trans he
+  have hlt : e % 4 < 4 := Nat.mod_lt e (by decide)
+  omega
+
+private theorem atlas_exp_mod4_repr
+    {e r : Nat}
+    (hr : e % 4 = r) :
+    ∃ k : Nat, e = r + 4 * k := by
+  refine ⟨e / 4, ?_⟩
+  have h := Nat.mod_add_div e 4
+  rw [hr] at h
+  exact h.symm
+
+/-- Odd base + odd exponent + power 15 mod16 forces base 15 mod16. -/
+theorem odd_pow_mod16_eq_fifteen_forces_base_fifteen_core
+    {u e : Nat}
+    (huOdd : u % 2 = 1)
+    (heOdd : e % 2 = 1)
+    (hpow : u ^ e % 16 = 15) :
+    u % 16 = 15 := by
+  have he4 := atlas_odd_exp_mod4_split heOdd
+  have hu16 := odd_res16 huOdd
+  rcases he4 with he1 | he3
+  · rcases atlas_exp_mod4_repr he1 with ⟨k, hk⟩
+    rcases hu16 with h | h | h | h | h | h | h | h
+    all_goals
+      have hc : u ^ e % 16 = (u % 16) ^ e % 16 := by
+        apply atlas_pow_mod_congr
+        simp
+      rw [hc, hk, h] at hpow
+      simp [Nat.pow_add, Nat.pow_mul, Nat.mul_mod] at hpow ⊢
+  · rcases atlas_exp_mod4_repr he3 with ⟨k, hk⟩
+    rcases hu16 with h | h | h | h | h | h | h | h
+    all_goals
+      have hc : u ^ e % 16 = (u % 16) ^ e % 16 := by
+        apply atlas_pow_mod_congr
+        simp
+      rw [hc, hk, h] at hpow
+      simp [Nat.pow_add, Nat.pow_mul, Nat.mul_mod] at hpow ⊢
+
+/-- Orbit C, x=z=4: c even forces b itself to be 15 mod16. -/
+theorem twoFour_xz_c_even_forces_b_mod16_fifteen
+    (r : ReducedPrimitiveCandidate)
+    (hx : r.x = 4)
+    (hz : r.z = 4)
+    (hyPrime : OddPrimeExponent r.y)
+    (hc : Even r.c) :
+    r.b % 16 = 15 := by
+  have hE := reducedExactlyOneEven r
+  have hbOdd : r.b % 2 = 1 := by
+    rcases hE with hA | hB | hC
+    · exact False.elim (hA.2.2 hc)
+    · exact False.elim (hB.2.2 hc)
+    · exact (neven_iff_mod2_one r.b).mp hC.2.1
+  have hp :=
+    (twoFour_xz_residue_atlas r hx hz).2.2 hc
+  exact odd_pow_mod16_eq_fifteen_forces_base_fifteen_core
+    hbOdd (atlas_oddPrime_mod2_one hyPrime) hp
+
+/-- Symmetric orbit C, y=z=4: c even forces a itself to be 15 mod16. -/
+theorem twoFour_yz_c_even_forces_a_mod16_fifteen
+    (r : ReducedPrimitiveCandidate)
+    (hy : r.y = 4)
+    (hz : r.z = 4)
+    (hxPrime : OddPrimeExponent r.x)
+    (hc : Even r.c) :
+    r.a % 16 = 15 := by
+  have hE := reducedExactlyOneEven r
+  have haOdd : r.a % 2 = 1 := by
+    rcases hE with hA | hB | hC
+    · exact False.elim (hA.2.2 hc)
+    · exact False.elim (hB.2.2 hc)
+    · exact (neven_iff_mod2_one r.a).mp hC.1
+  have hp :=
+    (twoFour_yz_residue_atlas r hy hz).2.2 hc
+  exact odd_pow_mod16_eq_fifteen_forces_base_fifteen_core
+    haOdd (atlas_oddPrime_mod2_one hxPrime) hp
+
 #print axioms MCore.BealEffective.OpenMath.twoFour_xz_residue_atlas
 #print axioms MCore.BealEffective.OpenMath.twoFour_yz_residue_atlas
 #print axioms MCore.BealEffective.OpenMath.twoFour_xy_rhs_not_even_atlas
 #print axioms MCore.BealEffective.OpenMath.twoFour_xy_rhs_pow_mod16_atlas
 #print axioms MCore.BealEffective.OpenMath.twoFourPrime_forces_residue_pressure
+#print axioms MCore.BealEffective.OpenMath.odd_pow_mod16_eq_fifteen_forces_base_fifteen_core
+#print axioms MCore.BealEffective.OpenMath.twoFour_xz_c_even_forces_b_mod16_fifteen
+#print axioms MCore.BealEffective.OpenMath.twoFour_yz_c_even_forces_a_mod16_fifteen
 
 end OpenMath
 end BealEffective
