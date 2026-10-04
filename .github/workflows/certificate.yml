@@ -71,7 +71,6 @@ jobs:
             open_math/Beal_Reduced_ParityPressure.lean
             open_math/Beal_Reduced_GCDPressure.lean
             open_math/Beal_Core_Mod16.lean
-            open_math/Beal_CoprimePrimePowerSplitter.lean
             open_math/Beal_Quartic_CoreFactorization.lean
           )
           for f in "${FILES[@]}"; do
