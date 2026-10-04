@@ -4,6 +4,16 @@ namespace MCore
 namespace BealEffective
 namespace OpenMath
 
+private theorem atlas_pow_mod_congr
+    {a b m e : Nat}
+    (h : a % m = b % m) :
+    a ^ e % m = b ^ e % m := by
+  induction e with
+  | zero => simp
+  | succ e ih =>
+      rw [Nat.pow_succ, Nat.pow_succ, Nat.mul_mod, Nat.mul_mod, ih, h]
+      simp
+
 private theorem neven_iff_mod2_one (n : Nat) :
     (¬ Even n) ↔ n % 2 = 1 := by
   unfold Even
@@ -31,14 +41,18 @@ private theorem odd_fourth16
     (hn : n % 2 = 1) :
     n ^ 4 % 16 = 1 := by
   rcases odd_res16 hn with h | h | h | h | h | h | h | h
-  all_goals simp [Nat.pow_mod, h]
+  all_goals
+    have hc : n ^ 4 % 16 = (n % 16) ^ 4 % 16 := by
+      apply atlas_pow_mod_congr
+      simp
+    rw [hc, h]
 
 private theorem even_fourth16
     {n : Nat}
     (hn : Even n) :
     n ^ 4 % 16 = 0 := by
   rcases hn with ⟨k, rfl⟩
-  simp [mul_pow, Nat.mul_mod]
+  simp [Nat.mul_pow, Nat.mul_mod]
 
 private def reducedData (r : ReducedPrimitiveCandidate) : BealData where
   a := r.a
@@ -155,8 +169,17 @@ private theorem odd_fourth8
     {n : Nat}
     (hn : n % 2 = 1) :
     n ^ 4 % 8 = 1 := by
-  rcases odd_res16 hn with h | h | h | h | h | h | h | h
-  all_goals simp [Nat.pow_mod, h]
+  have hpar : (n % 8) % 2 = 1 :=
+    (Nat.mod_mod_of_dvd n (by decide : 2 ∣ 8)).trans hn
+  have hlt : n % 8 < 8 := Nat.mod_lt n (by decide)
+  have hres : n % 8 = 1 ∨ n % 8 = 3 ∨ n % 8 = 5 ∨ n % 8 = 7 := by
+    omega
+  rcases hres with h | h | h | h
+  all_goals
+    have hc : n ^ 4 % 8 = (n % 8) ^ 4 % 8 := by
+      apply atlas_pow_mod_congr
+      simp
+    rw [hc, h]
 
 private theorem even_pow8_gt_two
     {n e : Nat}
@@ -168,7 +191,7 @@ private theorem even_pow8_gt_two
     refine ⟨e - 3, ?_⟩
     omega
   subst e
-  simp [pow_add, mul_pow, Nat.mul_mod]
+  simp [Nat.pow_add, Nat.mul_pow, Nat.mul_mod]
 
 /-- The x=y=4 orientation cannot place the even base on the right. -/
 theorem twoFour_xy_rhs_not_even_atlas
@@ -209,13 +232,17 @@ theorem twoFour_xy_rhs_pow_mod16_atlas
     have hA16 : r.a ^ 4 % 16 = 0 := even_fourth16 hA.1
     have hB16 : r.b ^ 4 % 16 = 1 := odd_fourth16 hbOdd
     have hmod := congrArg (fun n : Nat => n % 16) r.equation
-    simpa [hx, hy, Nat.add_mod, hA16, hB16] using hmod
+    have h : 1 = r.c ^ r.z % 16 := by
+      simpa [hx, hy, Nat.add_mod, hA16, hB16] using hmod
+    exact h.symm
   ·
     have haOdd : r.a % 2 = 1 := (neven_iff_mod2_one r.a).mp hB.1
     have hA16 : r.a ^ 4 % 16 = 1 := odd_fourth16 haOdd
     have hB16 : r.b ^ 4 % 16 = 0 := even_fourth16 hB.2.1
     have hmod := congrArg (fun n : Nat => n % 16) r.equation
-    simpa [hx, hy, Nat.add_mod, hA16, hB16] using hmod
+    have h : 1 = r.c ^ r.z % 16 := by
+      simpa [hx, hy, Nat.add_mod, hA16, hB16] using hmod
+    exact h.symm
   · exact False.elim (hcOdd hC.2.2)
 
 /-- Concrete residue payload for a two-four-prime candidate. -/
