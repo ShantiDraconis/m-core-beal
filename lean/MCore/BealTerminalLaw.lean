@@ -28,34 +28,33 @@ theorem beal_terminal_certifies_iff_gcdLowerBound :
 
 theorem beal_terminal_refutes_iff_counterexample :
     BealTerminalRefutes ↔ ∃ d : BealData, BealCounterexample d := by
+  simp only [BealTerminalRefutes, BealCounterexample]
   constructor
   · rintro ⟨d, hg⟩
     refine ⟨d, ?_⟩
     intro hprime
-    have hgt : 1 < Nat.gcd d.a (Nat.gcd d.b d.c) :=
-      (commonPrime_iff_one_lt_nestedGCD d).mp hprime
-    exact (not_lt_of_ge hg) hgt
+    have hgt := (commonPrime_iff_one_lt_nestedGCD d).mp hprime
+    exact (Nat.not_lt_of_ge hg) hgt
   · rintro ⟨d, hcounter⟩
     refine ⟨d, ?_⟩
-    by_contra hnot
-    have hgt : 1 < Nat.gcd d.a (Nat.gcd d.b d.c) := lt_of_not_ge hnot
-    exact hcounter ((commonPrime_iff_one_lt_nestedGCD d).mpr hgt)
+    have hnot : ¬ 1 < Nat.gcd d.a (Nat.gcd d.b d.c) := by
+      intro hgt
+      exact hcounter ((commonPrime_iff_one_lt_nestedGCD d).mpr hgt)
+    exact Nat.le_of_not_gt hnot
 
 theorem not_beal_terminal_certifies_iff_refutes :
     ¬ BealTerminalCertifies ↔ BealTerminalRefutes := by
-  classical
   constructor
   · intro h
-    by_contra href
-    have hg : GCDLowerBoundProducer := by
-      intro d
-      by_contra hle
-      exact href ⟨d, le_of_not_gt hle⟩
-    exact h ((bealConjecture_iff_gcdLowerBoundProducer).2 hg)
-  · rintro ⟨d, hg⟩ hcert
-    have hgt : 1 < Nat.gcd d.a (Nat.gcd d.b d.c) :=
-      (commonPrime_iff_one_lt_nestedGCD d).mp (hcert d)
-    exact (not_lt_of_ge hg) hgt
+    have hnot : ¬ GCDLowerBoundProducer := by
+      intro hg
+      exact h ((bealConjecture_iff_gcdLowerBoundProducer).2 hg)
+    simpa [GCDLowerBoundProducer, BealTerminalRefutes] using hnot
+  · intro href hcert
+    have hg : GCDLowerBoundProducer :=
+      (bealConjecture_iff_gcdLowerBoundProducer).1 hcert
+    rcases href with ⟨d, hle⟩
+    exact (Nat.not_lt_of_ge hle) (hg d)
 
 theorem beal_terminal_cert_refute_disjoint :
     ¬ (BealTerminalCertifies ∧ BealTerminalRefutes) := by
