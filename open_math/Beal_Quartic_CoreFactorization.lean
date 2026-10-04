@@ -1177,6 +1177,37 @@ theorem reduced_yz_four_b_even_eliminated_of_denes
 /--
 Elementary core-only impossibility: if x=y=4, c cannot be the unique even base.
 -/
+private theorem quartic_odd_fourth_mod8
+    {n : Nat}
+    (hn : n % 2 = 1) :
+    n ^ 4 % 8 = 1 := by
+  have hres :
+      n % 8 = 1 ∨ n % 8 = 3 ∨ n % 8 = 5 ∨ n % 8 = 7 := by
+    have hpar : (n % 8) % 2 = 1 :=
+      (Nat.mod_mod_of_dvd n (by decide : 2 ∣ 8)).trans hn
+    have hlt : n % 8 < 8 := Nat.mod_lt n (by decide)
+    omega
+  have hdecomp : n = n % 8 + 8 * (n / 8) := by
+    exact (Nat.mod_add_div n 8).symm
+  rcases hres with h | h | h | h
+  all_goals
+    rw [hdecomp, h]
+    simp [Nat.pow_succ, Nat.add_mul, Nat.mul_add,
+      Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm, Nat.mul_mod]
+
+private theorem quartic_even_pow_mod8
+    {n e : Nat}
+    (hn : Even n)
+    (he : 2 < e) :
+    n ^ e % 8 = 0 := by
+  rcases hn with ⟨k, hk⟩
+  obtain ⟨m, hm⟩ : ∃ m : Nat, e = m + 3 := by
+    refine ⟨e - 3, ?_⟩
+    omega
+  rw [hk, hm]
+  simp [Nat.pow_add, Nat.mul_pow, Nat.mul_mod,
+    Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm]
+
 theorem reduced_xy_four_c_even_impossible
     (r : ReducedPrimitiveCandidate)
     (hx : r.x = 4)
@@ -1194,35 +1225,14 @@ theorem reduced_xy_four_c_even_impossible
     · exact (quartic_notEven_mod2_one r.b).mp hA.2.1
     · exact False.elim (hB.2.2 hc)
     · exact (quartic_notEven_mod2_one r.b).mp hC.2.1
-  have hAres :
-      r.a % 8 = 1 ∨ r.a % 8 = 3 ∨ r.a % 8 = 5 ∨ r.a % 8 = 7 := by
-    have hpar : (r.a % 8) % 2 = 1 :=
-      (Nat.mod_mod_of_dvd r.a (by decide : 2 ∣ 8)).trans haOdd
-    have hlt : r.a % 8 < 8 := Nat.mod_lt r.a (by decide)
-    omega
-  have hBres :
-      r.b % 8 = 1 ∨ r.b % 8 = 3 ∨ r.b % 8 = 5 ∨ r.b % 8 = 7 := by
-    have hpar : (r.b % 8) % 2 = 1 :=
-      (Nat.mod_mod_of_dvd r.b (by decide : 2 ∣ 8)).trans hbOdd
-    have hlt : r.b % 8 < 8 := Nat.mod_lt r.b (by decide)
-    omega
-  have hA8 : r.a ^ 4 % 8 = 1 := by
-    rcases hAres with h | h | h | h
-    all_goals simp [Nat.pow_mod, h]
-  have hB8 : r.b ^ 4 % 8 = 1 := by
-    rcases hBres with h | h | h | h
-    all_goals simp [Nat.pow_mod, h]
-  have hC8 : r.c ^ r.z % 8 = 0 := by
-    rcases hc with ⟨k, hck⟩
-    obtain ⟨m, hm⟩ : ∃ m : Nat, r.z = m + 3 := by
-      refine ⟨r.z - 3, ?_⟩
-      omega
-    rw [hck, hm]
-    simp [pow_add, mul_pow, Nat.mul_mod]
+  have hA8 : r.a ^ 4 % 8 = 1 := quartic_odd_fourth_mod8 haOdd
+  have hB8 : r.b ^ 4 % 8 = 1 := quartic_odd_fourth_mod8 hbOdd
+  have hC8 : r.c ^ r.z % 8 = 0 :=
+    quartic_even_pow_mod8 hc r.z_reduced.1
   have hmod := congrArg (fun n : Nat => n % 8) r.equation
   have hbad : (1 + 1) % 8 = 0 := by
     simpa [hx, hy, Nat.add_mod, hA8, hB8, hC8] using hmod
-  decide at hbad
+  simp at hbad
 
 /--
 After the two Dénes cells and the elementary c-even x=y=4 cell are removed,
