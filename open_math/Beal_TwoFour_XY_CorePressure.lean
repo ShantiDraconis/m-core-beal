@@ -67,30 +67,22 @@ theorem twoFour_xy_rhs_not_even
     (hy : r.y = 4) :
     ¬ Even r.c := by
   intro hc
+  let d : BealData :=
+    { a := r.a, b := r.b, c := r.c, x := r.x, y := r.y, z := r.z,
+      a_pos := r.a_pos, b_pos := r.b_pos, c_pos := r.c_pos,
+      x_gt_two := r.x_reduced.1, y_gt_two := r.y_reduced.1,
+      z_gt_two := r.z_reduced.1, equation := r.equation }
   have hpw : PairwisePrimitive r.a r.b r.c := by
     constructor
     · intro hab
-      rcases hab with ⟨q, hq, hqa, hqb⟩
-      exact r.no_common ⟨q, hq, hqa, hqb, by
-        have hp := ab_pair_forces_common
-          ({ a := r.a, b := r.b, c := r.c, x := r.x, y := r.y, z := r.z,
-             a_pos := r.a_pos, b_pos := r.b_pos, c_pos := r.c_pos,
-             x_gt_two := r.x_reduced.1, y_gt_two := r.y_reduced.1,
-             z_gt_two := r.z_reduced.1, equation := r.equation } : BealData)
-          ⟨q, hq, hqa, hqb⟩
-        rcases hp with ⟨p, hpgt, hpa, hpb, hpc⟩
-        exact hpc⟩
+      exact r.no_common (ab_pair_forces_common d hab)
     · constructor
       · intro hac
-        exact r.no_common hac
+        exact r.no_common (ac_pair_forces_common d hac)
       · intro hbc
-        exact r.no_common hbc
-  have hExact := exactlyOneEven_of_pairwise
-    ({ a := r.a, b := r.b, c := r.c, x := r.x, y := r.y, z := r.z,
-       a_pos := r.a_pos, b_pos := r.b_pos, c_pos := r.c_pos,
-       x_gt_two := r.x_reduced.1, y_gt_two := r.y_reduced.1,
-       z_gt_two := r.z_reduced.1, equation := r.equation } : BealData)
-    hpw
+        exact r.no_common (bc_pair_forces_common d hbc)
+  have hExact : ExactlyOneEven r.a r.b r.c :=
+    exactlyOneEven_of_pairwise d hpw
   have haOdd : ¬ Even r.a := by
     rcases hExact with hA | hB | hC
     · exact False.elim (hA.2.2 hc)
