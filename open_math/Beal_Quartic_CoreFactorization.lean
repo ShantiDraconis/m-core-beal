@@ -569,6 +569,60 @@ def reduced_xz_four_a_even_core_packet
   blocksCoprime := reduced_xz_four_a_even_block_gcd_packet r hx hz ha
 
 /--
+Minimal UFD producer: a product of two coprime naturals which is an e-th
+power splits into two e-th powers.
+-/
+def CoprimePairPowerSplitting : Prop :=
+  ∀ A B b e : Nat,
+    0 < e →
+    Nat.gcd A B = 1 →
+    b ^ e = A * B →
+    ∃ u v : Nat, A = u ^ e ∧ B = v ^ e
+
+private theorem gcd_mul_eq_one_of_pairwise_gcd
+    {A B C : Nat}
+    (hAB : Nat.gcd A B = 1)
+    (hAC : Nat.gcd A C = 1) :
+    Nat.gcd A (B * C) = 1 := by
+  by_contra hne
+  have hApos : 0 < A := by
+    by_cases hA0 : A = 0
+    · subst A
+      simp at hAB
+    · exact Nat.pos_of_ne_zero hA0
+  have hgPos : 0 < Nat.gcd A (B * C) :=
+    Nat.gcd_pos_of_pos_left (B * C) hApos
+  have hgGt : 1 < Nat.gcd A (B * C) := by omega
+  rcases primeDivisorProperty_proved (Nat.gcd A (B * C)) hgGt with
+    ⟨p, hp, hpg⟩
+  have hpA : p ∣ A :=
+    nat_dvd_trans hpg (Nat.gcd_dvd_left A (B * C))
+  have hpBC : p ∣ B * C :=
+    nat_dvd_trans hpg (Nat.gcd_dvd_right A (B * C))
+  rcases prime_dvd_mul_local hp hpBC with hpB | hpC
+  · have hpG : p ∣ Nat.gcd A B := Nat.dvd_gcd hpA hpB
+    rw [hAB] at hpG
+    have hle : p ≤ 1 := Nat.le_of_dvd (by decide : 0 < (1 : Nat)) hpG
+    omega
+  · have hpG : p ∣ Nat.gcd A C := Nat.dvd_gcd hpA hpC
+    rw [hAC] at hpG
+    have hle : p ≤ 1 := Nat.le_of_dvd (by decide : 0 < (1 : Nat)) hpG
+    omega
+
+/-- The two-factor splitter is sufficient to construct the triple splitter. -/
+theorem pairSplitter_implies_tripleSplitter
+    (hPair : CoprimePairPowerSplitting) :
+    CoprimeTriplePowerSplitting := by
+  intro A B C b e he hAB hAC hBC hpow
+  have hA_BC : Nat.gcd A (B * C) = 1 :=
+    gcd_mul_eq_one_of_pairwise_gcd hAB hAC
+  rcases hPair A (B * C) b e he hA_BC hpow with
+    ⟨u, t, hA, hBCpow⟩
+  rcases hPair B C t e he hBC hBCpow with
+    ⟨v, w, hB, hC⟩
+  exact ⟨u, v, w, hA, hB, hC⟩
+
+/--
 Generic UFD producer isolated from Beal:
 a pairwise-coprime triple whose product is an e-th power splits into e-th
 powers componentwise.
@@ -633,6 +687,7 @@ theorem reduced_xz_four_a_even_power_forms_of_splitter
 #print axioms MCore.BealEffective.OpenMath.reduced_xz_four_a_even_blocks_odd
 #print axioms MCore.BealEffective.OpenMath.reduced_xz_four_a_even_block_gcd_packet
 #print axioms MCore.BealEffective.OpenMath.reduced_xz_four_a_even_core_packet
+#print axioms MCore.BealEffective.OpenMath.pairSplitter_implies_tripleSplitter
 #print axioms MCore.BealEffective.OpenMath.reduced_xz_four_a_even_power_forms_of_splitter
 
 end OpenMath
