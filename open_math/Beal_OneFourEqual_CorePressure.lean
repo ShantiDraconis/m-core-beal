@@ -110,10 +110,10 @@ theorem oneFourEqual_x_pressure
   have hE := ofepExactlyOneEven r
   constructor
   · intro ha
-    have hA8 : r.a ^ 4 % 8 = 0 := by
-      rcases ha with ⟨k, rfl⟩
-      simp [Nat.mul_pow, Nat.mul_mod]
+    have hA8 : r.a ^ 4 % 8 = 0 :=
+      ofepEvenPow8 ha (by decide : 2 < (4 : Nat))
     have hmod := congrArg (fun n : Nat => n % 8) r.equation
+    change (r.a ^ r.x + r.b ^ r.y) % 8 = r.c ^ r.z % 8 at hmod
     rw [hx, hy, hz, Nat.add_mod, hA8] at hmod
     omega
   constructor
@@ -126,6 +126,7 @@ theorem oneFourEqual_x_pressure
     have hA8 : r.a ^ 4 % 8 = 1 := ofepOddFourth8 haOdd
     have hB8 : r.b ^ p % 8 = 0 := ofepEvenPow8 hb hp.2
     have hmod := congrArg (fun n : Nat => n % 8) r.equation
+    change (r.a ^ r.x + r.b ^ r.y) % 8 = r.c ^ r.z % 8 at hmod
     rw [hx, hy, hz, Nat.add_mod, hA8, hB8] at hmod
     omega
   · intro hc
@@ -137,6 +138,7 @@ theorem oneFourEqual_x_pressure
     have hA8 : r.a ^ 4 % 8 = 1 := ofepOddFourth8 haOdd
     have hC8 : r.c ^ p % 8 = 0 := ofepEvenPow8 hc hp.2
     have hmod := congrArg (fun n : Nat => n % 8) r.equation
+    change (r.a ^ r.x + r.b ^ r.y) % 8 = r.c ^ r.z % 8 at hmod
     rw [hx, hy, hz, Nat.add_mod, hA8, hC8] at hmod
     omega
 
@@ -158,10 +160,10 @@ theorem oneFourEqual_y_pressure
   have hE := ofepExactlyOneEven r
   constructor
   · intro hb
-    have hB8 : r.b ^ 4 % 8 = 0 := by
-      rcases hb with ⟨k, rfl⟩
-      simp [Nat.mul_pow, Nat.mul_mod]
+    have hB8 : r.b ^ 4 % 8 = 0 :=
+      ofepEvenPow8 hb (by decide : 2 < (4 : Nat))
     have hmod := congrArg (fun n : Nat => n % 8) r.equation
+    change (r.a ^ r.x + r.b ^ r.y) % 8 = r.c ^ r.z % 8 at hmod
     rw [hx, hy, hz, Nat.add_mod, hB8] at hmod
     omega
   constructor
@@ -174,6 +176,7 @@ theorem oneFourEqual_y_pressure
     have hB8 : r.b ^ 4 % 8 = 1 := ofepOddFourth8 hbOdd
     have hA8 : r.a ^ p % 8 = 0 := ofepEvenPow8 ha hp.2
     have hmod := congrArg (fun n : Nat => n % 8) r.equation
+    change (r.a ^ r.x + r.b ^ r.y) % 8 = r.c ^ r.z % 8 at hmod
     rw [hx, hy, hz, Nat.add_mod, hA8, hB8] at hmod
     omega
   · intro hc
@@ -185,6 +188,7 @@ theorem oneFourEqual_y_pressure
     have hB8 : r.b ^ 4 % 8 = 1 := ofepOddFourth8 hbOdd
     have hC8 : r.c ^ p % 8 = 0 := ofepEvenPow8 hc hp.2
     have hmod := congrArg (fun n : Nat => n % 8) r.equation
+    change (r.a ^ r.x + r.b ^ r.y) % 8 = r.c ^ r.z % 8 at hmod
     rw [hx, hy, hz, Nat.add_mod, hB8, hC8] at hmod
     omega
 
@@ -214,6 +218,7 @@ theorem oneFourEqual_z_pressure
     have hC8 : r.c ^ 4 % 8 = 1 := ofepOddFourth8 hcOdd
     have hA8 : r.a ^ p % 8 = 0 := ofepEvenPow8 ha hp.2
     have hmod := congrArg (fun n : Nat => n % 8) r.equation
+    change (r.a ^ r.x + r.b ^ r.y) % 8 = r.c ^ r.z % 8 at hmod
     rw [hx, hy, hz, Nat.add_mod, hA8, hC8] at hmod
     omega
   constructor
@@ -226,13 +231,14 @@ theorem oneFourEqual_z_pressure
     have hC8 : r.c ^ 4 % 8 = 1 := ofepOddFourth8 hcOdd
     have hB8 : r.b ^ p % 8 = 0 := ofepEvenPow8 hb hp.2
     have hmod := congrArg (fun n : Nat => n % 8) r.equation
+    change (r.a ^ r.x + r.b ^ r.y) % 8 = r.c ^ r.z % 8 at hmod
     rw [hx, hy, hz, Nat.add_mod, hB8, hC8] at hmod
     omega
   · intro hc
-    have hC8 : r.c ^ 4 % 8 = 0 := by
-      rcases hc with ⟨k, rfl⟩
-      simp [Nat.mul_pow, Nat.mul_mod]
+    have hC8 : r.c ^ 4 % 8 = 0 :=
+      ofepEvenPow8 hc (by decide : 2 < (4 : Nat))
     have hmod := congrArg (fun n : Nat => n % 8) r.equation
+    change (r.a ^ r.x + r.b ^ r.y) % 8 = r.c ^ r.z % 8 at hmod
     rw [hx, hy, hz, Nat.add_mod, hC8] at hmod
     exact hmod
 
