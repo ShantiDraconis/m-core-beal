@@ -727,19 +727,189 @@ theorem reduced_xz_four_a_even_to_denes_equation
   refine ⟨u ^ 2, v ^ 2, w, ?_⟩
   simpa [Nat.pow_mul, Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc] using hid
 
+private theorem splitter_pow_two_dvd_pow_prime
+    {u p : Nat}
+    (hp : 2 < p) :
+    u ^ 2 ∣ u ^ p := by
+  obtain ⟨k, hk⟩ : ∃ k : Nat, p = 2 + k := by
+    refine ⟨p - 2, ?_⟩
+    omega
+  refine ⟨u ^ k, ?_⟩
+  rw [hk, Nat.pow_add]
+
+private theorem splitter_gcd_one_of_two_divisors
+    {A A' B B' : Nat}
+    (hA : A' ∣ A)
+    (hB : B' ∣ B)
+    (hAB : Nat.gcd A B = 1) :
+    Nat.gcd A' B' = 1 := by
+  apply (Nat.gcd_eq_one_iff).2
+  intro d hdA hdB
+  have hdA0 : d ∣ A := nat_dvd_trans hdA hA
+  have hdB0 : d ∣ B := nat_dvd_trans hdB hB
+  have hdG : d ∣ Nat.gcd A B := Nat.dvd_gcd hdA0 hdB0
+  rw [hAB] at hdG
+  have hle : d ≤ 1 := Nat.le_of_dvd (by decide : 0 < (1 : Nat)) hdG
+  omega
+
+private theorem square_injective_pos
+    {u v : Nat}
+    (hu : 0 < u)
+    (hv : 0 < v)
+    (h : u ^ 2 = v ^ 2) :
+    u = v := by
+  have huv : u ≤ v := by
+    by_contra hnot
+    have hvu : v < u := Nat.lt_of_not_ge hnot
+    have h1 : v * v < u * v :=
+      Nat.mul_lt_mul_of_pos_right hvu hv
+    have h2 : u * v < u * u :=
+      Nat.mul_lt_mul_of_pos_left hvu hu
+    have : v ^ 2 < u ^ 2 := by
+      simpa [Nat.pow_succ, Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc]
+        using Nat.lt_trans h1 h2
+    rw [h] at this
+    exact Nat.lt_irrefl _ this
+  have hvu : v ≤ u := by
+    by_contra hnot
+    have huv' : u < v := Nat.lt_of_not_ge hnot
+    have h1 : u * u < v * u :=
+      Nat.mul_lt_mul_of_pos_right huv' hu
+    have h2 : v * u < v * v :=
+      Nat.mul_lt_mul_of_pos_left huv' hv
+    have : u ^ 2 < v ^ 2 := by
+      simpa [Nat.pow_succ, Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc]
+        using Nat.lt_trans h1 h2
+    rw [← h] at this
+    exact Nat.lt_irrefl _ this
+  exact Nat.le_antisymm huv hvu
+
+/-- Positive primitive nontrivial Dénes datum. -/
+structure PrimitiveDenesSolutionCore (n : Nat) where
+  X : Nat
+  Y : Nat
+  Z : Nat
+  X_pos : 0 < X
+  Y_pos : 0 < Y
+  Z_pos : 0 < Z
+  equation : X ^ n + Y ^ n = 2 * Z ^ n
+  primitive : Nat.gcd X (Nat.gcd Y Z) = 1
+  nontrivial : ¬ (X = Y ∧ Y = Z)
+
 /--
-Classical terminal producer after the quartic reduction: no positive
-nontrivial solution of the Dénes equation at an odd prime exponent.
-This statement is independent of Beal.
+The resolved core UFD splitter produces a genuine primitive nontrivial Dénes
+solution from the a-even x=z=4 branch.
 -/
-def DenesOddPrimeExclusion : Prop :=
-  ∀ p X Y Z : Nat,
-    OddPrimeExponent p →
-    0 < X →
-    0 < Y →
-    0 < Z →
-    X ^ p + Y ^ p = 2 * Z ^ p →
-    False
+theorem reduced_xz_four_a_even_to_primitive_denes_resolved
+    (r : ReducedPrimitiveCandidate)
+    (hx : r.x = 4)
+    (hz : r.z = 4)
+    (hy : OddPrimeExponent r.y)
+    (ha : Even r.a) :
+    Nonempty (PrimitiveDenesSolutionCore r.y) := by
+  have P := reduced_xz_four_a_even_core_packet r hx hz ha
+  rcases primePairSplitter_quartic_triple
+      coprimePairPrimePowerSplitting_resolved
+      (r.c - r.a)
+      (r.c + r.a)
+      (r.c ^ 2 + r.a ^ 2)
+      r.b
+      r.y
+      hy
+      P.blocksCoprime.1
+      P.blocksCoprime.2.1
+      P.blocksCoprime.2.2
+      P.factorization with
+    ⟨u, v, w, hsub, hadd, hquad⟩
+  have hac_lt : r.a < r.c := by
+    have heq' : r.b ^ r.y + r.a ^ r.x = r.c ^ r.z := by
+      simpa [Nat.add_comm] using r.equation
+    exact core_right_same_exponent_gap r.b_pos (by simpa [hx, hz] using heq')
+  have hsubPos : 0 < r.c - r.a := Nat.zero_lt_sub_of_lt hac_lt
+  have haddPos : 0 < r.c + r.a := Nat.add_pos_left r.c r.a_pos
+  have hquadPos : 0 < r.c ^ 2 + r.a ^ 2 :=
+    Nat.add_pos_left _ (Nat.pow_pos r.c_pos)
+  have huPos : 0 < u := by
+    have hup : 0 < u ^ r.y := by simpa [← hsub] using hsubPos
+    by_contra hnot
+    have hu0 : u = 0 := Nat.eq_zero_of_not_pos hnot
+    rw [hu0] at hup
+    have hy0 : r.y ≠ 0 :=
+      Nat.ne_of_gt (Nat.lt_trans (by decide : 0 < 2) hy.2)
+    simp [hy0] at hup
+  have hvPos : 0 < v := by
+    have hvp : 0 < v ^ r.y := by simpa [← hadd] using haddPos
+    by_contra hnot
+    have hv0 : v = 0 := Nat.eq_zero_of_not_pos hnot
+    rw [hv0] at hvp
+    have hy0 : r.y ≠ 0 :=
+      Nat.ne_of_gt (Nat.lt_trans (by decide : 0 < 2) hy.2)
+    simp [hy0] at hvp
+  have hwPos : 0 < w := by
+    have hwp : 0 < w ^ r.y := by simpa [← hquad] using hquadPos
+    by_contra hnot
+    have hw0 : w = 0 := Nat.eq_zero_of_not_pos hnot
+    rw [hw0] at hwp
+    have hy0 : r.y ≠ 0 :=
+      Nat.ne_of_gt (Nat.lt_trans (by decide : 0 < 2) hy.2)
+    simp [hy0] at hwp
+  let X := u ^ 2
+  let Y := v ^ 2
+  let Z := w
+  have hEq : X ^ r.y + Y ^ r.y = 2 * Z ^ r.y := by
+    have hid := core_quartic_linear_square_sum (Nat.le_of_lt hac_lt)
+    rw [hsub, hadd, hquad] at hid
+    simpa [X, Y, Z, Nat.pow_mul, Nat.mul_comm,
+      Nat.mul_left_comm, Nat.mul_assoc] using hid
+  have hXYg : Nat.gcd X Y = 1 := by
+    have hu2 : u ^ 2 ∣ u ^ r.y :=
+      splitter_pow_two_dvd_pow_prime hy.2
+    have hv2 : v ^ 2 ∣ v ^ r.y :=
+      splitter_pow_two_dvd_pow_prime hy.2
+    have huvPow : Nat.gcd (u ^ r.y) (v ^ r.y) = 1 := by
+      simpa [hsub, hadd] using P.blocksCoprime.1
+    simpa [X, Y] using
+      (splitter_gcd_one_of_two_divisors hu2 hv2 huvPow)
+  have hprimitive : Nat.gcd X (Nat.gcd Y Z) = 1 := by
+    have hdiv : Nat.gcd X (Nat.gcd Y Z) ∣ Nat.gcd X Y := by
+      apply Nat.dvd_gcd
+      · exact Nat.gcd_dvd_left _ _
+      · exact nat_dvd_trans
+          (Nat.gcd_dvd_right X (Nat.gcd Y Z))
+          (Nat.gcd_dvd_left Y Z)
+    have hone : Nat.gcd X (Nat.gcd Y Z) ∣ 1 := by
+      simpa [hXYg] using hdiv
+    exact Nat.dvd_one.mp hone
+  have hneqXY : X ≠ Y := by
+    intro hXY
+    have huv : u = v := by
+      apply square_injective_pos huPos hvPos
+      simpa [X, Y] using hXY
+    have hsumeq : r.c - r.a = r.c + r.a := by
+      rw [hsub, hadd, huv]
+    have ha0 : r.a = 0 := by omega
+    exact (Nat.ne_of_gt r.a_pos) ha0
+  exact ⟨{
+    X := X
+    Y := Y
+    Z := Z
+    X_pos := Nat.pow_pos huPos
+    Y_pos := Nat.pow_pos hvPos
+    Z_pos := hwPos
+    equation := hEq
+    primitive := hprimitive
+    nontrivial := by
+      intro h
+      exact hneqXY h.1
+  }⟩
+
+/--
+Deep terminal producer, stated in the exact Darmon–Merel shape needed here:
+no primitive nontrivial solution of X^p + Y^p = 2 Z^p for odd prime p.
+-/
+def DenesOddPrimePrimitiveExclusion : Prop :=
+  ∀ p : Nat, OddPrimeExponent p →
+    ∀ S : PrimitiveDenesSolutionCore p, False
 
 /--
 The a-even x=z=4 branch reduces exactly to the generic coprime power splitter.
@@ -794,6 +964,7 @@ theorem reduced_xz_four_a_even_power_forms_of_splitter
 #print axioms MCore.BealEffective.OpenMath.primePairSplitter_quartic_triple
 #print axioms MCore.BealEffective.OpenMath.core_quartic_linear_square_sum
 #print axioms MCore.BealEffective.OpenMath.reduced_xz_four_a_even_to_denes_equation
+#print axioms MCore.BealEffective.OpenMath.reduced_xz_four_a_even_to_primitive_denes_resolved
 #print axioms MCore.BealEffective.OpenMath.reduced_xz_four_a_even_power_forms_of_splitter
 
 end OpenMath
