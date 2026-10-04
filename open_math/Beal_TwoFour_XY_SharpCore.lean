@@ -169,28 +169,42 @@ private theorem xys_rhs_pow16
     exact h.symm
   · exact False.elim (hcOdd hC.2.2)
 
-private theorem xys_odd_exp_mod4_split
+private theorem xys_odd_exponent_repr
     {e : Nat}
     (he : e % 2 = 1) :
-    e % 4 = 1 ∨ e % 4 = 3 := by
-  have hpar : (e % 4) % 2 = 1 :=
-    (Nat.mod_mod_of_dvd e (by decide : 2 ∣ 4)).trans he
-  have hlt : e % 4 < 4 := Nat.mod_lt e (by decide)
+    ∃ k : Nat, e = 2 * k + 1 := by
+  refine ⟨e / 2, ?_⟩
+  have h := Nat.mod_add_div e 2
+  rw [he] at h
   omega
 
-private theorem xys_exp_mod4_repr
-    {e r : Nat}
-    (hr : e % 4 = r) :
-    ∃ k : Nat, e = r + 4 * k := by
-  refine ⟨e / 4, ?_⟩
-  have h := Nat.mod_add_div e 4
-  rw [hr] at h
-  exact h.symm
+private theorem xys_odd_square16
+    {u : Nat}
+    (hu : u % 2 = 1) :
+    u ^ 2 % 16 = 1 := by
+  rcases xys_odd_residue16 hu with h | h | h | h | h | h | h | h
+  all_goals
+    have hc : u ^ 2 % 16 = (u % 16) ^ 2 % 16 := by
+      apply xys_pow_mod_congr
+      simp
+    rw [hc, h]
+
+private theorem xys_odd_pow16_eq_base
+    {u e : Nat}
+    (hu : u % 2 = 1)
+    (he : e % 2 = 1) :
+    u ^ e % 16 = u % 16 := by
+  rcases xys_odd_exponent_repr he with ⟨k, hk⟩
+  have hs : u ^ 2 % 16 = 1 := xys_odd_square16 hu
+  have hkpow : (u ^ 2) ^ k % 16 = 1 := by
+    have hc := xys_pow_mod_congr
+      (a := u ^ 2) (b := 1) (m := 16) (e := k) hs
+    simpa using hc
+  rw [hk, Nat.pow_add, Nat.pow_mul, Nat.mul_mod, hkpow]
+  simp
 
 /--
 Odd base + odd exponent + power 1 mod16 forces base 1 mod16.
-For odd exponents only residues 1 or 3 modulo 4 occur; every odd unit modulo
-16 has fourth power 1, so the finite unit-group audit is exact.
 -/
 theorem odd_pow_mod16_eq_one_forces_base_one_core
     {u e : Nat}
@@ -198,27 +212,9 @@ theorem odd_pow_mod16_eq_one_forces_base_one_core
     (heOdd : e % 2 = 1)
     (hpow : u ^ e % 16 = 1) :
     u % 16 = 1 := by
-  have he4 := xys_odd_exp_mod4_split heOdd
-  have hu16 := xys_odd_residue16 huOdd
-  rcases he4 with he1 | he3
-  · rcases xys_exp_mod4_repr he1 with ⟨k, hk⟩
-    rcases hu16 with h | h | h | h | h | h | h | h
-    · exact h
-    all_goals
-      have hc : u ^ e % 16 = (u % 16) ^ e % 16 := by
-        apply xys_pow_mod_congr
-        simp
-      rw [hc, hk, h] at hpow
-      simp [Nat.pow_add, Nat.pow_mul, Nat.mul_mod] at hpow
-  · rcases xys_exp_mod4_repr he3 with ⟨k, hk⟩
-    rcases hu16 with h | h | h | h | h | h | h | h
-    · exact h
-    all_goals
-      have hc : u ^ e % 16 = (u % 16) ^ e % 16 := by
-        apply xys_pow_mod_congr
-        simp
-      rw [hc, hk, h] at hpow
-      simp [Nat.pow_add, Nat.pow_mul, Nat.mul_mod] at hpow
+  have hbase := xys_odd_pow16_eq_base huOdd heOdd
+  rw [hbase] at hpow
+  exact hpow
 
 /--
 Sharp ORBIT-A residue: x=y=4 and z an odd prime force c = 1 modulo 16.
