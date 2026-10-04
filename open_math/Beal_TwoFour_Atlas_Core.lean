@@ -102,6 +102,7 @@ theorem twoFour_xz_residue_atlas
     have hA16 : r.a ^ 4 % 16 = 0 := even_fourth16 ha
     have hC16 : r.c ^ 4 % 16 = 1 := odd_fourth16 hcOdd
     have hmod := congrArg (fun n : Nat => n % 16) r.equation
+    change (r.a ^ r.x + r.b ^ r.y) % 16 = r.c ^ r.z % 16 at hmod
     rw [hx, hz, Nat.add_mod, hA16, hC16] at hmod
     omega
   constructor
@@ -121,6 +122,7 @@ theorem twoFour_xz_residue_atlas
     have hA16 : r.a ^ 4 % 16 = 1 := odd_fourth16 haOdd
     have hC16 : r.c ^ 4 % 16 = 0 := even_fourth16 hc
     have hmod := congrArg (fun n : Nat => n % 16) r.equation
+    change (r.a ^ r.x + r.b ^ r.y) % 16 = r.c ^ r.z % 16 at hmod
     rw [hx, hz, Nat.add_mod, hA16, hC16] at hmod
     omega
 
@@ -151,6 +153,7 @@ theorem twoFour_yz_residue_atlas
     have hB16 : r.b ^ 4 % 16 = 0 := even_fourth16 hb
     have hC16 : r.c ^ 4 % 16 = 1 := odd_fourth16 hcOdd
     have hmod := congrArg (fun n : Nat => n % 16) r.equation
+    change (r.a ^ r.x + r.b ^ r.y) % 16 = r.c ^ r.z % 16 at hmod
     rw [hy, hz, Nat.add_mod, hB16, hC16] at hmod
     omega
   · intro hc
@@ -162,6 +165,7 @@ theorem twoFour_yz_residue_atlas
     have hB16 : r.b ^ 4 % 16 = 1 := odd_fourth16 hbOdd
     have hC16 : r.c ^ 4 % 16 = 0 := even_fourth16 hc
     have hmod := congrArg (fun n : Nat => n % 16) r.equation
+    change (r.a ^ r.x + r.b ^ r.y) % 16 = r.c ^ r.z % 16 at hmod
     rw [hy, hz, Nat.add_mod, hB16, hC16] at hmod
     omega
 
@@ -215,6 +219,7 @@ theorem twoFour_xy_rhs_not_even_atlas
   have hB8 : r.b ^ 4 % 8 = 1 := odd_fourth8 hbOdd
   have hC8 : r.c ^ r.z % 8 = 0 := even_pow8_gt_two hc r.z_reduced.1
   have hmod := congrArg (fun n : Nat => n % 8) r.equation
+  change (r.a ^ r.x + r.b ^ r.y) % 8 = r.c ^ r.z % 8 at hmod
   rw [hx, hy, Nat.add_mod, hA8, hB8, hC8] at hmod
   omega
 
@@ -232,6 +237,7 @@ theorem twoFour_xy_rhs_pow_mod16_atlas
     have hA16 : r.a ^ 4 % 16 = 0 := even_fourth16 hA.1
     have hB16 : r.b ^ 4 % 16 = 1 := odd_fourth16 hbOdd
     have hmod := congrArg (fun n : Nat => n % 16) r.equation
+    change (r.a ^ r.x + r.b ^ r.y) % 16 = r.c ^ r.z % 16 at hmod
     have h : 1 = r.c ^ r.z % 16 := by
       simpa [hx, hy, Nat.add_mod, hA16, hB16] using hmod
     exact h.symm
@@ -240,6 +246,7 @@ theorem twoFour_xy_rhs_pow_mod16_atlas
     have hA16 : r.a ^ 4 % 16 = 1 := odd_fourth16 haOdd
     have hB16 : r.b ^ 4 % 16 = 0 := even_fourth16 hB.2.1
     have hmod := congrArg (fun n : Nat => n % 16) r.equation
+    change (r.a ^ r.x + r.b ^ r.y) % 16 = r.c ^ r.z % 16 at hmod
     have h : 1 = r.c ^ r.z % 16 := by
       simpa [hx, hy, Nat.add_mod, hA16, hB16] using hmod
     exact h.symm
@@ -403,6 +410,7 @@ theorem twoFour_xz_b_even_pow_mod16_zero
   have hA16 : r.a ^ 4 % 16 = 1 := odd_fourth16 haOdd
   have hC16 : r.c ^ 4 % 16 = 1 := odd_fourth16 hcOdd
   have hmod := congrArg (fun n : Nat => n % 16) r.equation
+  change (r.a ^ r.x + r.b ^ r.y) % 16 = r.c ^ r.z % 16 at hmod
   rw [hx, hz, Nat.add_mod, hA16, hC16] at hmod
   omega
 
@@ -480,6 +488,7 @@ theorem twoFour_yz_a_even_prime_split
   have hC16 : r.c ^ 4 % 16 = 1 := odd_fourth16 hcOdd
   have hpow0 : r.a ^ r.x % 16 = 0 := by
     have hmod := congrArg (fun n : Nat => n % 16) r.equation
+    change (r.a ^ r.x + r.b ^ r.y) % 16 = r.c ^ r.z % 16 at hmod
     rw [hy, hz, Nat.add_mod, hB16, hC16] at hmod
     omega
   by_cases h3 : r.x = 3
