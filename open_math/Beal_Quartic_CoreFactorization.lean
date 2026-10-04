@@ -1434,23 +1434,16 @@ theorem reduced_xy_four_prime_orbit_pressure
 private theorem quartic_gcd3_eq_one
     (r : ReducedPrimitiveCandidate) :
     Nat.gcd r.a (Nat.gcd r.b r.c) = 1 := by
-  by_contra hne
-  have hgPos : 0 < Nat.gcd r.a (Nat.gcd r.b r.c) :=
+  have hnot :
+      ¬ 1 < Nat.gcd r.a (Nat.gcd r.b r.c) := by
+    intro hgt
+    have hex :
+        ∃ q : Nat, CommonDivisor q r.a r.b r.c :=
+      (commonDivisor_iff_one_lt_nestedGCD (quarticData r)).2 hgt
+    exact r.no_common hex
+  have hpos : 0 < Nat.gcd r.a (Nat.gcd r.b r.c) :=
     Nat.gcd_pos_of_pos_left (Nat.gcd r.b r.c) r.a_pos
-  have hgGt : 1 < Nat.gcd r.a (Nat.gcd r.b r.c) := by
-    omega
-  rcases primeDivisorProperty_proved
-      (Nat.gcd r.a (Nat.gcd r.b r.c)) hgGt with
-    ⟨p, hp, hpg⟩
-  have hpa : p ∣ r.a :=
-    nat_dvd_trans hpg (Nat.gcd_dvd_left r.a (Nat.gcd r.b r.c))
-  have hpbc : p ∣ Nat.gcd r.b r.c :=
-    nat_dvd_trans hpg (Nat.gcd_dvd_right r.a (Nat.gcd r.b r.c))
-  have hpb : p ∣ r.b :=
-    nat_dvd_trans hpbc (Nat.gcd_dvd_left r.b r.c)
-  have hpc : p ∣ r.c :=
-    nat_dvd_trans hpbc (Nat.gcd_dvd_right r.b r.c)
-  exact r.no_common ⟨p, hp.1, hpa, hpb, hpc⟩
+  omega
 
 /-- Concrete primitive solution of the generalized Fermat signature (4,4,p). -/
 structure PrimitiveQuarticSumPrimeSolution (p : Nat) where
@@ -1544,7 +1537,7 @@ theorem reduced_yz_four_to_primitive_quartic_difference
     Z_pos := r.a_pos
     primitiveXY := quartic_gcd_bc_eq_one r
     equation := by
-      simpa [hy, hz] using r.equation
+      simpa [hy, hz, Nat.add_comm] using r.equation
   }⟩
 
 /--
