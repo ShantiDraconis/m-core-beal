@@ -73,7 +73,8 @@ jobs:
             open_math/Beal_Core_Mod16.lean
             open_math/Beal_CoprimePrimePowerSplitter.lean
             open_math/Beal_Quartic_CoreFactorization.lean
-          )          for f in "${FILES[@]}"; do
+          )
+          for f in "${FILES[@]}"; do
             echo "=== BUILD $f ==="
             lake env lean "$f"
           done
