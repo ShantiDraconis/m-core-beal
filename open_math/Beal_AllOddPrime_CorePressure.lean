@@ -63,6 +63,7 @@ theorem reduced_forces_mod8_parity_pressure
     have hA8 : r.a ^ r.x % 8 = 0 :=
       oddEvenPow8 ha r.x_reduced.1
     have hmod := congrArg (fun n : Nat => n % 8) r.equation
+    change (r.a ^ r.x + r.b ^ r.y) % 8 = r.c ^ r.z % 8 at hmod
     rw [Nat.add_mod, hA8] at hmod
     omega
   constructor
@@ -70,12 +71,14 @@ theorem reduced_forces_mod8_parity_pressure
     have hB8 : r.b ^ r.y % 8 = 0 :=
       oddEvenPow8 hb r.y_reduced.1
     have hmod := congrArg (fun n : Nat => n % 8) r.equation
+    change (r.a ^ r.x + r.b ^ r.y) % 8 = r.c ^ r.z % 8 at hmod
     rw [Nat.add_mod, hB8] at hmod
     omega
   · intro hc
     have hC8 : r.c ^ r.z % 8 = 0 :=
       oddEvenPow8 hc r.z_reduced.1
     have hmod := congrArg (fun n : Nat => n % 8) r.equation
+    change (r.a ^ r.x + r.b ^ r.y) % 8 = r.c ^ r.z % 8 at hmod
     rw [Nat.add_mod, hC8] at hmod
     exact hmod
 
