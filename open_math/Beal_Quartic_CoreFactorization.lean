@@ -1297,9 +1297,10 @@ private theorem quartic_oddPrime_mod2_one
     p % 2 = 1 := by
   have hnot : ¬ 2 ∣ p := by
     intro h2
-    rcases hp.1.2 2 h2 with h1 | h2eq
-    · omega
-    · omega
+    rcases hp.1.2 2 h2 with h1 | hp2
+    · cases h1
+    · have hlt : 2 < 2 := by simpa [hp2] using hp.2
+      exact Nat.lt_irrefl 2 hlt
   have hpos : 0 < p % 2 := Nat.emod_pos_of_not_dvd hnot
   have hlt : p % 2 < 2 := Nat.mod_lt p (by decide)
   omega
@@ -1338,17 +1339,19 @@ private theorem quartic_odd_pow_mod8_eq_base
   rcases quartic_mod2_one_repr he with ⟨k, hk⟩
   rw [hk]
   have hs : n ^ 2 % 8 = 1 := quartic_odd_square_mod8 hn
+  have hkpow : (n ^ 2) ^ k % 8 = 1 := by
+    have hc := quartic_pow_mod_congr_local
+      (a := n ^ 2) (b := 1) (m := 8) (e := k) hs
+    simpa using hc
   calc
     n ^ (2 * k + 1) % 8
         = ((n ^ 2) ^ k * n) % 8 := by
             simp [Nat.pow_add, Nat.pow_mul]
-    _ = (((n ^ 2) % 8) ^ k % 8 * (n % 8)) % 8 := by
-            induction k with
-            | zero => simp [Nat.mul_mod]
-            | succ k ih =>
-                rw [Nat.pow_succ, Nat.mul_mod, ih]
-                simp [Nat.mul_mod]
-    _ = n % 8 := by simp [hs]
+    _ = (((n ^ 2) ^ k % 8) * (n % 8)) % 8 := by
+            rw [Nat.mul_mod]
+    _ = n % 8 := by
+            rw [hkpow]
+            simp
 
 /--
 Normalized arithmetic packet for the residual x=y=4, z=p orbit.
@@ -1397,7 +1400,7 @@ theorem reduced_xy_four_prime_orbit_pressure
       have hB8 : r.b ^ 4 % 8 = 1 :=
         quartic_odd_fourth_mod8 hbOdd
       have hmod := congrArg (fun n : Nat => n % 8) r.equation
-      simpa [hx, hy, Nat.add_mod, hA8, hB8] using hmod
+      simpa [hx, hy, Nat.add_mod, hA8, hB8] using hmod.symm
     ·
       have haOdd : r.a % 2 = 1 := by
         rcases hE with hA | hB | hC
@@ -1409,7 +1412,7 @@ theorem reduced_xy_four_prime_orbit_pressure
       have hB8 : r.b ^ 4 % 8 = 0 :=
         quartic_even_pow_mod8 hb (by decide)
       have hmod := congrArg (fun n : Nat => n % 8) r.equation
-      simpa [hx, hy, Nat.add_mod, hA8, hB8] using hmod
+      simpa [hx, hy, Nat.add_mod, hA8, hB8] using hmod.symm
   have hzOdd : r.z % 2 = 1 :=
     quartic_oddPrime_mod2_one hzPrime
   have hcPowBase :
