@@ -957,11 +957,13 @@ private theorem square_injective_pos
 
 private theorem pos_of_pow_pos_local
     {u p : Nat}
+    (hp : 0 < p)
     (h : 0 < u ^ p) :
     0 < u := by
   cases u with
   | zero =>
-      simp at h
+      have hp0 : p ≠ 0 := Nat.ne_of_gt hp
+      simp [hp0] at h
   | succ n =>
       exact Nat.succ_pos n
 
@@ -1013,13 +1015,13 @@ theorem reduced_xz_four_a_even_to_primitive_denes_resolved
     omega
   have huPos : 0 < u := by
     have hup : 0 < u ^ r.y := by simpa [hsub] using hsubPos
-    exact pos_of_pow_pos_local hup
+    exact pos_of_pow_pos_local (Nat.lt_trans (by decide : 0 < 2) hy.2) hup
   have hvPos : 0 < v := by
     have hvp : 0 < v ^ r.y := by simpa [hadd] using haddPos
-    exact pos_of_pow_pos_local hvp
+    exact pos_of_pow_pos_local (Nat.lt_trans (by decide : 0 < 2) hy.2) hvp
   have hwPos : 0 < w := by
     have hwp : 0 < w ^ r.y := by simpa [hquad] using hquadPos
-    exact pos_of_pow_pos_local hwp
+    exact pos_of_pow_pos_local (Nat.lt_trans (by decide : 0 < 2) hy.2) hwp
   let X := u ^ 2
   let Y := v ^ 2
   let Z := w
