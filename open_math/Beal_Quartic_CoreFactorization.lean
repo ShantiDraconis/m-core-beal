@@ -1101,6 +1101,79 @@ theorem reduced_xz_four_a_even_eliminated_of_denes
       r hx hz hy ha with ⟨S⟩
   exact hDenes r.y hy S
 
+/--
+Swap the two summands of a reduced primitive Beal candidate.  This is a genuine
+symmetry of the equation and preserves every reduced-candidate field.
+-/
+def ReducedPrimitiveCandidate.swapAB
+    (r : ReducedPrimitiveCandidate) : ReducedPrimitiveCandidate where
+  a := r.b
+  b := r.a
+  c := r.c
+  x := r.y
+  y := r.x
+  z := r.z
+  a_pos := r.b_pos
+  b_pos := r.a_pos
+  c_pos := r.c_pos
+  x_reduced := r.y_reduced
+  y_reduced := r.x_reduced
+  z_reduced := r.z_reduced
+  equation := by simpa [Nat.add_comm] using r.equation
+  no_common := by
+    intro h
+    rcases h with ⟨p, hp, hpb, hpa, hpc⟩
+    exact r.no_common ⟨p, hp, hpa, hpb, hpc⟩
+
+@[simp] theorem swapAB_a (r : ReducedPrimitiveCandidate) :
+    r.swapAB.a = r.b := rfl
+@[simp] theorem swapAB_b (r : ReducedPrimitiveCandidate) :
+    r.swapAB.b = r.a := rfl
+@[simp] theorem swapAB_c (r : ReducedPrimitiveCandidate) :
+    r.swapAB.c = r.c := rfl
+@[simp] theorem swapAB_x (r : ReducedPrimitiveCandidate) :
+    r.swapAB.x = r.y := rfl
+@[simp] theorem swapAB_y (r : ReducedPrimitiveCandidate) :
+    r.swapAB.y = r.x := rfl
+@[simp] theorem swapAB_z (r : ReducedPrimitiveCandidate) :
+    r.swapAB.z = r.z := rfl
+
+/--
+Symmetric Dénes production: y=z=4 with b even reduces to the already-resolved
+x=z=4/a-even branch after swapping the two summands.
+-/
+theorem reduced_yz_four_b_even_to_primitive_denes_resolved
+    (r : ReducedPrimitiveCandidate)
+    (hy : r.y = 4)
+    (hz : r.z = 4)
+    (hxPrime : OddPrimeExponent r.x)
+    (hb : Even r.b) :
+    Nonempty (PrimitiveDenesSolutionCore r.x) := by
+  have hs :
+      Nonempty (PrimitiveDenesSolutionCore r.swapAB.y) :=
+    reduced_xz_four_a_even_to_primitive_denes_resolved
+      r.swapAB
+      (by simpa using hy)
+      (by simpa using hz)
+      (by simpa using hxPrime)
+      (by simpa using hb)
+  simpa using hs
+
+/--
+Darmon–Merel therefore also eliminates the symmetric y=z=4/b-even cell.
+-/
+theorem reduced_yz_four_b_even_eliminated_of_denes
+    (hDenes : DenesOddPrimePrimitiveExclusion)
+    (r : ReducedPrimitiveCandidate)
+    (hy : r.y = 4)
+    (hz : r.z = 4)
+    (hxPrime : OddPrimeExponent r.x)
+    (hb : Even r.b) :
+    False := by
+  rcases reduced_yz_four_b_even_to_primitive_denes_resolved
+      r hy hz hxPrime hb with ⟨S⟩
+  exact hDenes r.x hxPrime S
+
 #print axioms MCore.BealEffective.OpenMath.core_diff_factorization
 #print axioms MCore.BealEffective.OpenMath.core_right_same_exponent_gap
 #print axioms MCore.BealEffective.OpenMath.reduced_x_eq_z_exact_factor
@@ -1126,6 +1199,8 @@ theorem reduced_xz_four_a_even_eliminated_of_denes
 #print axioms MCore.BealEffective.OpenMath.reduced_xz_four_a_even_to_denes_equation
 #print axioms MCore.BealEffective.OpenMath.reduced_xz_four_a_even_to_primitive_denes_resolved
 #print axioms MCore.BealEffective.OpenMath.reduced_xz_four_a_even_eliminated_of_denes
+#print axioms MCore.BealEffective.OpenMath.reduced_yz_four_b_even_to_primitive_denes_resolved
+#print axioms MCore.BealEffective.OpenMath.reduced_yz_four_b_even_eliminated_of_denes
 
 end OpenMath
 end BealEffective
