@@ -163,6 +163,7 @@ theorem allOddPrime_forces_base_pressure
     have hB8 := oddBase_oddExponent_pow_mod8_eq_base hbOdd hyOdd
     have hC8 := oddBase_oddExponent_pow_mod8_eq_base hcOdd hzOdd
     have hmod := congrArg (fun n : Nat => n % 8) r.equation
+    change (r.a ^ r.x + r.b ^ r.y) % 8 = r.c ^ r.z % 8 at hmod
     rw [Nat.add_mod, hA8, hB8, hC8] at hmod
     omega
   constructor
@@ -181,6 +182,7 @@ theorem allOddPrime_forces_base_pressure
     have hB8 : r.b ^ r.y % 8 = 0 := evenPow8 hb hy.2
     have hC8 := oddBase_oddExponent_pow_mod8_eq_base hcOdd hzOdd
     have hmod := congrArg (fun n : Nat => n % 8) r.equation
+    change (r.a ^ r.x + r.b ^ r.y) % 8 = r.c ^ r.z % 8 at hmod
     rw [Nat.add_mod, hA8, hB8, hC8] at hmod
     omega
   · intro hc
@@ -198,6 +200,7 @@ theorem allOddPrime_forces_base_pressure
     have hB8 := oddBase_oddExponent_pow_mod8_eq_base hbOdd hyOdd
     have hC8 : r.c ^ r.z % 8 = 0 := evenPow8 hc hz.2
     have hmod := congrArg (fun n : Nat => n % 8) r.equation
+    change (r.a ^ r.x + r.b ^ r.y) % 8 = r.c ^ r.z % 8 at hmod
     rw [Nat.add_mod, hA8, hB8, hC8] at hmod
     exact hmod
 
