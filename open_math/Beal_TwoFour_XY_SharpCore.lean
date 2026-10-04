@@ -188,6 +188,7 @@ private theorem xys_odd_square16
       apply xys_pow_mod_congr
       simp
     rw [hc, h]
+    decide
 
 private theorem xys_odd_pow16_eq_base
     {u e : Nat}
