@@ -79,7 +79,6 @@ jobs:
             open_math/Beal_OneFour_GenericPressure.lean
             open_math/Beal_AllOddPrime_CorePressure.lean
             open_math/Beal_AllOddPrime_BasePressure.lean
-            open_math/Beal_CoprimePrimePowerSplitter.lean
             open_math/Beal_Quartic_CoreFactorization.lean
             open_math/Beal_ATK_ForcedQuestions.lean
           )
