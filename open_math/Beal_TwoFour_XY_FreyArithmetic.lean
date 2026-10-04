@@ -202,6 +202,20 @@ def xyFourPrimeFreyArithmeticPacket
   rhsNotEven := xyFrey_rhs_not_even r hx hy
   discriminant := xy_frey_discriminant_rewrite r.equation
 
+/--
+On the xy-four orbit the raw discriminant has the exact exponent pattern
+16 * a^8 * b^8 * c^(2z).
+-/
+theorem xy_four_frey_discriminant_normal_form
+    (r : ReducedPrimitiveCandidate)
+    (hx : r.x = 4)
+    (hy : r.y = 4) :
+    XYFreyDiscriminantBeal r.a r.b r.c r.x r.y r.z =
+      16 * r.a ^ 8 * r.b ^ 8 * r.c ^ (2 * r.z) := by
+  unfold XYFreyDiscriminantBeal
+  rw [hx, hy]
+  simp [Nat.pow_mul, Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm]
+
 private theorem xyFrey_not_dvd_other_of_gcd_one
     {q u v : Nat}
     (hq : IsPrime q)
@@ -283,6 +297,7 @@ theorem xy_frey_odd_bad_prime_exactly_one_base
     exact Or.inr (Or.inr ⟨hc, hna, hnb⟩)
 
 #print axioms MCore.BealEffective.OpenMath.xy_frey_discriminant_rewrite
+#print axioms MCore.BealEffective.OpenMath.xy_four_frey_discriminant_normal_form
 #print axioms MCore.BealEffective.OpenMath.xyFourPrimeFreyArithmeticPacket
 #print axioms MCore.BealEffective.OpenMath.xy_frey_odd_bad_prime_divides_a_or_b_or_c
 #print axioms MCore.BealEffective.OpenMath.xy_frey_odd_bad_prime_exactly_one_base
