@@ -43,7 +43,7 @@ private theorem oddEvenPow8
     refine ⟨e - 3, ?_⟩
     omega
   subst e
-  simp [pow_add, mul_pow, Nat.mul_mod]
+  simp [Nat.pow_add, Nat.mul_pow, Nat.mul_mod]
 
 /--
 The universal local parity pressure for a reduced primitive candidate.
