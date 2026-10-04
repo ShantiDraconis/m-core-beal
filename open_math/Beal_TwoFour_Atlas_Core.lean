@@ -371,6 +371,115 @@ theorem twoFour_yz_c_even_forces_a_mod16_fifteen
   exact odd_pow_mod16_eq_fifteen_forces_base_fifteen_core
     haOdd (atlas_oddPrime_mod2_one hxPrime) hp
 
+/-- In x=z=4 with b even, the prime-power term is 0 modulo 16. -/
+theorem twoFour_xz_b_even_pow_mod16_zero
+    (r : ReducedPrimitiveCandidate)
+    (hx : r.x = 4)
+    (hz : r.z = 4)
+    (hb : Even r.b) :
+    r.b ^ r.y % 16 = 0 := by
+  have hE := reducedExactlyOneEven r
+  have haOdd : r.a % 2 = 1 := by
+    rcases hE with hA | hB | hC
+    · exact False.elim (hA.2.1 hb)
+    · exact (neven_iff_mod2_one r.a).mp hB.1
+    · exact False.elim (hC.2.1 hb)
+  have hcOdd : r.c % 2 = 1 := by
+    rcases hE with hA | hB | hC
+    · exact False.elim (hA.2.1 hb)
+    · exact (neven_iff_mod2_one r.c).mp hB.2.2
+    · exact False.elim (hC.2.1 hb)
+  have hA16 : r.a ^ 4 % 16 = 1 := odd_fourth16 haOdd
+  have hC16 : r.c ^ 4 % 16 = 1 := odd_fourth16 hcOdd
+  have hmod := congrArg (fun n : Nat => n % 16) r.equation
+  rw [hx, hz, Nat.add_mod, hA16, hC16] at hmod
+  omega
+
+private theorem even_cube_mod16_zero_forces_mod4_zero
+    {n : Nat}
+    (hn : Even n)
+    (h3 : n ^ 3 % 16 = 0) :
+    n % 4 = 0 := by
+  have hmod4 : n % 4 = 0 ∨ n % 4 = 2 := by
+    have hpar : (n % 4) % 2 = 0 := by
+      have h0 : n % 2 = 0 := Nat.mod_eq_zero_of_dvd hn
+      exact (Nat.mod_mod_of_dvd n (by decide : 2 ∣ 4)).trans h0
+    have hlt : n % 4 < 4 := Nat.mod_lt n (by decide)
+    omega
+  rcases hmod4 with h0 | h2
+  · exact h0
+  ·
+    have hres :
+        n % 16 = 2 ∨ n % 16 = 6 ∨ n % 16 = 10 ∨ n % 16 = 14 := by
+      have hpar : (n % 16) % 4 = 2 :=
+        (Nat.mod_mod_of_dvd n (by decide : 4 ∣ 16)).trans h2
+      have hlt : n % 16 < 16 := Nat.mod_lt n (by decide)
+      omega
+    rcases hres with h | h | h | h
+    all_goals
+      have hc : n ^ 3 % 16 = (n % 16) ^ 3 % 16 := by
+        apply atlas_pow_mod_congr
+        simp
+      rw [hc, h] at h3
+      norm_num at h3
+
+/--
+Orbit B split: either the odd prime exponent is 3, in which case the even base
+is actually divisible by 4, or the exponent is at least 5.
+-/
+theorem twoFour_xz_b_even_prime_split
+    (r : ReducedPrimitiveCandidate)
+    (hx : r.x = 4)
+    (hz : r.z = 4)
+    (hyPrime : OddPrimeExponent r.y)
+    (hb : Even r.b) :
+    (r.y = 3 ∧ r.b % 4 = 0) ∨ 5 ≤ r.y := by
+  have hyOdd : r.y % 2 = 1 := atlas_oddPrime_mod2_one hyPrime
+  by_cases h3 : r.y = 3
+  · left
+    refine ⟨h3, ?_⟩
+    have hp0 := twoFour_xz_b_even_pow_mod16_zero r hx hz hb
+    rw [h3] at hp0
+    exact even_cube_mod16_zero_forces_mod4_zero hb hp0
+  · right
+    have hgt : 2 < r.y := hyPrime.2
+    omega
+
+/-- Symmetric orbit-B split for y=z=4 with a even. -/
+theorem twoFour_yz_a_even_prime_split
+    (r : ReducedPrimitiveCandidate)
+    (hy : r.y = 4)
+    (hz : r.z = 4)
+    (hxPrime : OddPrimeExponent r.x)
+    (ha : Even r.a) :
+    (r.x = 3 ∧ r.a % 4 = 0) ∨ 5 ≤ r.x := by
+  have hxOdd : r.x % 2 = 1 := atlas_oddPrime_mod2_one hxPrime
+  have hE := reducedExactlyOneEven r
+  have hbOdd : r.b % 2 = 1 := by
+    rcases hE with hA | hB | hC
+    · exact (neven_iff_mod2_one r.b).mp hA.2.1
+    · exact False.elim (hB.1 ha)
+    · exact False.elim (hC.1 ha)
+  have hcOdd : r.c % 2 = 1 := by
+    rcases hE with hA | hB | hC
+    · exact (neven_iff_mod2_one r.c).mp hA.2.2
+    · exact False.elim (hB.1 ha)
+    · exact False.elim (hC.1 ha)
+  have hB16 : r.b ^ 4 % 16 = 1 := odd_fourth16 hbOdd
+  have hC16 : r.c ^ 4 % 16 = 1 := odd_fourth16 hcOdd
+  have hpow0 : r.a ^ r.x % 16 = 0 := by
+    have hmod := congrArg (fun n : Nat => n % 16) r.equation
+    rw [hy, hz, Nat.add_mod, hB16, hC16] at hmod
+    omega
+  by_cases h3 : r.x = 3
+  · left
+    refine ⟨h3, ?_⟩
+    rw [h3] at hpow0
+    exact even_cube_mod16_zero_forces_mod4_zero ha hpow0
+  · right
+    have hgt : 2 < r.x := hxPrime.2
+    omega
+
 #print axioms MCore.BealEffective.OpenMath.twoFour_xz_residue_atlas
 #print axioms MCore.BealEffective.OpenMath.twoFour_yz_residue_atlas
 #print axioms MCore.BealEffective.OpenMath.twoFour_xy_rhs_not_even_atlas
@@ -379,6 +488,8 @@ theorem twoFour_yz_c_even_forces_a_mod16_fifteen
 #print axioms MCore.BealEffective.OpenMath.odd_pow_mod16_eq_fifteen_forces_base_fifteen_core
 #print axioms MCore.BealEffective.OpenMath.twoFour_xz_c_even_forces_b_mod16_fifteen
 #print axioms MCore.BealEffective.OpenMath.twoFour_yz_c_even_forces_a_mod16_fifteen
+#print axioms MCore.BealEffective.OpenMath.twoFour_xz_b_even_prime_split
+#print axioms MCore.BealEffective.OpenMath.twoFour_yz_a_even_prime_split
 
 end OpenMath
 end BealEffective
