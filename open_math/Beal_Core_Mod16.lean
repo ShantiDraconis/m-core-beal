@@ -4,6 +4,15 @@ namespace MCore
 namespace BealEffective
 namespace OpenMath
 
+private theorem pow_mod_congr_local
+    {a b m e : Nat}
+    (h : a % m = b % m) :
+    a ^ e % m = b ^ e % m := by
+  induction e with
+  | zero => simp
+  | succ e ih =>
+      rw [Nat.pow_succ, Nat.pow_succ, Nat.mul_mod, Nat.mul_mod, ih, h]
+
 /-- A reduced prime exponent is not divisible by two. -/
 theorem oddPrimeExponent_not_even
     {p : Nat}
@@ -11,8 +20,9 @@ theorem oddPrimeExponent_not_even
     ¬ Even p := by
   intro htwo
   rcases hp.1.2 2 htwo with h1 | hp2
-  · omega
-  · omega
+  · exact Nat.noConfusion h1
+  · have hlt : 2 < 2 := by simpa [hp2] using hp.2
+    exact Nat.lt_irrefl 2 hlt
 
 /-- Hence every reduced prime exponent is 1 modulo 2. -/
 theorem oddPrimeExponent_mod_two_eq_one
@@ -30,7 +40,7 @@ theorem even_fourth_mod_sixteen_core
     (hn : Even n) :
     n ^ 4 % 16 = 0 := by
   rcases hn with ⟨k, rfl⟩
-  simp [mul_pow, Nat.mul_mod]
+  simp [Nat.mul_pow, Nat.mul_mod]
 
 /--
 An odd natural has one of the eight odd residue classes modulo 16.
@@ -60,7 +70,11 @@ theorem odd_fourth_mod_sixteen_core
   rcases odd_residue_mod_sixteen_split hn with
     h | h | h | h | h | h | h | h
   all_goals
-    simp [Nat.pow_mod, h]
+    have hc : n ^ 4 % 16 = (n % 16) ^ 4 % 16 := by
+      apply pow_mod_congr_local
+      simp
+    rw [hc, h]
+    decide
 
 /-- Non-even naturals are exactly the odd naturals modulo two. -/
 theorem not_even_iff_mod_two_eq_one_core
