@@ -479,6 +479,7 @@ theorem reduced_xz_four_a_even_blocks_odd
     have hdecomp : (r.c - r.a) + r.a = r.c :=
       Nat.sub_add_cancel hac
     have hm := congrArg (fun n : Nat => n % 2) hdecomp
+    change ((r.c - r.a) + r.a) % 2 = r.c % 2 at hm
     rw [Nat.add_mod, ha0, hcOdd] at hm
     omega
   have haddOdd : (r.c + r.a) % 2 = 1 := by
@@ -725,14 +726,18 @@ theorem coprimePairPrimePowerSplitting_resolved :
           cases b with
           | zero => rfl
           | succ n =>
-              have hp0 : p ≠ 0 :=
-                Nat.ne_of_gt (Nat.lt_trans (by decide : 0 < 2) hp.2)
-              simp [hp0] at hpow0
+              have hpos : 0 < (n + 1) ^ p :=
+                Nat.pow_pos (Nat.succ_pos n)
+              rw [hpow0] at hpos
+              exact False.elim (Nat.lt_irrefl 0 hpos)
         refine ⟨0, 1, ?_, ?_⟩
         · subst b
-          have hp0 : p ≠ 0 :=
-            Nat.ne_of_gt (Nat.lt_trans (by decide : 0 < 2) hp.2)
-          simp [hp0]
+          cases p with
+          | zero =>
+              have : ¬ 2 < 0 := Nat.not_lt_zero 2
+              exact False.elim (this hp.2)
+          | succ p =>
+              simp
         · simpa [hB1]
       by_cases hA1 : A = 1
       · subst A
@@ -853,6 +858,12 @@ theorem core_quartic_linear_square_sum
   simp [Nat.pow_succ, Nat.add_mul, Nat.mul_add, Nat.mul_assoc]
   omega
 
+private theorem pow_square_swap
+    (u p : Nat) :
+    (u ^ p) ^ 2 = (u ^ 2) ^ p := by
+  rw [← Nat.pow_mul, ← Nat.pow_mul]
+  rw [Nat.mul_comm p 2]
+
 /--
 Prime-exponent UFD splitting turns the a-even x=z=4 branch into the concrete
 Dénes equation (u^2)^p + (v^2)^p = 2*w^p.
@@ -887,7 +898,8 @@ theorem reduced_xz_four_a_even_to_denes_equation
   have hid := core_quartic_linear_square_sum (Nat.le_of_lt hac_lt)
   rw [hsub, hadd, hquad] at hid
   refine ⟨u ^ 2, v ^ 2, w, ?_⟩
-  simpa [Nat.pow_mul, Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc] using hid
+  rw [pow_square_swap u r.y, pow_square_swap v r.y] at hid
+  simpa [Nat.mul_comm] using hid
 
 private theorem splitter_pow_two_dvd_pow_prime
     {u p : Nat}
@@ -919,31 +931,39 @@ private theorem square_injective_pos
     (hv : 0 < v)
     (h : u ^ 2 = v ^ 2) :
     u = v := by
-  have huv : u ≤ v := by
-    by_contra hnot
-    have hvu : v < u := Nat.lt_of_not_ge hnot
-    have h1 : v * v < u * v :=
-      Nat.mul_lt_mul_of_pos_right hvu hv
-    have h2 : u * v < u * u :=
-      Nat.mul_lt_mul_of_pos_left hvu hu
-    have : v ^ 2 < u ^ 2 := by
-      simpa [Nat.pow_succ, Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc]
-        using Nat.lt_trans h1 h2
-    rw [h] at this
-    exact Nat.lt_irrefl _ this
-  have hvu : v ≤ u := by
-    by_contra hnot
-    have huv' : u < v := Nat.lt_of_not_ge hnot
-    have h1 : u * u < v * u :=
-      Nat.mul_lt_mul_of_pos_right huv' hu
-    have h2 : v * u < v * v :=
-      Nat.mul_lt_mul_of_pos_left huv' hv
-    have : u ^ 2 < v ^ 2 := by
-      simpa [Nat.pow_succ, Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc]
-        using Nat.lt_trans h1 h2
-    rw [← h] at this
-    exact Nat.lt_irrefl _ this
-  exact Nat.le_antisymm huv hvu
+  rcases Nat.le_total u v with huv | hvu
+  · rcases Nat.eq_or_lt_of_le huv with huvEq | huvLt
+    · exact huvEq
+    · have h1 : u * u < v * u :=
+        Nat.mul_lt_mul_of_pos_right huvLt hu
+      have h2 : v * u < v * v :=
+        Nat.mul_lt_mul_of_pos_left huvLt hv
+      have hlt : u ^ 2 < v ^ 2 := by
+        simpa [Nat.pow_succ, Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc]
+          using Nat.lt_trans h1 h2
+      rw [h] at hlt
+      exact False.elim (Nat.lt_irrefl _ hlt)
+  · rcases Nat.eq_or_lt_of_le hvu with hvuEq | hvuLt
+    · exact hvuEq.symm
+    · have h1 : v * v < u * v :=
+        Nat.mul_lt_mul_of_pos_right hvuLt hv
+      have h2 : u * v < u * u :=
+        Nat.mul_lt_mul_of_pos_left hvuLt hu
+      have hlt : v ^ 2 < u ^ 2 := by
+        simpa [Nat.pow_succ, Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc]
+          using Nat.lt_trans h1 h2
+      rw [← h] at hlt
+      exact False.elim (Nat.lt_irrefl _ hlt)
+
+private theorem pos_of_pow_pos_local
+    {u p : Nat}
+    (h : 0 < u ^ p) :
+    0 < u := by
+  cases u with
+  | zero =>
+      simp at h
+  | succ n =>
+      exact Nat.succ_pos n
 
 /-- Positive primitive nontrivial Dénes datum. -/
 structure PrimitiveDenesSolutionCore (n : Nat) where
@@ -993,21 +1013,21 @@ theorem reduced_xz_four_a_even_to_primitive_denes_resolved
     omega
   have huPos : 0 < u := by
     have hup : 0 < u ^ r.y := by simpa [hsub] using hsubPos
-    exact Nat.pos_of_pow_pos _ hup
+    exact pos_of_pow_pos_local hup
   have hvPos : 0 < v := by
     have hvp : 0 < v ^ r.y := by simpa [hadd] using haddPos
-    exact Nat.pos_of_pow_pos _ hvp
+    exact pos_of_pow_pos_local hvp
   have hwPos : 0 < w := by
     have hwp : 0 < w ^ r.y := by simpa [hquad] using hquadPos
-    exact Nat.pos_of_pow_pos _ hwp
+    exact pos_of_pow_pos_local hwp
   let X := u ^ 2
   let Y := v ^ 2
   let Z := w
   have hEq : X ^ r.y + Y ^ r.y = 2 * Z ^ r.y := by
     have hid := core_quartic_linear_square_sum (Nat.le_of_lt hac_lt)
     rw [hsub, hadd, hquad] at hid
-    simpa [X, Y, Z, Nat.pow_mul, Nat.mul_comm,
-      Nat.mul_left_comm, Nat.mul_assoc] using hid
+    rw [pow_square_swap u r.y, pow_square_swap v r.y] at hid
+    simpa [X, Y, Z, Nat.mul_comm] using hid
   have hXYg : Nat.gcd X Y = 1 := by
     have hu2 : u ^ 2 ∣ u ^ r.y :=
       splitter_pow_two_dvd_pow_prime hy.2
@@ -1099,7 +1119,6 @@ theorem reduced_xz_four_a_even_eliminated_of_denes
 #print axioms MCore.BealEffective.OpenMath.reduced_xz_four_a_even_to_denes_equation
 #print axioms MCore.BealEffective.OpenMath.reduced_xz_four_a_even_to_primitive_denes_resolved
 #print axioms MCore.BealEffective.OpenMath.reduced_xz_four_a_even_eliminated_of_denes
-#print axioms MCore.BealEffective.OpenMath.reduced_xz_four_a_even_power_forms_of_splitter
 
 end OpenMath
 end BealEffective
