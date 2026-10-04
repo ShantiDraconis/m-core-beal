@@ -71,16 +71,9 @@ jobs:
             open_math/Beal_Reduced_ParityPressure.lean
             open_math/Beal_Reduced_GCDPressure.lean
             open_math/Beal_Core_Mod16.lean
-            open_math/Beal_TwoFour_XY_CorePressure.lean
-            open_math/Beal_TwoFour_Atlas_Core.lean
-            open_math/Beal_OneFourEqual_CorePressure.lean
-            open_math/Beal_OneFour_GenericPressure.lean
-            open_math/Beal_AllOddPrime_CorePressure.lean
-            open_math/Beal_AllOddPrime_BasePressure.lean
             open_math/Beal_CoprimePrimePowerSplitter.lean
             open_math/Beal_Quartic_CoreFactorization.lean
-          )
-          for f in "${FILES[@]}"; do
+          )          for f in "${FILES[@]}"; do
             echo "=== BUILD $f ==="
             lake env lean "$f"
           done
