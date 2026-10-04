@@ -60,10 +60,7 @@ theorem odd_fourth_mod_sixteen_core
   rcases odd_residue_mod_sixteen_split hn with
     h | h | h | h | h | h | h | h
   all_goals
-    have hp : n ^ 4 % 16 = (n % 16) ^ 4 % 16 := by
-      simpa using (Nat.pow_mod n 4 16).symm
-    rw [hp, h]
-    decide
+    simp [Nat.pow_mod, h]
 
 /-- Non-even naturals are exactly the odd naturals modulo two. -/
 theorem not_even_iff_mod_two_eq_one_core
