@@ -1174,6 +1174,105 @@ theorem reduced_yz_four_b_even_eliminated_of_denes
       r hy hz hxPrime hb with ⟨S⟩
   exact hDenes r.x hxPrime S
 
+/--
+Elementary core-only impossibility: if x=y=4, c cannot be the unique even base.
+-/
+theorem reduced_xy_four_c_even_impossible
+    (r : ReducedPrimitiveCandidate)
+    (hx : r.x = 4)
+    (hy : r.y = 4)
+    (hc : Even r.c) :
+    False := by
+  have hE := quarticExactlyOneEven r
+  have haOdd : r.a % 2 = 1 := by
+    rcases hE with hA | hB | hC
+    · exact False.elim (hA.2.2 hc)
+    · exact (quartic_notEven_mod2_one r.a).mp hB.1
+    · exact (quartic_notEven_mod2_one r.a).mp hC.1
+  have hbOdd : r.b % 2 = 1 := by
+    rcases hE with hA | hB | hC
+    · exact (quartic_notEven_mod2_one r.b).mp hA.2.1
+    · exact False.elim (hB.2.2 hc)
+    · exact (quartic_notEven_mod2_one r.b).mp hC.2.1
+  have hA8 : r.a ^ 4 % 8 = 1 := by
+    have hpar : (r.a % 8) % 2 = 1 :=
+      (Nat.mod_mod_of_dvd r.a (by decide : 2 ∣ 8)).trans haOdd
+    have hlt : r.a % 8 < 8 := Nat.mod_lt r.a (by decide)
+    omega
+  have hB8 : r.b ^ 4 % 8 = 1 := by
+    have hpar : (r.b % 8) % 2 = 1 :=
+      (Nat.mod_mod_of_dvd r.b (by decide : 2 ∣ 8)).trans hbOdd
+    have hlt : r.b % 8 < 8 := Nat.mod_lt r.b (by decide)
+    omega
+  have hC8 : r.c ^ r.z % 8 = 0 := by
+    rcases hc with ⟨k, rfl⟩
+    obtain ⟨m, hm⟩ : ∃ m : Nat, r.z = m + 3 := by
+      refine ⟨r.z - 3, ?_⟩
+      omega
+    rw [hm]
+    simp [pow_add, mul_pow, Nat.mul_mod]
+  have hmod := congrArg (fun n : Nat => n % 8) r.equation
+  rw [hx, hy, Nat.add_mod, hA8, hB8, hC8] at hmod
+  omega
+
+/--
+After the two Dénes cells and the elementary c-even x=y=4 cell are removed,
+every remaining TwoFourPrime candidate lies in one of only three symmetry
+orbits.
+-/
+def TwoFourResidualOrbit (r : ReducedPrimitiveCandidate) : Prop :=
+  -- Orbit A: x=y=4 and the unique even base is on the left.
+  (r.x = 4 ∧ r.y = 4 ∧ OddPrimeExponent r.z ∧
+    (Even r.a ∨ Even r.b)) ∨
+  -- Orbit B: x=z=4 with b even, symmetric to y=z=4 with a even.
+  (r.x = 4 ∧ r.z = 4 ∧ OddPrimeExponent r.y ∧ Even r.b) ∨
+  -- Orbit C: x=z=4 with c even, symmetric to y=z=4 with c even.
+  (r.x = 4 ∧ r.z = 4 ∧ OddPrimeExponent r.y ∧ Even r.c)
+
+/--
+Conditional exact compression of Q3: Darmon–Merel reduces all of
+TwoFourPrime to the three residual symmetry orbits above.
+-/
+theorem twoFourPrime_reduces_to_three_orbits_of_denes
+    (hDenes : DenesOddPrimePrimitiveExclusion)
+    (r : ReducedPrimitiveCandidate)
+    (h : TwoFourPrime r.x r.y r.z) :
+    TwoFourResidualOrbit r := by
+  have hE := quarticExactlyOneEven r
+  rcases h with hxy | hxz | hyz
+  · rcases hxy with ⟨hx, hy, hzPrime⟩
+    rcases hE with hA | hB | hC
+    · exact Or.inl ⟨hx, hy, hzPrime, Or.inl hA.1⟩
+    · exact Or.inl ⟨hx, hy, hzPrime, Or.inr hB.2.1⟩
+    · exact False.elim
+        (reduced_xy_four_c_even_impossible r hx hy hC.2.2)
+  · rcases hxz with ⟨hx, hz, hyPrime⟩
+    rcases hE with hA | hB | hC
+    · exact False.elim
+        (reduced_xz_four_a_even_eliminated_of_denes
+          hDenes r hx hz hyPrime hA.1)
+    · exact Or.inr (Or.inl ⟨hx, hz, hyPrime, hB.2.1⟩)
+    · exact Or.inr (Or.inr ⟨hx, hz, hyPrime, hC.2.2⟩)
+  · rcases hyz with ⟨hy, hz, hxPrime⟩
+    rcases hE with hA | hB | hC
+    ·
+      let s := r.swapAB
+      have hsx : s.x = 4 := by simpa [s] using hy
+      have hsz : s.z = 4 := by simpa [s] using hz
+      have hsp : OddPrimeExponent s.y := by simpa [s] using hxPrime
+      have hsb : Even s.b := by simpa [s] using hA.1
+      exact Or.inr (Or.inl ⟨hsx, hsz, hsp, hsb⟩)
+    · exact False.elim
+        (reduced_yz_four_b_even_eliminated_of_denes
+          hDenes r hy hz hxPrime hB.2.1)
+    ·
+      let s := r.swapAB
+      have hsx : s.x = 4 := by simpa [s] using hy
+      have hsz : s.z = 4 := by simpa [s] using hz
+      have hsp : OddPrimeExponent s.y := by simpa [s] using hxPrime
+      have hsc : Even s.c := by simpa [s] using hC.2.2
+      exact Or.inr (Or.inr ⟨hsx, hsz, hsp, hsc⟩)
+
 #print axioms MCore.BealEffective.OpenMath.core_diff_factorization
 #print axioms MCore.BealEffective.OpenMath.core_right_same_exponent_gap
 #print axioms MCore.BealEffective.OpenMath.reduced_x_eq_z_exact_factor
@@ -1201,6 +1300,8 @@ theorem reduced_yz_four_b_even_eliminated_of_denes
 #print axioms MCore.BealEffective.OpenMath.reduced_xz_four_a_even_eliminated_of_denes
 #print axioms MCore.BealEffective.OpenMath.reduced_yz_four_b_even_to_primitive_denes_resolved
 #print axioms MCore.BealEffective.OpenMath.reduced_yz_four_b_even_eliminated_of_denes
+#print axioms MCore.BealEffective.OpenMath.reduced_xy_four_c_even_impossible
+#print axioms MCore.BealEffective.OpenMath.twoFourPrime_reduces_to_three_orbits_of_denes
 
 end OpenMath
 end BealEffective
