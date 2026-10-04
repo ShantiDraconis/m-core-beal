@@ -33,20 +33,20 @@ theorem reduced_pairwisePrimitive
     have hcommon :
         ∃ p : Nat, CommonDivisor p r.a r.b r.c := by
       simpa [ReducedPrimitiveCandidate.toBealData] using
-        (ab_pair_forces_common r.toBealData hab)
+        (ab_pair_forces_common ReducedPrimitiveCandidate.toBealData r hab)
     exact r.no_common hcommon
   constructor
   · intro hac
     have hcommon :
         ∃ p : Nat, CommonDivisor p r.a r.b r.c := by
       simpa [ReducedPrimitiveCandidate.toBealData] using
-        (ac_pair_forces_common r.toBealData hac)
+        (ac_pair_forces_common ReducedPrimitiveCandidate.toBealData r hac)
     exact r.no_common hcommon
   · intro hbc
     have hcommon :
         ∃ p : Nat, CommonDivisor p r.a r.b r.c := by
       simpa [ReducedPrimitiveCandidate.toBealData] using
-        (bc_pair_forces_common r.toBealData hbc)
+        (bc_pair_forces_common ReducedPrimitiveCandidate.toBealData r hbc)
     exact r.no_common hcommon
 
 /--
@@ -57,7 +57,7 @@ theorem reduced_exactlyOneEven
     (r : ReducedPrimitiveCandidate) :
     ExactlyOneEven r.a r.b r.c := by
   simpa [ReducedPrimitiveCandidate.toBealData] using
-    (exactlyOneEven_of_pairwise r.toBealData (reduced_pairwisePrimitive r))
+    (exactlyOneEven_of_pairwise ReducedPrimitiveCandidate.toBealData r (reduced_pairwisePrimitive r))
 
 /-- A reduced candidate cannot carry a concrete common prime. -/
 theorem reduced_noCommonPrime
