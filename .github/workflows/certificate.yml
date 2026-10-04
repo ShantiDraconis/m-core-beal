@@ -73,6 +73,7 @@ jobs:
             open_math/Beal_Core_Mod16.lean
             open_math/Beal_TwoFour_XY_CorePressure.lean
             open_math/Beal_TwoFour_XY_SharpCore.lean
+            open_math/Beal_TwoFour_XY_FreyArithmetic.lean
             open_math/Beal_TwoFour_Atlas_Core.lean
             open_math/Beal_OneFourEqual_CorePressure.lean
             open_math/Beal_OneFour_GenericPressure.lean
