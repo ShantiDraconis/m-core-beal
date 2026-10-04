@@ -682,6 +682,13 @@ theorem core_quartic_linear_square_sum
     {a c : Nat}
     (hac : a ≤ c) :
     (c - a) ^ 2 + (c + a) ^ 2 = 2 * (c ^ 2 + a ^ 2) := by
+  let d := c - a
+  have hc : c = d + a := by
+    dsimp [d]
+    exact (Nat.sub_add_cancel hac).symm
+  rw [hc]
+  dsimp [d]
+  simp [Nat.pow_succ, Nat.add_mul, Nat.mul_add, Nat.mul_assoc]
   omega
 
 /--
@@ -718,7 +725,7 @@ theorem reduced_xz_four_a_even_to_denes_equation
   have hid := core_quartic_linear_square_sum (Nat.le_of_lt hac_lt)
   rw [hsub, hadd, hquad] at hid
   refine ⟨u ^ 2, v ^ 2, w, ?_⟩
-  simpa [pow_mul, Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc] using hid
+  simpa [Nat.pow_mul, Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc] using hid
 
 /--
 Classical terminal producer after the quartic reduction: no positive
