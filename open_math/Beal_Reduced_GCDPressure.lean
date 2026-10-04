@@ -4,6 +4,22 @@ namespace MCore
 namespace BealEffective
 namespace OpenMath
 
+private def reducedToBealData
+    (r : ReducedPrimitiveCandidate) : BealData where
+  a := r.a
+  b := r.b
+  c := r.c
+  x := r.x
+  y := r.y
+  z := r.z
+  a_pos := r.a_pos
+  b_pos := r.b_pos
+  c_pos := r.c_pos
+  x_gt_two := r.x_reduced.1
+  y_gt_two := r.y_reduced.1
+  z_gt_two := r.z_reduced.1
+  equation := r.equation
+
 /-- Every reduced primitive candidate is pairwise primitive in the project predicate. -/
 theorem reduced_pairwisePrimitive_core
     (r : ReducedPrimitiveCandidate) :
@@ -12,18 +28,18 @@ theorem reduced_pairwisePrimitive_core
   · intro hab
     have hcommon :
         ∃ p : Nat, CommonDivisor p r.a r.b r.c :=
-      ab_pair_forces_common r.toBealData hab
+      ab_pair_forces_common reducedToBealData r hab
     exact r.no_common hcommon
   constructor
   · intro hac
     have hcommon :
         ∃ p : Nat, CommonDivisor p r.a r.b r.c :=
-      ac_pair_forces_common r.toBealData hac
+      ac_pair_forces_common reducedToBealData r hac
     exact r.no_common hcommon
   · intro hbc
     have hcommon :
         ∃ p : Nat, CommonDivisor p r.a r.b r.c :=
-      bc_pair_forces_common r.toBealData hbc
+      bc_pair_forces_common reducedToBealData r hbc
     exact r.no_common hcommon
 
 /-- Project pairwise-primitivity forces gcd(a,b)=1. -/
