@@ -1126,17 +1126,17 @@ def ReducedPrimitiveCandidate.swapAB
     exact r.no_common ⟨p, hp, hpa, hpb, hpc⟩
 
 @[simp] theorem swapAB_a (r : ReducedPrimitiveCandidate) :
-    r.swapAB.a = r.b := rfl
+    (ReducedPrimitiveCandidate.swapAB r).a = r.b := rfl
 @[simp] theorem swapAB_b (r : ReducedPrimitiveCandidate) :
-    r.swapAB.b = r.a := rfl
+    (ReducedPrimitiveCandidate.swapAB r).b = r.a := rfl
 @[simp] theorem swapAB_c (r : ReducedPrimitiveCandidate) :
-    r.swapAB.c = r.c := rfl
+    (ReducedPrimitiveCandidate.swapAB r).c = r.c := rfl
 @[simp] theorem swapAB_x (r : ReducedPrimitiveCandidate) :
-    r.swapAB.x = r.y := rfl
+    (ReducedPrimitiveCandidate.swapAB r).x = r.y := rfl
 @[simp] theorem swapAB_y (r : ReducedPrimitiveCandidate) :
-    r.swapAB.y = r.x := rfl
+    (ReducedPrimitiveCandidate.swapAB r).y = r.x := rfl
 @[simp] theorem swapAB_z (r : ReducedPrimitiveCandidate) :
-    r.swapAB.z = r.z := rfl
+    (ReducedPrimitiveCandidate.swapAB r).z = r.z := rfl
 
 /--
 Symmetric Dénes production: y=z=4 with b even reduces to the already-resolved
@@ -1150,9 +1150,9 @@ theorem reduced_yz_four_b_even_to_primitive_denes_resolved
     (hb : Even r.b) :
     Nonempty (PrimitiveDenesSolutionCore r.x) := by
   have hs :
-      Nonempty (PrimitiveDenesSolutionCore r.swapAB.y) :=
+      Nonempty (PrimitiveDenesSolutionCore (ReducedPrimitiveCandidate.swapAB r).y) :=
     reduced_xz_four_a_even_to_primitive_denes_resolved
-      r.swapAB
+      (ReducedPrimitiveCandidate.swapAB r)
       (by simpa using hy)
       (by simpa using hz)
       (by simpa using hxPrime)
@@ -1194,26 +1194,35 @@ theorem reduced_xy_four_c_even_impossible
     · exact (quartic_notEven_mod2_one r.b).mp hA.2.1
     · exact False.elim (hB.2.2 hc)
     · exact (quartic_notEven_mod2_one r.b).mp hC.2.1
-  have hA8 : r.a ^ 4 % 8 = 1 := by
+  have hAres :
+      r.a % 8 = 1 ∨ r.a % 8 = 3 ∨ r.a % 8 = 5 ∨ r.a % 8 = 7 := by
     have hpar : (r.a % 8) % 2 = 1 :=
       (Nat.mod_mod_of_dvd r.a (by decide : 2 ∣ 8)).trans haOdd
     have hlt : r.a % 8 < 8 := Nat.mod_lt r.a (by decide)
     omega
-  have hB8 : r.b ^ 4 % 8 = 1 := by
+  have hBres :
+      r.b % 8 = 1 ∨ r.b % 8 = 3 ∨ r.b % 8 = 5 ∨ r.b % 8 = 7 := by
     have hpar : (r.b % 8) % 2 = 1 :=
       (Nat.mod_mod_of_dvd r.b (by decide : 2 ∣ 8)).trans hbOdd
     have hlt : r.b % 8 < 8 := Nat.mod_lt r.b (by decide)
     omega
+  have hA8 : r.a ^ 4 % 8 = 1 := by
+    rcases hAres with h | h | h | h
+    all_goals simp [Nat.pow_mod, h]
+  have hB8 : r.b ^ 4 % 8 = 1 := by
+    rcases hBres with h | h | h | h
+    all_goals simp [Nat.pow_mod, h]
   have hC8 : r.c ^ r.z % 8 = 0 := by
-    rcases hc with ⟨k, rfl⟩
+    rcases hc with ⟨k, hck⟩
     obtain ⟨m, hm⟩ : ∃ m : Nat, r.z = m + 3 := by
       refine ⟨r.z - 3, ?_⟩
       omega
-    rw [hm]
+    rw [hck, hm]
     simp [pow_add, mul_pow, Nat.mul_mod]
   have hmod := congrArg (fun n : Nat => n % 8) r.equation
-  rw [hx, hy, Nat.add_mod, hA8, hB8, hC8] at hmod
-  omega
+  have hbad : (1 + 1) % 8 = 0 := by
+    simpa [hx, hy, Nat.add_mod, hA8, hB8, hC8] using hmod
+  decide at hbad
 
 /--
 After the two Dénes cells and the elementary c-even x=y=4 cell are removed,
