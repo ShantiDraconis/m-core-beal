@@ -12,6 +12,7 @@ private theorem pow_mod_congr_local
   | zero => simp
   | succ e ih =>
       rw [Nat.pow_succ, Nat.pow_succ, Nat.mul_mod, Nat.mul_mod, ih, h]
+      simp
 
 /-- A reduced prime exponent is not divisible by two. -/
 theorem oddPrimeExponent_not_even
@@ -20,7 +21,7 @@ theorem oddPrimeExponent_not_even
     ¬ Even p := by
   intro htwo
   rcases hp.1.2 2 htwo with h1 | hp2
-  · exact Nat.noConfusion h1
+  · cases h1
   · have hlt : 2 < 2 := by simpa [hp2] using hp.2
     exact Nat.lt_irrefl 2 hlt
 
@@ -74,7 +75,6 @@ theorem odd_fourth_mod_sixteen_core
       apply pow_mod_congr_local
       simp
     rw [hc, h]
-    decide
 
 /-- Non-even naturals are exactly the odd naturals modulo two. -/
 theorem not_even_iff_mod_two_eq_one_core
