@@ -294,6 +294,135 @@ theorem reduced_yz_four_quad_prime_supports_a
     exact dvd_mul_left_local hinner
   exact prime_dvd_pow_reflect hp hpow
 
+/-- Closed form of the recursive quotient at exponent two. -/
+private theorem coreDiffQuot_two
+    (c a : Nat) :
+    CoreDiffQuot c a 2 = c + a := by
+  simp [CoreDiffQuot, Nat.pow_succ, Nat.add_comm, Nat.add_left_comm,
+    Nat.add_assoc, Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc]
+
+/--
+No odd prime divides both c-a and c^2+a^2 on x=z=4.
+-/
+theorem reduced_xz_four_sub_quad_odd_prime_disjoint
+    (r : ReducedPrimitiveCandidate)
+    (hx : r.x = 4)
+    (hz : r.z = 4)
+    {p : Nat}
+    (hp : IsPrime p)
+    (hp2 : p ≠ 2) :
+    ¬ (p ∣ r.c - r.a ∧ p ∣ r.c ^ 2 + r.a ^ 2) := by
+  intro h
+  rcases h with ⟨hsub, hquad⟩
+  have hac_lt : r.a < r.c := by
+    have heq' : r.b ^ r.y + r.a ^ r.x = r.c ^ r.z := by
+      simpa [Nat.add_comm] using r.equation
+    exact core_right_same_exponent_gap r.b_pos (by simpa [hx, hz] using heq')
+  have hac : r.a ≤ r.c := Nat.le_of_lt hac_lt
+  have hfac2 := core_diff_factorization hac 2
+  rw [coreDiffQuot_two] at hfac2
+  have hprod : p ∣ (r.c - r.a) * (r.c + r.a) :=
+    dvd_mul_right_local hsub
+  have hdiffEq :
+      r.c ^ 2 - r.a ^ 2 = (r.c - r.a) * (r.c + r.a) := by
+    rw [← hfac2]
+    simp
+  have hdiff : p ∣ r.c ^ 2 - r.a ^ 2 := by
+    rw [hdiffEq]
+    exact hprod
+  have h2a2 : p ∣ 2 * (r.a ^ 2) := by
+    have hs : p ∣ (r.c ^ 2 + r.a ^ 2) - (r.c ^ 2 - r.a ^ 2) :=
+      Nat.dvd_sub hquad hdiff
+    have hsqle : r.a ^ 2 ≤ r.c ^ 2 := by
+      rw [← hfac2]
+      exact Nat.le_add_right _ _
+    have hid :
+        (r.c ^ 2 + r.a ^ 2) - (r.c ^ 2 - r.a ^ 2) =
+          2 * (r.a ^ 2) := by
+      omega
+    simpa [hid] using hs
+  have hpa2 : p ∣ r.a ^ 2 := by
+    rcases prime_dvd_mul_local hp h2a2 with htwo | ha2
+    · have hle : p ≤ 2 := Nat.le_of_dvd (by decide : 0 < (2 : Nat)) htwo
+      have heq : p = 2 := by omega
+      exact False.elim (hp2 heq)
+    · exact ha2
+  have hpa : p ∣ r.a := prime_dvd_pow_reflect hp hpa2
+  have hpc : p ∣ r.c := by
+    have hs : p ∣ (r.c - r.a) + r.a := Nat.dvd_add hsub hpa
+    simpa [Nat.sub_add_cancel hac] using hs
+  exact (quarticPairwise r).2.1 ⟨p, hp.1, hpa, hpc⟩
+
+/--
+No odd prime divides both c+a and c^2+a^2 on x=z=4.
+-/
+theorem reduced_xz_four_add_quad_odd_prime_disjoint
+    (r : ReducedPrimitiveCandidate)
+    (hx : r.x = 4)
+    (hz : r.z = 4)
+    {p : Nat}
+    (hp : IsPrime p)
+    (hp2 : p ≠ 2) :
+    ¬ (p ∣ r.c + r.a ∧ p ∣ r.c ^ 2 + r.a ^ 2) := by
+  intro h
+  rcases h with ⟨hadd, hquad⟩
+  have hsq : p ∣ (r.c + r.a) * (r.c + r.a) :=
+    dvd_mul_right_local hadd
+  have hsumSq :
+      (r.c + r.a) * (r.c + r.a) =
+        r.c ^ 2 + 2 * r.c * r.a + r.a ^ 2 := by
+    simp [Nat.pow_succ, Nat.add_mul, Nat.mul_add,
+      Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm,
+      Nat.add_assoc, Nat.add_comm, Nat.add_left_comm]
+  have hfull : p ∣ r.c ^ 2 + 2 * r.c * r.a + r.a ^ 2 := by
+    rw [← hsumSq]
+    exact hsq
+  have h2ca : p ∣ 2 * r.c * r.a := by
+    have hs :
+        p ∣ (r.c ^ 2 + 2 * r.c * r.a + r.a ^ 2) -
+          (r.c ^ 2 + r.a ^ 2) :=
+      Nat.dvd_sub hfull hquad
+    have hid :
+        (r.c ^ 2 + 2 * r.c * r.a + r.a ^ 2) -
+          (r.c ^ 2 + r.a ^ 2) =
+        2 * r.c * r.a := by
+      omega
+    simpa [hid] using hs
+  rcases prime_dvd_mul_local hp h2ca with h2c | hpa
+  · rcases prime_dvd_mul_local hp h2c with htwo | hpc
+    · have hle : p ≤ 2 := Nat.le_of_dvd (by decide : 0 < (2 : Nat)) htwo
+      have heq : p = 2 := by omega
+      exact hp2 heq
+    ·
+      have hpa' : p ∣ r.a := by
+        have hs : p ∣ (r.c + r.a) - r.c := Nat.dvd_sub hadd hpc
+        simpa using hs
+      exact (quarticPairwise r).2.1 ⟨p, hp.1, hpa', hpc⟩
+  ·
+    have hpc : p ∣ r.c := by
+      have hs : p ∣ (r.c + r.a) - r.a := Nat.dvd_sub hadd hpa
+      simpa using hs
+    exact (quarticPairwise r).2.1 ⟨p, hp.1, hpa, hpc⟩
+
+/--
+The three quartic blocks on x=z=4 have pairwise disjoint odd-prime support.
+-/
+theorem reduced_xz_four_three_block_odd_prime_separation
+    (r : ReducedPrimitiveCandidate)
+    (hx : r.x = 4)
+    (hz : r.z = 4)
+    {p : Nat}
+    (hp : IsPrime p)
+    (hp2 : p ≠ 2) :
+    ¬ (p ∣ r.c - r.a ∧ p ∣ r.c + r.a) ∧
+    ¬ (p ∣ r.c - r.a ∧ p ∣ r.c ^ 2 + r.a ^ 2) ∧
+    ¬ (p ∣ r.c + r.a ∧ p ∣ r.c ^ 2 + r.a ^ 2) := by
+  exact ⟨
+    reduced_xz_four_linear_odd_prime_disjoint r hx hz hp hp2,
+    reduced_xz_four_sub_quad_odd_prime_disjoint r hx hz hp hp2,
+    reduced_xz_four_add_quad_odd_prime_disjoint r hx hz hp hp2
+  ⟩
+
 #print axioms MCore.BealEffective.OpenMath.core_diff_factorization
 #print axioms MCore.BealEffective.OpenMath.core_right_same_exponent_gap
 #print axioms MCore.BealEffective.OpenMath.reduced_x_eq_z_exact_factor
@@ -307,6 +436,9 @@ theorem reduced_yz_four_quad_prime_supports_a
 #print axioms MCore.BealEffective.OpenMath.reduced_yz_four_sub_prime_supports_a
 #print axioms MCore.BealEffective.OpenMath.reduced_yz_four_add_prime_supports_a
 #print axioms MCore.BealEffective.OpenMath.reduced_yz_four_quad_prime_supports_a
+#print axioms MCore.BealEffective.OpenMath.reduced_xz_four_sub_quad_odd_prime_disjoint
+#print axioms MCore.BealEffective.OpenMath.reduced_xz_four_add_quad_odd_prime_disjoint
+#print axioms MCore.BealEffective.OpenMath.reduced_xz_four_three_block_odd_prime_separation
 
 end OpenMath
 end BealEffective
