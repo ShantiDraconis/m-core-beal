@@ -97,11 +97,8 @@ theorem oneFourEqual_x_pressure
   constructor
   · intro ha
     have hA8 : r.a ^ 4 % 8 = 0 := by
-      have : r.a ^ 4 % 16 = 0 := by
-        rcases ha with ⟨k, rfl⟩
-        simp [mul_pow, Nat.mul_mod]
-      have h := congrArg (fun n : Nat => n % 8) this
-      simpa using h
+      rcases ha with ⟨k, rfl⟩
+      simp [mul_pow, Nat.mul_mod]
     have hmod := congrArg (fun n : Nat => n % 8) r.equation
     rw [hx, hy, hz, Nat.add_mod, hA8] at hmod
     omega
@@ -149,12 +146,12 @@ theorem oneFourEqualPrimes_forces_x_pressure_or_other_orientation
     OneFourEqualResiduePressure r := by
   rcases h with hx | hy | hz
   · rcases hx with ⟨hx4, hp, hzy⟩
-    exact Or.inl ⟨r.y, hp, hx4, rfl, hzy.symm,
-      oneFourEqual_x_pressure r r.y hx4 rfl hzy.symm hp⟩
+    exact Or.inl ⟨r.y, hp, hx4, rfl, hzy,
+      oneFourEqual_x_pressure r r.y hx4 rfl hzy hp⟩
   · rcases hy with ⟨hy4, hp, hzx⟩
-    exact Or.inr (Or.inl ⟨r.x, hp, hy4, rfl, hzx.symm⟩)
+    exact Or.inr (Or.inl ⟨r.x, hp, hy4, rfl, hzx⟩)
   · rcases hz with ⟨hz4, hp, hyx⟩
-    exact Or.inr (Or.inr ⟨r.x, hp, hz4, rfl, hyx.symm⟩)
+    exact Or.inr (Or.inr ⟨r.x, hp, hz4, rfl, hyx⟩)
 
 #print axioms MCore.BealEffective.OpenMath.oneFourEqual_x_pressure
 #print axioms MCore.BealEffective.OpenMath.oneFourEqualPrimes_forces_x_pressure_or_other_orientation
