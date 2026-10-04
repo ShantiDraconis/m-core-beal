@@ -245,6 +245,7 @@ theorem xy_four_frey_discriminant_normal_form
     simp [Nat.mul_comm]
   unfold XYFreyDiscriminantBeal
   rw [hx, hy, ha8, hb8, hcz]
+  simp [Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm]
 
 private theorem xyFrey_not_dvd_other_of_gcd_one
     {q u v : Nat}
@@ -281,7 +282,8 @@ theorem xy_frey_odd_bad_prime_divides_a_or_b_or_c
     have hqTwo : q ∣ 2 := prime_dvd_pow_reflect hq hq2pow
     have hqle : q ≤ 2 :=
       Nat.le_of_dvd (by decide : 0 < (2 : Nat)) hqTwo
-    have hEq : q = 2 := by omega
+    have hqge : 2 ≤ q := Nat.succ_le_of_lt hq.1
+    have hEq : q = 2 := Nat.le_antisymm hqle hqge
     exact False.elim (hq2 hEq)
   · rcases prime_dvd_mul_local hq hrest with hA2 | hBC
     · have hAx : q ∣ r.a ^ r.x := prime_dvd_pow_reflect hq hA2
