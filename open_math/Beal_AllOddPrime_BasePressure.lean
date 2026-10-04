@@ -21,8 +21,10 @@ private theorem oddPrime_mod2_one
   have hnot : ¬ 2 ∣ p := by
     intro h2
     rcases hp.1.2 2 h2 with h1 | hp2
-    · omega
-    · omega
+    · cases h1
+    · have hlt : 2 < 2 := by
+        simpa [hp2] using hp.2
+      exact Nat.lt_irrefl 2 hlt
   have hpos : 0 < p % 2 := Nat.emod_pos_of_not_dvd hnot
   have hlt : p % 2 < 2 := Nat.mod_lt p (by decide)
   omega
