@@ -136,20 +136,17 @@ theorem coprimePairPrimePowerSplitting_core :
       have hA1lt : A1 < A := by
         have hqpgt : 1 < q ^ p := by
           have hpPos : 0 < p := Nat.lt_trans (by decide : 0 < 2) hp.2
-          have hqge2 : 2 ≤ q := Nat.succ_le_of_lt hq.1
-          have hqpowge : q ≤ q ^ p := by
-            cases p with
-            | zero => contradiction
-            | succ k =>
-                simp [Nat.pow_succ]
-                exact Nat.le_mul_of_pos_left q (Nat.pow_pos (Nat.lt_trans Nat.zero_lt_one hq.1))
-          omega
+          have hqq : q ∣ q := ⟨1, (Nat.mul_one q).symm⟩
+          have hqpow : q ∣ q ^ p := dvd_pow_of_dvd hpPos hqq
+          have hqle : q ≤ q ^ p :=
+            Nat.le_of_dvd (Nat.pow_pos (Nat.lt_trans Nat.zero_lt_one hq.1)) hqpow
+          exact Nat.lt_of_lt_of_le hq.1 hqle
         have hA1pos : 0 < A1 := by
           by_contra hzero
           have : A1 = 0 := Nat.eq_zero_of_not_pos hzero
           rw [this] at hAeq
           simp at hAeq
-          exact hA0 hAeq.symm
+          exact hA0 hAeq
         rw [hAeq]
         have hlt :
             1 * A1 < (q ^ p) * A1 :=
