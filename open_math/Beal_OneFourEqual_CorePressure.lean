@@ -4,6 +4,16 @@ namespace MCore
 namespace BealEffective
 namespace OpenMath
 
+private theorem ofep_pow_mod_congr
+    {a b m e : Nat}
+    (h : a % m = b % m) :
+    a ^ e % m = b ^ e % m := by
+  induction e with
+  | zero => simp
+  | succ e ih =>
+      rw [Nat.pow_succ, Nat.pow_succ, Nat.mul_mod, Nat.mul_mod, ih, h]
+      simp
+
 private def ofepData (r : ReducedPrimitiveCandidate) : BealData where
   a := r.a
   b := r.b
@@ -60,7 +70,11 @@ private theorem ofepOddFourth8
     (hn : n % 2 = 1) :
     n ^ 4 % 8 = 1 := by
   rcases ofepOddResidue8 hn with h | h | h | h
-  all_goals simp [Nat.pow_mod, h]
+  all_goals
+    have hc : n ^ 4 % 8 = (n % 8) ^ 4 % 8 := by
+      apply ofep_pow_mod_congr
+      simp
+    rw [hc, h]
 
 private theorem ofepEvenPow8
     {n e : Nat}
@@ -72,7 +86,7 @@ private theorem ofepEvenPow8
     refine ⟨e - 3, ?_⟩
     omega
   subst e
-  simp [pow_add, mul_pow, Nat.mul_mod]
+  simp [Nat.pow_add, Nat.mul_pow, Nat.mul_mod]
 
 /--
 Concrete residue consequences for x=4, y=z=p.
@@ -98,7 +112,7 @@ theorem oneFourEqual_x_pressure
   · intro ha
     have hA8 : r.a ^ 4 % 8 = 0 := by
       rcases ha with ⟨k, rfl⟩
-      simp [mul_pow, Nat.mul_mod]
+      simp [Nat.mul_pow, Nat.mul_mod]
     have hmod := congrArg (fun n : Nat => n % 8) r.equation
     rw [hx, hy, hz, Nat.add_mod, hA8] at hmod
     omega
@@ -146,7 +160,7 @@ theorem oneFourEqual_y_pressure
   · intro hb
     have hB8 : r.b ^ 4 % 8 = 0 := by
       rcases hb with ⟨k, rfl⟩
-      simp [mul_pow, Nat.mul_mod]
+      simp [Nat.mul_pow, Nat.mul_mod]
     have hmod := congrArg (fun n : Nat => n % 8) r.equation
     rw [hx, hy, hz, Nat.add_mod, hB8] at hmod
     omega
@@ -217,7 +231,7 @@ theorem oneFourEqual_z_pressure
   · intro hc
     have hC8 : r.c ^ 4 % 8 = 0 := by
       rcases hc with ⟨k, rfl⟩
-      simp [mul_pow, Nat.mul_mod]
+      simp [Nat.mul_pow, Nat.mul_mod]
     have hmod := congrArg (fun n : Nat => n % 8) r.equation
     rw [hx, hy, hz, Nat.add_mod, hC8] at hmod
     exact hmod
