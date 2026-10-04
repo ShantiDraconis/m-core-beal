@@ -34,7 +34,7 @@ private theorem mod2_one_repr
   refine ⟨e / 2, ?_⟩
   have h := Nat.mod_add_div e 2
   rw [he] at h
-  omega
+  simpa [Nat.add_comm] using h.symm
 
 private theorem oddResidue8
     {n : Nat}
