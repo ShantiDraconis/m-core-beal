@@ -65,6 +65,7 @@ jobs:
       - name: G5.5 build open-math forcing frontier
         run: |
           set -euo pipefail
+          lake build MCore.BealEffective.ReducedFamilies
           FILES=(
             open_math/Beal_Fermat_Mining.lean
             open_math/Beal_Reduced_ParityPressure.lean
