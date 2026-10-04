@@ -1,5 +1,5 @@
 import MCore.BealEffective.ReducedFamilies
-import «open_math».Beal_Reduced_ParityPressure
+import open_math.Beal_Reduced_ParityPressure
 
 namespace MCore
 namespace BealEffective
