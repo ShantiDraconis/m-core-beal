@@ -641,6 +641,100 @@ theorem pairSplitter_implies_tripleSplitter
 
 
 /--
+Exact UFD producer actually needed by the (4,4,p) lane: the exponent is an
+odd prime, not an arbitrary positive natural.
+-/
+def CoprimePairPrimePowerSplitting : Prop :=
+  ∀ A B b p : Nat,
+    OddPrimeExponent p →
+    Nat.gcd A B = 1 →
+    b ^ p = A * B →
+    ∃ u v : Nat, A = u ^ p ∧ B = v ^ p
+
+/--
+The prime-exponent pair splitter suffices for the quartic triple whenever the
+common exponent is an odd prime.
+-/
+theorem primePairSplitter_quartic_triple
+    (hPair : CoprimePairPrimePowerSplitting)
+    (A B C b p : Nat)
+    (hp : OddPrimeExponent p)
+    (hAB : Nat.gcd A B = 1)
+    (hAC : Nat.gcd A C = 1)
+    (hBC : Nat.gcd B C = 1)
+    (hpow : b ^ p = A * (B * C)) :
+    ∃ u v w : Nat,
+      A = u ^ p ∧
+      B = v ^ p ∧
+      C = w ^ p := by
+  have hA_BC : Nat.gcd A (B * C) = 1 :=
+    gcd_mul_eq_one_of_pairwise_gcd hAB hAC
+  rcases hPair A (B * C) b p hp hA_BC hpow with
+    ⟨u, t, hA, hBCpow⟩
+  rcases hPair B C t p hp hBC hBCpow with
+    ⟨v, w, hB, hC⟩
+  exact ⟨u, v, w, hA, hB, hC⟩
+
+/--
+The exact quartic identity used to reach the Dénes equation.
+-/
+theorem core_quartic_linear_square_sum
+    {a c : Nat}
+    (hac : a ≤ c) :
+    (c - a) ^ 2 + (c + a) ^ 2 = 2 * (c ^ 2 + a ^ 2) := by
+  omega
+
+/--
+Prime-exponent UFD splitting turns the a-even x=z=4 branch into the concrete
+Dénes equation (u^2)^p + (v^2)^p = 2*w^p.
+-/
+theorem reduced_xz_four_a_even_to_denes_equation
+    (hPair : CoprimePairPrimePowerSplitting)
+    (r : ReducedPrimitiveCandidate)
+    (hx : r.x = 4)
+    (hz : r.z = 4)
+    (hy : OddPrimeExponent r.y)
+    (ha : Even r.a) :
+    ∃ X Y Z : Nat,
+      X ^ r.y + Y ^ r.y = 2 * Z ^ r.y := by
+  have P := reduced_xz_four_a_even_core_packet r hx hz ha
+  rcases primePairSplitter_quartic_triple
+      hPair
+      (r.c - r.a)
+      (r.c + r.a)
+      (r.c ^ 2 + r.a ^ 2)
+      r.b
+      r.y
+      hy
+      P.blocksCoprime.1
+      P.blocksCoprime.2.1
+      P.blocksCoprime.2.2
+      P.factorization with
+    ⟨u, v, w, hsub, hadd, hquad⟩
+  have hac_lt : r.a < r.c := by
+    have heq' : r.b ^ r.y + r.a ^ r.x = r.c ^ r.z := by
+      simpa [Nat.add_comm] using r.equation
+    exact core_right_same_exponent_gap r.b_pos (by simpa [hx, hz] using heq')
+  have hid := core_quartic_linear_square_sum (Nat.le_of_lt hac_lt)
+  rw [hsub, hadd, hquad] at hid
+  refine ⟨u ^ 2, v ^ 2, w, ?_⟩
+  simpa [pow_mul, Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc] using hid
+
+/--
+Classical terminal producer after the quartic reduction: no positive
+nontrivial solution of the Dénes equation at an odd prime exponent.
+This statement is independent of Beal.
+-/
+def DenesOddPrimeExclusion : Prop :=
+  ∀ p X Y Z : Nat,
+    OddPrimeExponent p →
+    0 < X →
+    0 < Y →
+    0 < Z →
+    X ^ p + Y ^ p = 2 * Z ^ p →
+    False
+
+/--
 The a-even x=z=4 branch reduces exactly to the generic coprime power splitter.
 No Beal conclusion appears in this producer.
 -/
@@ -689,6 +783,9 @@ theorem reduced_xz_four_a_even_power_forms_of_splitter
 #print axioms MCore.BealEffective.OpenMath.reduced_xz_four_a_even_block_gcd_packet
 #print axioms MCore.BealEffective.OpenMath.reduced_xz_four_a_even_core_packet
 #print axioms MCore.BealEffective.OpenMath.pairSplitter_implies_tripleSplitter
+#print axioms MCore.BealEffective.OpenMath.primePairSplitter_quartic_triple
+#print axioms MCore.BealEffective.OpenMath.core_quartic_linear_square_sum
+#print axioms MCore.BealEffective.OpenMath.reduced_xz_four_a_even_to_denes_equation
 #print axioms MCore.BealEffective.OpenMath.reduced_xz_four_a_even_power_forms_of_splitter
 
 end OpenMath
