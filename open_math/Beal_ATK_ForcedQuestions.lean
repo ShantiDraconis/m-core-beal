@@ -72,9 +72,13 @@ theorem ATK_no_reduced_closes_exact_remaining
     (hNoReduced : ∀ r : ReducedPrimitiveCandidate, False) :
     ExactRemainingObligation := by
   intro d
-  by_contra hFail
-  rcases failed_lowerBound_to_reduced d hFail with ⟨r⟩
-  exact hNoReduced r
+  rcases Nat.lt_or_ge 1 (gcd3 d) with hgood | hle
+  · exact hgood
+  · have hFail : ¬ 1 < gcd3 d := by
+      intro hlt
+      exact (Nat.not_le_of_gt hlt) hle
+    rcases failed_lowerBound_to_reduced d hFail with ⟨r⟩
+    exact False.elim (hNoReduced r)
 
 /-- Full exact reduction of Beal to the seven ATK answers. -/
 theorem ATK_all_answers_close_beal
