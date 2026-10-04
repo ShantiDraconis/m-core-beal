@@ -202,8 +202,90 @@ def xyFourPrimeFreyArithmeticPacket
   rhsNotEven := xyFrey_rhs_not_even r hx hy
   discriminant := xy_frey_discriminant_rewrite r.equation
 
+private theorem xyFrey_not_dvd_other_of_gcd_one
+    {q u v : Nat}
+    (hq : IsPrime q)
+    (hu : q ∣ u)
+    (hG : Nat.gcd u v = 1) :
+    ¬ q ∣ v := by
+  intro hv
+  have hqg : q ∣ Nat.gcd u v := Nat.dvd_gcd hu hv
+  rw [hG] at hqg
+  have hle : q ≤ 1 := Nat.le_of_dvd (by decide : 0 < (1 : Nat)) hqg
+  exact (Nat.not_le_of_gt hq.1) hle
+
+/--
+Every odd prime dividing the raw Frey discriminant support divides at least
+one of the three Beal bases.
+-/
+theorem xy_frey_odd_bad_prime_divides_a_or_b_or_c
+    (r : ReducedPrimitiveCandidate)
+    {q : Nat}
+    (hq : IsPrime q)
+    (hq2 : q ≠ 2)
+    (hDelta : q ∣ XYFreyDiscriminantBeal
+      r.a r.b r.c r.x r.y r.z) :
+    q ∣ r.a ∨ q ∣ r.b ∨ q ∣ r.c := by
+  have hfac :
+      XYFreyDiscriminantBeal r.a r.b r.c r.x r.y r.z =
+        16 * ((r.a ^ r.x) ^ 2 *
+          ((r.b ^ r.y) ^ 2 * (r.c ^ r.z) ^ 2)) := by
+    simp [XYFreyDiscriminantBeal, Nat.mul_assoc]
+  rw [hfac] at hDelta
+  rcases prime_dvd_mul_local hq hDelta with h16 | hrest
+  · have hq2pow : q ∣ 2 ^ 4 := by simpa using h16
+    have hqTwo : q ∣ 2 := prime_dvd_pow_reflect hq hq2pow
+    rcases hq.2 2 hqTwo with h1 | hEq
+    · cases h1
+    · exact False.elim (hq2 hEq)
+  · rcases prime_dvd_mul_local hq hrest with hA2 | hBC
+    · have hAx : q ∣ r.a ^ r.x := prime_dvd_pow_reflect hq hA2
+      exact Or.inl (prime_dvd_pow_reflect hq hAx)
+    · rcases prime_dvd_mul_local hq hBC with hB2 | hC2
+      · have hBy : q ∣ r.b ^ r.y := prime_dvd_pow_reflect hq hB2
+        exact Or.inr (Or.inl (prime_dvd_pow_reflect hq hBy))
+      · have hCz : q ∣ r.c ^ r.z := prime_dvd_pow_reflect hq hC2
+        exact Or.inr (Or.inr (prime_dvd_pow_reflect hq hCz))
+
+/--
+Because the reduced candidate is pairwise primitive, every odd bad prime of
+the Frey discriminant belongs to exactly one base support.
+-/
+theorem xy_frey_odd_bad_prime_exactly_one_base
+    (r : ReducedPrimitiveCandidate)
+    {q : Nat}
+    (hq : IsPrime q)
+    (hq2 : q ≠ 2)
+    (hDelta : q ∣ XYFreyDiscriminantBeal
+      r.a r.b r.c r.x r.y r.z) :
+    (q ∣ r.a ∧ ¬ q ∣ r.b ∧ ¬ q ∣ r.c) ∨
+    (q ∣ r.b ∧ ¬ q ∣ r.a ∧ ¬ q ∣ r.c) ∨
+    (q ∣ r.c ∧ ¬ q ∣ r.a ∧ ¬ q ∣ r.b) := by
+  rcases xy_frey_odd_bad_prime_divides_a_or_b_or_c r hq hq2 hDelta with
+    ha | hb | hc
+  ·
+    have hnb := xyFrey_not_dvd_other_of_gcd_one hq ha (xyFrey_gcd_ab r)
+    have hnc := xyFrey_not_dvd_other_of_gcd_one hq ha (xyFrey_gcd_ac r)
+    exact Or.inl ⟨ha, hnb, hnc⟩
+  ·
+    have hna : ¬ q ∣ r.a := by
+      intro ha
+      exact (xyFrey_not_dvd_other_of_gcd_one hq ha (xyFrey_gcd_ab r)) hb
+    have hnc := xyFrey_not_dvd_other_of_gcd_one hq hb (xyFrey_gcd_bc r)
+    exact Or.inr (Or.inl ⟨hb, hna, hnc⟩)
+  ·
+    have hna : ¬ q ∣ r.a := by
+      intro ha
+      exact (xyFrey_not_dvd_other_of_gcd_one hq ha (xyFrey_gcd_ac r)) hc
+    have hnb : ¬ q ∣ r.b := by
+      intro hb
+      exact (xyFrey_not_dvd_other_of_gcd_one hq hb (xyFrey_gcd_bc r)) hc
+    exact Or.inr (Or.inr ⟨hc, hna, hnb⟩)
+
 #print axioms MCore.BealEffective.OpenMath.xy_frey_discriminant_rewrite
 #print axioms MCore.BealEffective.OpenMath.xyFourPrimeFreyArithmeticPacket
+#print axioms MCore.BealEffective.OpenMath.xy_frey_odd_bad_prime_divides_a_or_b_or_c
+#print axioms MCore.BealEffective.OpenMath.xy_frey_odd_bad_prime_exactly_one_base
 
 end OpenMath
 end BealEffective
