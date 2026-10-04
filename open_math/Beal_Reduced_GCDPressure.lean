@@ -55,7 +55,7 @@ theorem reduced_gcd_ab_eq_one
     subst d
     rcases hda with ⟨k, hk⟩
     simp at hk
-    exact (Nat.ne_of_gt r.a_pos) hk.symm
+    exact (Nat.ne_of_gt r.a_pos) hk
   have hdpos : 0 < d := Nat.pos_of_ne_zero hd0
   have hdgt : 1 < d := by
     have hle : 1 ≤ d := Nat.succ_le_of_lt hdpos
@@ -75,7 +75,7 @@ theorem reduced_gcd_ac_eq_one
     subst d
     rcases hda with ⟨k, hk⟩
     simp at hk
-    exact (Nat.ne_of_gt r.a_pos) hk.symm
+    exact (Nat.ne_of_gt r.a_pos) hk
   have hdpos : 0 < d := Nat.pos_of_ne_zero hd0
   have hdgt : 1 < d := by
     have hle : 1 ≤ d := Nat.succ_le_of_lt hdpos
@@ -95,7 +95,7 @@ theorem reduced_gcd_bc_eq_one
     subst d
     rcases hdb with ⟨k, hk⟩
     simp at hk
-    exact (Nat.ne_of_gt r.b_pos) hk.symm
+    exact (Nat.ne_of_gt r.b_pos) hk
   have hdpos : 0 < d := Nat.pos_of_ne_zero hd0
   have hdgt : 1 < d := by
     have hle : 1 ≤ d := Nat.succ_le_of_lt hdpos
