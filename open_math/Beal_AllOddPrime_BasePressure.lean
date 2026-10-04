@@ -4,6 +4,16 @@ namespace MCore
 namespace BealEffective
 namespace OpenMath
 
+private theorem aobp_pow_mod_congr
+    {a b m e : Nat}
+    (h : a % m = b % m) :
+    a ^ e % m = b ^ e % m := by
+  induction e with
+  | zero => simp
+  | succ e ih =>
+      rw [Nat.pow_succ, Nat.pow_succ, Nat.mul_mod, Nat.mul_mod, ih, h]
+      simp
+
 private theorem oddPrime_mod2_one
     {p : Nat}
     (hp : OddPrimeExponent p) :
@@ -40,7 +50,11 @@ private theorem oddSquare_mod8
     (hn : n % 2 = 1) :
     n ^ 2 % 8 = 1 := by
   rcases oddResidue8 hn with h | h | h | h
-  all_goals simp [Nat.pow_mod, h]
+  all_goals
+    have hc : n ^ 2 % 8 = (n % 8) ^ 2 % 8 := by
+      apply aobp_pow_mod_congr
+      simp
+    rw [hc, h]
 
 /--
 For odd n and odd exponent e, n^e has the same residue as n modulo 8.
@@ -53,14 +67,12 @@ theorem oddBase_oddExponent_pow_mod8_eq_base
     n ^ e % 8 = n % 8 := by
   rcases mod2_one_repr he with ⟨k, rfl⟩
   have hs : n ^ 2 % 8 = 1 := oddSquare_mod8 hn
-  calc
-    n ^ (2 * k + 1) % 8
-        = ((n ^ 2) ^ k * n) % 8 := by
-            simp [pow_add, pow_mul]
-    _ = (((n ^ 2) % 8) ^ k % 8 * (n % 8)) % 8 := by
-            simp [Nat.pow_mod, Nat.mul_mod]
-    _ = n % 8 := by
-            simp [hs]
+  have hkpow : (n ^ 2) ^ k % 8 = 1 := by
+    have hc := aobp_pow_mod_congr
+      (a := n ^ 2) (b := 1) (m := 8) (e := k) hs
+    simpa using hc
+  rw [Nat.pow_add, Nat.pow_mul, Nat.mul_mod, hkpow]
+  simp
 
 private theorem notEven_mod2_one
     (n : Nat) :
@@ -114,7 +126,7 @@ private theorem evenPow8
     refine ⟨e - 3, ?_⟩
     omega
   subst e
-  simp [pow_add, mul_pow, Nat.mul_mod]
+  simp [Nat.pow_add, Nat.mul_pow, Nat.mul_mod]
 
 /--
 Base-level mod-8 pressure for a candidate whose three exponents are odd primes.
