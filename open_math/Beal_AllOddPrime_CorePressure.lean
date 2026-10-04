@@ -104,39 +104,9 @@ theorem threeDistinctOddPrimes_forces_pressure
     ThreeDistinctOddPrimePressure r :=
   ⟨h, reduced_forces_mod8_parity_pressure r⟩
 
-/--
-After the two classical equal-exponent families, every mixed family now has a
-kernel-produced arithmetic pressure object.
--/
-def MixedArithmeticPressure (r : ReducedPrimitiveCandidate) : Prop :=
-  TwoFourPrime r.x r.y r.z ∨
-  OneFourEqualPrimes r.x r.y r.z ∨
-  OneFourDistinctPrimes r.x r.y r.z ∨
-  TwoEqualOddPrimePressure r ∨
-  ThreeDistinctOddPrimePressure r
-
-theorem mixed_signature_forces_arithmetic_pressure
-    (r : ReducedPrimitiveCandidate)
-    (h :
-      TwoFourPrime r.x r.y r.z ∨
-      OneFourEqualPrimes r.x r.y r.z ∨
-      OneFourDistinctPrimes r.x r.y r.z ∨
-      TwoEqualOddPrimes r.x r.y r.z ∨
-      ThreeDistinctOddPrimes r.x r.y r.z) :
-    MixedArithmeticPressure r := by
-  rcases h with h24 | h4e | h4d | h2e | h3d
-  · exact Or.inl h24
-  · exact Or.inr (Or.inl h4e)
-  · exact Or.inr (Or.inr (Or.inl h4d))
-  · exact Or.inr (Or.inr (Or.inr (Or.inl
-      (twoEqualOddPrimes_forces_pressure r h2e))))
-  · exact Or.inr (Or.inr (Or.inr (Or.inr
-      (threeDistinctOddPrimes_forces_pressure r h3d))))
-
 #print axioms MCore.BealEffective.OpenMath.reduced_forces_mod8_parity_pressure
 #print axioms MCore.BealEffective.OpenMath.twoEqualOddPrimes_forces_pressure
 #print axioms MCore.BealEffective.OpenMath.threeDistinctOddPrimes_forces_pressure
-#print axioms MCore.BealEffective.OpenMath.mixed_signature_forces_arithmetic_pressure
 
 end OpenMath
 end BealEffective
