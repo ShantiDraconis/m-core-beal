@@ -187,9 +187,23 @@ private theorem xys_exp_mod4_repr
   rw [hr] at h
   exact h.symm
 
+private theorem xys_odd_pow_reduce_mod4
+    {u e r : Nat}
+    (huOdd : u % 2 = 1)
+    (hr : e % 4 = r) :
+    u ^ e % 16 = u ^ r % 16 := by
+  rcases xys_exp_mod4_repr hr with ⟨k, hk⟩
+  have h4 : u ^ 4 % 16 = 1 := xys_odd_fourth16 huOdd
+  have hkpow : (u ^ 4) ^ k % 16 = 1 := by
+    have hc := xys_pow_mod_congr
+      (a := u ^ 4) (b := 1) (m := 16) (e := k) h4
+    simpa using hc
+  rw [hk, Nat.pow_add, Nat.pow_mul, Nat.mul_mod, hkpow]
+  simp
+
 /--
 Odd base + odd exponent + power 1 mod16 forces base 1 mod16.
-The proof audits the eight odd residues and the two odd exponent classes mod 4.
+The exponent is reduced modulo 4 using u^4 = 1 for odd units mod 16.
 -/
 theorem odd_pow_mod16_eq_one_forces_base_one_core
     {u e : Nat}
@@ -198,26 +212,21 @@ theorem odd_pow_mod16_eq_one_forces_base_one_core
     (hpow : u ^ e % 16 = 1) :
     u % 16 = 1 := by
   have he4 := xys_odd_exp_mod4_split heOdd
-  have hu16 := xys_odd_residue16 huOdd
   rcases he4 with he1 | he3
-  · rcases xys_exp_mod4_repr he1 with ⟨k, hk⟩
+  · have hred := xys_odd_pow_reduce_mod4 huOdd he1
+    rw [hred] at hpow
+    simpa using hpow
+  · have hred := xys_odd_pow_reduce_mod4 huOdd he3
+    rw [hred] at hpow
+    have hu16 := xys_odd_residue16 huOdd
     rcases hu16 with h | h | h | h | h | h | h | h
     · exact h
     all_goals
-      have hc : u ^ e % 16 = (u % 16) ^ e % 16 := by
+      have hc : u ^ 3 % 16 = (u % 16) ^ 3 % 16 := by
         apply xys_pow_mod_congr
         simp
-      rw [hc, hk, h] at hpow
-      simp [Nat.pow_add, Nat.pow_mul, Nat.mul_mod] at hpow
-  · rcases xys_exp_mod4_repr he3 with ⟨k, hk⟩
-    rcases hu16 with h | h | h | h | h | h | h | h
-    · exact h
-    all_goals
-      have hc : u ^ e % 16 = (u % 16) ^ e % 16 := by
-        apply xys_pow_mod_congr
-        simp
-      rw [hc, hk, h] at hpow
-      simp [Nat.pow_add, Nat.pow_mul, Nat.mul_mod] at hpow
+      rw [hc, h] at hpow
+      simp at hpow
 
 /--
 Sharp ORBIT-A residue: x=y=4 and z an odd prime force c = 1 modulo 16.
