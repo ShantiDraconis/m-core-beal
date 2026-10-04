@@ -1177,6 +1177,16 @@ theorem reduced_yz_four_b_even_eliminated_of_denes
 /--
 Elementary core-only impossibility: if x=y=4, c cannot be the unique even base.
 -/
+private theorem quartic_pow_mod_congr_local
+    {a b m e : Nat}
+    (h : a % m = b % m) :
+    a ^ e % m = b ^ e % m := by
+  induction e with
+  | zero => simp
+  | succ e ih =>
+      rw [Nat.pow_succ, Nat.pow_succ, Nat.mul_mod, Nat.mul_mod, ih, h]
+      simp
+
 private theorem quartic_odd_fourth_mod8
     {n : Nat}
     (hn : n % 2 = 1) :
@@ -1187,13 +1197,12 @@ private theorem quartic_odd_fourth_mod8
       (Nat.mod_mod_of_dvd n (by decide : 2 ∣ 8)).trans hn
     have hlt : n % 8 < 8 := Nat.mod_lt n (by decide)
     omega
-  have hdecomp : n = n % 8 + 8 * (n / 8) := by
-    exact (Nat.mod_add_div n 8).symm
   rcases hres with h | h | h | h
   all_goals
-    rw [hdecomp, h]
-    simp [Nat.pow_succ, Nat.add_mul, Nat.mul_add,
-      Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm, Nat.mul_mod]
+    have hc : n ^ 4 % 8 = (n % 8) ^ 4 % 8 := by
+      apply quartic_pow_mod_congr_local
+      simp
+    rw [hc, h]
 
 private theorem quartic_even_pow_mod8
     {n e : Nat}
