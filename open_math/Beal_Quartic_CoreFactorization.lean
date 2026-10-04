@@ -1224,10 +1224,12 @@ def TwoFourResidualOrbit (r : ReducedPrimitiveCandidate) : Prop :=
   -- Orbit A: x=y=4 and the unique even base is on the left.
   (r.x = 4 ∧ r.y = 4 ∧ OddPrimeExponent r.z ∧
     (Even r.a ∨ Even r.b)) ∨
-  -- Orbit B: x=z=4 with b even, symmetric to y=z=4 with a even.
-  (r.x = 4 ∧ r.z = 4 ∧ OddPrimeExponent r.y ∧ Even r.b) ∨
-  -- Orbit C: x=z=4 with c even, symmetric to y=z=4 with c even.
-  (r.x = 4 ∧ r.z = 4 ∧ OddPrimeExponent r.y ∧ Even r.c)
+  -- Orbit B: the prime exponent is on the left summand; the other left base is even.
+  ((r.x = 4 ∧ r.z = 4 ∧ OddPrimeExponent r.y ∧ Even r.b) ∨
+   (r.y = 4 ∧ r.z = 4 ∧ OddPrimeExponent r.x ∧ Even r.a)) ∨
+  -- Orbit C: z=4 and c is the unique even base.
+  ((r.x = 4 ∧ r.z = 4 ∧ OddPrimeExponent r.y ∧ Even r.c) ∨
+   (r.y = 4 ∧ r.z = 4 ∧ OddPrimeExponent r.x ∧ Even r.c))
 
 /--
 Conditional exact compression of Q3: Darmon–Merel reduces all of
@@ -1251,27 +1253,15 @@ theorem twoFourPrime_reduces_to_three_orbits_of_denes
     · exact False.elim
         (reduced_xz_four_a_even_eliminated_of_denes
           hDenes r hx hz hyPrime hA.1)
-    · exact Or.inr (Or.inl ⟨hx, hz, hyPrime, hB.2.1⟩)
-    · exact Or.inr (Or.inr ⟨hx, hz, hyPrime, hC.2.2⟩)
+    · exact Or.inr (Or.inl (Or.inl ⟨hx, hz, hyPrime, hB.2.1⟩))
+    · exact Or.inr (Or.inr (Or.inl ⟨hx, hz, hyPrime, hC.2.2⟩))
   · rcases hyz with ⟨hy, hz, hxPrime⟩
     rcases hE with hA | hB | hC
-    ·
-      let s := r.swapAB
-      have hsx : s.x = 4 := by simpa [s] using hy
-      have hsz : s.z = 4 := by simpa [s] using hz
-      have hsp : OddPrimeExponent s.y := by simpa [s] using hxPrime
-      have hsb : Even s.b := by simpa [s] using hA.1
-      exact Or.inr (Or.inl ⟨hsx, hsz, hsp, hsb⟩)
+    · exact Or.inr (Or.inl (Or.inr ⟨hy, hz, hxPrime, hA.1⟩))
     · exact False.elim
         (reduced_yz_four_b_even_eliminated_of_denes
           hDenes r hy hz hxPrime hB.2.1)
-    ·
-      let s := r.swapAB
-      have hsx : s.x = 4 := by simpa [s] using hy
-      have hsz : s.z = 4 := by simpa [s] using hz
-      have hsp : OddPrimeExponent s.y := by simpa [s] using hxPrime
-      have hsc : Even s.c := by simpa [s] using hC.2.2
-      exact Or.inr (Or.inr ⟨hsx, hsz, hsp, hsc⟩)
+    · exact Or.inr (Or.inr (Or.inr ⟨hy, hz, hxPrime, hC.2.2⟩))
 
 #print axioms MCore.BealEffective.OpenMath.core_diff_factorization
 #print axioms MCore.BealEffective.OpenMath.core_right_same_exponent_gap
