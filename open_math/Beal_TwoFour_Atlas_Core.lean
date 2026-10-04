@@ -421,7 +421,7 @@ private theorem even_cube_mod16_zero_forces_mod4_zero
         apply atlas_pow_mod_congr
         simp
       rw [hc, h] at h3
-      norm_num at h3
+      simp at h3
 
 /--
 Orbit B split: either the odd prime exponent is 3, in which case the even base
