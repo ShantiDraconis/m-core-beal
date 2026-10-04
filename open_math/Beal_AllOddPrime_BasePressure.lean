@@ -195,15 +195,15 @@ theorem twoEqualOddPrimes_forces_base_pressure
     (h : TwoEqualOddPrimes r.x r.y r.z) :
     AllOddPrimeBasePressure r := by
   rcases h with hxy | hxz | hyz
-  · exact allOddPrime_forces_base_pressure r hxy.1
-      (hxy.1 |> fun hp => by simpa [hxy.2.1] using hp)
-      hxy.2.2.1
-  · exact allOddPrime_forces_base_pressure r hxz.1
-      hxz.2.2.1
-      (hxz.1 |> fun hp => by simpa [hxz.2.1] using hp)
-  · exact allOddPrime_forces_base_pressure r hyz.2.2.1
-      hyz.1
-      (hyz.1 |> fun hp => by simpa [hyz.2.1] using hp)
+  · have hyPrime : OddPrimeExponent r.y := by
+      simpa [hxy.2.1] using hxy.1
+    exact allOddPrime_forces_base_pressure r hxy.1 hyPrime hxy.2.2.1
+  · have hzPrime : OddPrimeExponent r.z := by
+      simpa [hxz.2.1] using hxz.1
+    exact allOddPrime_forces_base_pressure r hxz.1 hxz.2.2.1 hzPrime
+  · have hzPrime : OddPrimeExponent r.z := by
+      simpa [hyz.2.1] using hyz.1
+    exact allOddPrime_forces_base_pressure r hyz.2.2.1 hyz.1 hzPrime
 
 /-- (p,q,r) with all three primes distinct forces the same base-level packet. -/
 theorem threeDistinctOddPrimes_forces_base_pressure
