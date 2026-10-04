@@ -57,35 +57,59 @@ private theorem xyFreyExactlyOneEven
 private theorem xyFrey_gcd_ab
     (r : ReducedPrimitiveCandidate) :
     Nat.gcd r.a r.b = 1 := by
-  by_contra hne
-  have hpos : 0 < Nat.gcd r.a r.b :=
-    Nat.gcd_pos_of_pos_left r.b r.a_pos
-  have hgt : 1 < Nat.gcd r.a r.b := by omega
-  exact (xyFreyPairwise r).1
-    ⟨Nat.gcd r.a r.b, hgt,
-      Nat.gcd_dvd_left _ _, Nat.gcd_dvd_right _ _⟩
+  apply (Nat.gcd_eq_one_iff).2
+  intro d hda hdb
+  by_cases hd1 : d = 1
+  · exact hd1
+  have hd0 : d ≠ 0 := by
+    intro hd0
+    subst d
+    rcases hda with ⟨k, hk⟩
+    simp at hk
+    exact (Nat.ne_of_gt r.a_pos) hk
+  have hdpos : 0 < d := Nat.pos_of_ne_zero hd0
+  have hdgt : 1 < d := by
+    have hle : 1 ≤ d := Nat.succ_le_of_lt hdpos
+    exact Nat.lt_of_le_of_ne hle (Ne.symm hd1)
+  exact False.elim ((xyFreyPairwise r).1 ⟨d, hdgt, hda, hdb⟩)
 
 private theorem xyFrey_gcd_ac
     (r : ReducedPrimitiveCandidate) :
     Nat.gcd r.a r.c = 1 := by
-  by_contra hne
-  have hpos : 0 < Nat.gcd r.a r.c :=
-    Nat.gcd_pos_of_pos_left r.c r.a_pos
-  have hgt : 1 < Nat.gcd r.a r.c := by omega
-  exact (xyFreyPairwise r).2.1
-    ⟨Nat.gcd r.a r.c, hgt,
-      Nat.gcd_dvd_left _ _, Nat.gcd_dvd_right _ _⟩
+  apply (Nat.gcd_eq_one_iff).2
+  intro d hda hdc
+  by_cases hd1 : d = 1
+  · exact hd1
+  have hd0 : d ≠ 0 := by
+    intro hd0
+    subst d
+    rcases hda with ⟨k, hk⟩
+    simp at hk
+    exact (Nat.ne_of_gt r.a_pos) hk
+  have hdpos : 0 < d := Nat.pos_of_ne_zero hd0
+  have hdgt : 1 < d := by
+    have hle : 1 ≤ d := Nat.succ_le_of_lt hdpos
+    exact Nat.lt_of_le_of_ne hle (Ne.symm hd1)
+  exact False.elim ((xyFreyPairwise r).2.1 ⟨d, hdgt, hda, hdc⟩)
 
 private theorem xyFrey_gcd_bc
     (r : ReducedPrimitiveCandidate) :
     Nat.gcd r.b r.c = 1 := by
-  by_contra hne
-  have hpos : 0 < Nat.gcd r.b r.c :=
-    Nat.gcd_pos_of_pos_left r.c r.b_pos
-  have hgt : 1 < Nat.gcd r.b r.c := by omega
-  exact (xyFreyPairwise r).2.2
-    ⟨Nat.gcd r.b r.c, hgt,
-      Nat.gcd_dvd_left _ _, Nat.gcd_dvd_right _ _⟩
+  apply (Nat.gcd_eq_one_iff).2
+  intro d hdb hdc
+  by_cases hd1 : d = 1
+  · exact hd1
+  have hd0 : d ≠ 0 := by
+    intro hd0
+    subst d
+    rcases hdb with ⟨k, hk⟩
+    simp at hk
+    exact (Nat.ne_of_gt r.b_pos) hk
+  have hdpos : 0 < d := Nat.pos_of_ne_zero hd0
+  have hdgt : 1 < d := by
+    have hle : 1 ≤ d := Nat.succ_le_of_lt hdpos
+    exact Nat.lt_of_le_of_ne hle (Ne.symm hd1)
+  exact False.elim ((xyFreyPairwise r).2.2 ⟨d, hdgt, hdb, hdc⟩)
 
 /--
 Exact arithmetic packet supplied to the modular/Frey route for orbit A.
@@ -249,9 +273,10 @@ theorem xy_frey_odd_bad_prime_divides_a_or_b_or_c
   rcases prime_dvd_mul_local hq hDelta with h16 | hrest
   · have hq2pow : q ∣ 2 ^ 4 := by simpa using h16
     have hqTwo : q ∣ 2 := prime_dvd_pow_reflect hq hq2pow
-    rcases hq.2 2 hqTwo with h1 | hEq
-    · cases h1
-    · exact False.elim (hq2 hEq)
+    have hqle : q ≤ 2 :=
+      Nat.le_of_dvd (by decide : 0 < (2 : Nat)) hqTwo
+    have hEq : q = 2 := by omega
+    exact False.elim (hq2 hEq)
   · rcases prime_dvd_mul_local hq hrest with hA2 | hBC
     · have hAx : q ∣ r.a ^ r.x := prime_dvd_pow_reflect hq hA2
       exact Or.inl (prime_dvd_pow_reflect hq hAx)
