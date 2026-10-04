@@ -86,8 +86,9 @@ theorem coreDiffQuot_four
     (c a : Nat) :
     CoreDiffQuot c a 4 =
       (c + a) * (c ^ 2 + a ^ 2) := by
-  simp [CoreDiffQuot, Nat.pow_succ]
-  ac_rfl
+  simp [CoreDiffQuot, Nat.pow_succ, Nat.add_mul, Nat.mul_add,
+    Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm,
+    Nat.add_assoc, Nat.add_comm, Nat.add_left_comm]
 
 /--
 Exact quartic factorization in the x=z=4 orientation:
