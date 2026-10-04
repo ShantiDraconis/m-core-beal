@@ -962,8 +962,13 @@ private theorem pos_of_pow_pos_local
     0 < u := by
   cases u with
   | zero =>
-      have hp0 : p ≠ 0 := Nat.ne_of_gt hp
-      simp [hp0] at h
+      cases p with
+      | zero =>
+          exact False.elim ((Nat.not_lt_zero 0) hp)
+      | succ p =>
+          have h00 : 0 < 0 := by
+            simpa using h
+          exact False.elim (Nat.lt_irrefl 0 h00)
   | succ n =>
       exact Nat.succ_pos n
 
