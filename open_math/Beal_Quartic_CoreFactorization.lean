@@ -1291,6 +1291,143 @@ theorem twoFourPrime_reduces_to_three_orbits_of_denes
           hDenes r hy hz hxPrime hB.2.1)
     · exact Or.inr (Or.inr (Or.inr ⟨hy, hz, hxPrime, hC.2.2⟩))
 
+private theorem quartic_oddPrime_mod2_one
+    {p : Nat}
+    (hp : OddPrimeExponent p) :
+    p % 2 = 1 := by
+  have hnot : ¬ 2 ∣ p := by
+    intro h2
+    rcases hp.1.2 2 h2 with h1 | h2eq
+    · omega
+    · omega
+  have hpos : 0 < p % 2 := Nat.emod_pos_of_not_dvd hnot
+  have hlt : p % 2 < 2 := Nat.mod_lt p (by decide)
+  omega
+
+private theorem quartic_mod2_one_repr
+    {e : Nat}
+    (he : e % 2 = 1) :
+    ∃ k : Nat, e = 2 * k + 1 := by
+  refine ⟨e / 2, ?_⟩
+  have h := Nat.mod_add_div e 2
+  rw [he] at h
+  omega
+
+private theorem quartic_odd_square_mod8
+    {n : Nat}
+    (hn : n % 2 = 1) :
+    n ^ 2 % 8 = 1 := by
+  have hres :
+      n % 8 = 1 ∨ n % 8 = 3 ∨ n % 8 = 5 ∨ n % 8 = 7 := by
+    have hpar : (n % 8) % 2 = 1 :=
+      (Nat.mod_mod_of_dvd n (by decide : 2 ∣ 8)).trans hn
+    have hlt : n % 8 < 8 := Nat.mod_lt n (by decide)
+    omega
+  rcases hres with h | h | h | h
+  all_goals
+    have hc : n ^ 2 % 8 = (n % 8) ^ 2 % 8 := by
+      apply quartic_pow_mod_congr_local
+      simp
+    rw [hc, h]
+
+private theorem quartic_odd_pow_mod8_eq_base
+    {n e : Nat}
+    (hn : n % 2 = 1)
+    (he : e % 2 = 1) :
+    n ^ e % 8 = n % 8 := by
+  rcases quartic_mod2_one_repr he with ⟨k, hk⟩
+  rw [hk]
+  have hs : n ^ 2 % 8 = 1 := quartic_odd_square_mod8 hn
+  calc
+    n ^ (2 * k + 1) % 8
+        = ((n ^ 2) ^ k * n) % 8 := by
+            simp [Nat.pow_add, Nat.pow_mul]
+    _ = (((n ^ 2) % 8) ^ k % 8 * (n % 8)) % 8 := by
+            induction k with
+            | zero => simp [Nat.mul_mod]
+            | succ k ih =>
+                rw [Nat.pow_succ, Nat.mul_mod, ih]
+                simp [Nat.mul_mod]
+    _ = n % 8 := by simp [hs]
+
+/--
+Normalized arithmetic packet for the residual x=y=4, z=p orbit.
+-/
+structure XYFourPrimeOrbitPressure
+    (r : ReducedPrimitiveCandidate) : Prop where
+  hx : r.x = 4
+  hy : r.y = 4
+  hzPrime : OddPrimeExponent r.z
+  leftEven : Even r.a ∨ Even r.b
+  cOdd : r.c % 2 = 1
+  cMod8 : r.c % 8 = 1
+  pairwise : PairwisePrimitive r.a r.b r.c
+
+/--
+Every x=y=4 odd-prime candidate is forced into the normalized Orbit-A packet.
+The c-even cell has already been eliminated.
+-/
+theorem reduced_xy_four_prime_orbit_pressure
+    (r : ReducedPrimitiveCandidate)
+    (hx : r.x = 4)
+    (hy : r.y = 4)
+    (hzPrime : OddPrimeExponent r.z) :
+    XYFourPrimeOrbitPressure r := by
+  have hE := quarticExactlyOneEven r
+  have hcNot : ¬ Even r.c := by
+    intro hc
+    exact reduced_xy_four_c_even_impossible r hx hy hc
+  have hcOdd : r.c % 2 = 1 :=
+    (quartic_notEven_mod2_one r.c).mp hcNot
+  have hleft : Even r.a ∨ Even r.b := by
+    rcases hE with hA | hB | hC
+    · exact Or.inl hA.1
+    · exact Or.inr hB.2.1
+    · exact False.elim (hcNot hC.2.2)
+  have hRhs8 : r.c ^ r.z % 8 = 1 := by
+    rcases hleft with ha | hb
+    ·
+      have hbOdd : r.b % 2 = 1 := by
+        rcases hE with hA | hB | hC
+        · exact (quartic_notEven_mod2_one r.b).mp hA.2.1
+        · exact False.elim (hB.1 ha)
+        · exact False.elim (hcNot hC.2.2)
+      have hA8 : r.a ^ 4 % 8 = 0 :=
+        quartic_even_pow_mod8 ha (by decide)
+      have hB8 : r.b ^ 4 % 8 = 1 :=
+        quartic_odd_fourth_mod8 hbOdd
+      have hmod := congrArg (fun n : Nat => n % 8) r.equation
+      simpa [hx, hy, Nat.add_mod, hA8, hB8] using hmod
+    ·
+      have haOdd : r.a % 2 = 1 := by
+        rcases hE with hA | hB | hC
+        · exact False.elim (hA.2.1 hb)
+        · exact (quartic_notEven_mod2_one r.a).mp hB.1
+        · exact False.elim (hcNot hC.2.2)
+      have hA8 : r.a ^ 4 % 8 = 1 :=
+        quartic_odd_fourth_mod8 haOdd
+      have hB8 : r.b ^ 4 % 8 = 0 :=
+        quartic_even_pow_mod8 hb (by decide)
+      have hmod := congrArg (fun n : Nat => n % 8) r.equation
+      simpa [hx, hy, Nat.add_mod, hA8, hB8] using hmod
+  have hzOdd : r.z % 2 = 1 :=
+    quartic_oddPrime_mod2_one hzPrime
+  have hcPowBase :
+      r.c ^ r.z % 8 = r.c % 8 :=
+    quartic_odd_pow_mod8_eq_base hcOdd hzOdd
+  have hc8 : r.c % 8 = 1 := by
+    rw [← hcPowBase]
+    exact hRhs8
+  exact {
+    hx := hx
+    hy := hy
+    hzPrime := hzPrime
+    leftEven := hleft
+    cOdd := hcOdd
+    cMod8 := hc8
+    pairwise := quarticPairwise r
+  }
+
 #print axioms MCore.BealEffective.OpenMath.core_diff_factorization
 #print axioms MCore.BealEffective.OpenMath.core_right_same_exponent_gap
 #print axioms MCore.BealEffective.OpenMath.reduced_x_eq_z_exact_factor
@@ -1320,6 +1457,7 @@ theorem twoFourPrime_reduces_to_three_orbits_of_denes
 #print axioms MCore.BealEffective.OpenMath.reduced_yz_four_b_even_eliminated_of_denes
 #print axioms MCore.BealEffective.OpenMath.reduced_xy_four_c_even_impossible
 #print axioms MCore.BealEffective.OpenMath.twoFourPrime_reduces_to_three_orbits_of_denes
+#print axioms MCore.BealEffective.OpenMath.reduced_xy_four_prime_orbit_pressure
 
 end OpenMath
 end BealEffective
