@@ -4,6 +4,16 @@ namespace MCore
 namespace BealEffective
 namespace OpenMath
 
+private theorem ofg_pow_mod_congr
+    {a b m e : Nat}
+    (h : a % m = b % m) :
+    a ^ e % m = b ^ e % m := by
+  induction e with
+  | zero => simp
+  | succ e ih =>
+      rw [Nat.pow_succ, Nat.pow_succ, Nat.mul_mod, Nat.mul_mod, ih, h]
+      simp
+
 private def oneFourData (r : ReducedPrimitiveCandidate) : BealData where
   a := r.a
   b := r.b
@@ -59,7 +69,11 @@ private theorem oneFour_oddFourth8
     (hn : n % 2 = 1) :
     n ^ 4 % 8 = 1 := by
   rcases oneFour_oddResidue8 hn with h | h | h | h
-  all_goals simp [Nat.pow_mod, h]
+  all_goals
+    have hc : n ^ 4 % 8 = (n % 8) ^ 4 % 8 := by
+      apply ofg_pow_mod_congr
+      simp
+    rw [hc, h]
 
 private theorem oneFour_evenPow8
     {n e : Nat}
@@ -71,7 +85,7 @@ private theorem oneFour_evenPow8
     refine ⟨e - 3, ?_⟩
     omega
   subst e
-  simp [pow_add, mul_pow, Nat.mul_mod]
+  simp [Nat.pow_add, Nat.mul_pow, Nat.mul_mod]
 
 /-- Residue pressure whenever x=4; y and z need only be >2. -/
 def OneFourXGenericPressure (r : ReducedPrimitiveCandidate) : Prop :=
@@ -88,7 +102,7 @@ theorem oneFour_x_generic_pressure
   · intro ha
     have hA8 : r.a ^ 4 % 8 = 0 := by
       rcases ha with ⟨k, rfl⟩
-      simp [mul_pow, Nat.mul_mod]
+      simp [Nat.mul_pow, Nat.mul_mod]
     have hmod := congrArg (fun n : Nat => n % 8) r.equation
     rw [hx, Nat.add_mod, hA8] at hmod
     omega
@@ -133,7 +147,7 @@ theorem oneFour_y_generic_pressure
   · intro hb
     have hB8 : r.b ^ 4 % 8 = 0 := by
       rcases hb with ⟨k, rfl⟩
-      simp [mul_pow, Nat.mul_mod]
+      simp [Nat.mul_pow, Nat.mul_mod]
     have hmod := congrArg (fun n : Nat => n % 8) r.equation
     rw [hy, Nat.add_mod, hB8] at hmod
     omega
@@ -203,7 +217,7 @@ theorem oneFour_z_generic_pressure
   · intro hc
     have hC8 : r.c ^ 4 % 8 = 0 := by
       rcases hc with ⟨k, rfl⟩
-      simp [mul_pow, Nat.mul_mod]
+      simp [Nat.mul_pow, Nat.mul_mod]
     have hmod := congrArg (fun n : Nat => n % 8) r.equation
     rw [hz, Nat.add_mod, hC8] at hmod
     exact hmod
