@@ -62,11 +62,22 @@ private theorem pow_factor_cancel
   rw [hb, Nat.mul_pow]
 
 /--
+Standalone statement of the core UFD step.  It intentionally duplicates only
+the proposition shape, not any Beal-specific conclusion.
+-/
+def CoprimePairPrimePowerSplittingCore : Prop :=
+  ∀ A B b p : Nat,
+    OddPrimeExponent p →
+    Nat.gcd A B = 1 →
+    b ^ p = A * B →
+    ∃ u v : Nat, A = u ^ p ∧ B = v ^ p
+
+/--
 Core proof of the UFD step needed by the quartic Beal branch.
 No Nat.factorization and no Mathlib are used.
 -/
 theorem coprimePairPrimePowerSplitting_core :
-    CoprimePairPrimePowerSplitting := by
+    CoprimePairPrimePowerSplittingCore := by
   intro A
   induction A using Nat.lt_wfRel.wf.induction with
   | h A ih =>
@@ -140,8 +151,10 @@ theorem coprimePairPrimePowerSplitting_core :
           simp at hAeq
           exact hA0 hAeq.symm
         rw [hAeq]
-        have := Nat.lt_mul_of_one_lt_left hA1pos hqpgt
-        simpa [Nat.mul_comm] using this
+        have hlt :
+            1 * A1 < (q ^ p) * A1 :=
+          Nat.mul_lt_mul_of_pos_right hqpgt hA1pos
+        simpa using hlt
       have hA1dvdA : A1 ∣ A := by
         refine ⟨q ^ p, ?_⟩
         rw [hAeq, Nat.mul_comm]
