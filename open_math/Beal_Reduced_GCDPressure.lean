@@ -46,40 +46,61 @@ theorem reduced_pairwisePrimitive_core
 theorem reduced_gcd_ab_eq_one
     (r : ReducedPrimitiveCandidate) :
     Nat.gcd r.a r.b = 1 := by
-  by_contra hne
-  have hpos : 0 < Nat.gcd r.a r.b :=
-    Nat.gcd_pos_of_pos_left r.b r.a_pos
-  have hgt : 1 < Nat.gcd r.a r.b := by
-    have hle : 1 ≤ Nat.gcd r.a r.b := Nat.succ_le_of_lt hpos
-    exact Nat.lt_of_le_of_ne hle (Ne.symm hne)
-  exact (reduced_pairwisePrimitive_core r).1
-    ⟨Nat.gcd r.a r.b, hgt, Nat.gcd_dvd_left _ _, Nat.gcd_dvd_right _ _⟩
+  apply (Nat.gcd_eq_one_iff).2
+  intro d hda hdb
+  by_cases hd1 : d = 1
+  · exact hd1
+  have hd0 : d ≠ 0 := by
+    intro hd0
+    subst d
+    rcases hda with ⟨k, hk⟩
+    simp at hk
+    exact (Nat.ne_of_gt r.a_pos) hk.symm
+  have hdpos : 0 < d := Nat.pos_of_ne_zero hd0
+  have hdgt : 1 < d := by
+    have hle : 1 ≤ d := Nat.succ_le_of_lt hdpos
+    exact Nat.lt_of_le_of_ne hle (Ne.symm hd1)
+  exact False.elim ((reduced_pairwisePrimitive_core r).1 ⟨d, hdgt, hda, hdb⟩)
 
 /-- Project pairwise-primitivity forces gcd(a,c)=1. -/
 theorem reduced_gcd_ac_eq_one
     (r : ReducedPrimitiveCandidate) :
     Nat.gcd r.a r.c = 1 := by
-  by_contra hne
-  have hpos : 0 < Nat.gcd r.a r.c :=
-    Nat.gcd_pos_of_pos_left r.c r.a_pos
-  have hgt : 1 < Nat.gcd r.a r.c := by
-    have hle : 1 ≤ Nat.gcd r.a r.c := Nat.succ_le_of_lt hpos
-    exact Nat.lt_of_le_of_ne hle (Ne.symm hne)
-  exact (reduced_pairwisePrimitive_core r).2.1
-    ⟨Nat.gcd r.a r.c, hgt, Nat.gcd_dvd_left _ _, Nat.gcd_dvd_right _ _⟩
+  apply (Nat.gcd_eq_one_iff).2
+  intro d hda hdc
+  by_cases hd1 : d = 1
+  · exact hd1
+  have hd0 : d ≠ 0 := by
+    intro hd0
+    subst d
+    rcases hda with ⟨k, hk⟩
+    simp at hk
+    exact (Nat.ne_of_gt r.a_pos) hk.symm
+  have hdpos : 0 < d := Nat.pos_of_ne_zero hd0
+  have hdgt : 1 < d := by
+    have hle : 1 ≤ d := Nat.succ_le_of_lt hdpos
+    exact Nat.lt_of_le_of_ne hle (Ne.symm hd1)
+  exact False.elim ((reduced_pairwisePrimitive_core r).2.1 ⟨d, hdgt, hda, hdc⟩)
 
 /-- Project pairwise-primitivity forces gcd(b,c)=1. -/
 theorem reduced_gcd_bc_eq_one
     (r : ReducedPrimitiveCandidate) :
     Nat.gcd r.b r.c = 1 := by
-  by_contra hne
-  have hpos : 0 < Nat.gcd r.b r.c :=
-    Nat.gcd_pos_of_pos_left r.c r.b_pos
-  have hgt : 1 < Nat.gcd r.b r.c := by
-    have hle : 1 ≤ Nat.gcd r.b r.c := Nat.succ_le_of_lt hpos
-    exact Nat.lt_of_le_of_ne hle (Ne.symm hne)
-  exact (reduced_pairwisePrimitive_core r).2.2
-    ⟨Nat.gcd r.b r.c, hgt, Nat.gcd_dvd_left _ _, Nat.gcd_dvd_right _ _⟩
+  apply (Nat.gcd_eq_one_iff).2
+  intro d hdb hdc
+  by_cases hd1 : d = 1
+  · exact hd1
+  have hd0 : d ≠ 0 := by
+    intro hd0
+    subst d
+    rcases hdb with ⟨k, hk⟩
+    simp at hk
+    exact (Nat.ne_of_gt r.b_pos) hk.symm
+  have hdpos : 0 < d := Nat.pos_of_ne_zero hd0
+  have hdgt : 1 < d := by
+    have hle : 1 ≤ d := Nat.succ_le_of_lt hdpos
+    exact Nat.lt_of_le_of_ne hle (Ne.symm hd1)
+  exact False.elim ((reduced_pairwisePrimitive_core r).2.2 ⟨d, hdgt, hdb, hdc⟩)
 
 /-- All three pairwise gcd equalities, packaged without adding hypotheses. -/
 theorem reduced_pairwise_gcd_packet
