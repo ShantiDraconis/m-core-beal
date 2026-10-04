@@ -830,7 +830,7 @@ theorem reduced_xz_four_a_even_to_primitive_denes_resolved
   have hquadPos : 0 < r.c ^ 2 + r.a ^ 2 :=
     Nat.add_pos_left _ (Nat.pow_pos r.c_pos)
   have huPos : 0 < u := by
-    have hup : 0 < u ^ r.y := by simpa [← hsub] using hsubPos
+    have hup : 0 < u ^ r.y := by simpa [hsub] using hsubPos
     by_contra hnot
     have hu0 : u = 0 := Nat.eq_zero_of_not_pos hnot
     rw [hu0] at hup
@@ -838,7 +838,7 @@ theorem reduced_xz_four_a_even_to_primitive_denes_resolved
       Nat.ne_of_gt (Nat.lt_trans (by decide : 0 < 2) hy.2)
     simp [hy0] at hup
   have hvPos : 0 < v := by
-    have hvp : 0 < v ^ r.y := by simpa [← hadd] using haddPos
+    have hvp : 0 < v ^ r.y := by simpa [hadd] using haddPos
     by_contra hnot
     have hv0 : v = 0 := Nat.eq_zero_of_not_pos hnot
     rw [hv0] at hvp
@@ -846,7 +846,7 @@ theorem reduced_xz_four_a_even_to_primitive_denes_resolved
       Nat.ne_of_gt (Nat.lt_trans (by decide : 0 < 2) hy.2)
     simp [hy0] at hvp
   have hwPos : 0 < w := by
-    have hwp : 0 < w ^ r.y := by simpa [← hquad] using hquadPos
+    have hwp : 0 < w ^ r.y := by simpa [hquad] using hquadPos
     by_contra hnot
     have hw0 : w = 0 := Nat.eq_zero_of_not_pos hnot
     rw [hw0] at hwp
@@ -912,6 +912,22 @@ def DenesOddPrimePrimitiveExclusion : Prop :=
     ∀ S : PrimitiveDenesSolutionCore p, False
 
 /--
+Once the exact Darmon–Merel exclusion is supplied, the a-even x=z=4 branch is
+impossible.  All preceding arithmetic is kernel-produced.
+-/
+theorem reduced_xz_four_a_even_eliminated_of_denes
+    (hDenes : DenesOddPrimePrimitiveExclusion)
+    (r : ReducedPrimitiveCandidate)
+    (hx : r.x = 4)
+    (hz : r.z = 4)
+    (hy : OddPrimeExponent r.y)
+    (ha : Even r.a) :
+    False := by
+  rcases reduced_xz_four_a_even_to_primitive_denes_resolved
+      r hx hz hy ha with ⟨S⟩
+  exact hDenes r.y hy S
+
+/--
 The a-even x=z=4 branch reduces exactly to the generic coprime power splitter.
 No Beal conclusion appears in this producer.
 -/
@@ -965,6 +981,7 @@ theorem reduced_xz_four_a_even_power_forms_of_splitter
 #print axioms MCore.BealEffective.OpenMath.core_quartic_linear_square_sum
 #print axioms MCore.BealEffective.OpenMath.reduced_xz_four_a_even_to_denes_equation
 #print axioms MCore.BealEffective.OpenMath.reduced_xz_four_a_even_to_primitive_denes_resolved
+#print axioms MCore.BealEffective.OpenMath.reduced_xz_four_a_even_eliminated_of_denes
 #print axioms MCore.BealEffective.OpenMath.reduced_xz_four_a_even_power_forms_of_splitter
 
 end OpenMath
