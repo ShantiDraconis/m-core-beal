@@ -313,25 +313,36 @@ theorem odd_pow_mod16_eq_fifteen_forces_base_fifteen_core
     (heOdd : e % 2 = 1)
     (hpow : u ^ e % 16 = 15) :
     u % 16 = 15 := by
+  have h4 : u ^ 4 % 16 = 1 := odd_fourth16 huOdd
   have he4 := atlas_odd_exp_mod4_split heOdd
-  have hu16 := odd_res16 huOdd
   rcases he4 with he1 | he3
   · rcases atlas_exp_mod4_repr he1 with ⟨k, hk⟩
-    rcases hu16 with h | h | h | h | h | h | h | h
-    all_goals
-      have hc : u ^ e % 16 = (u % 16) ^ e % 16 := by
-        apply atlas_pow_mod_congr
-        simp
-      rw [hc, hk, h] at hpow
-      simp [Nat.pow_add, Nat.pow_mul, Nat.mul_mod] at hpow ⊢
+    have hkpow : (u ^ 4) ^ k % 16 = 1 := by
+      have hc := atlas_pow_mod_congr
+        (a := u ^ 4) (b := 1) (m := 16) (e := k) h4
+      simpa using hc
+    have hbase : u ^ e % 16 = u % 16 := by
+      rw [hk, Nat.pow_add, Nat.pow_mul, Nat.mul_mod, hkpow]
+      simp
+    rw [hbase] at hpow
+    exact hpow
   · rcases atlas_exp_mod4_repr he3 with ⟨k, hk⟩
-    rcases hu16 with h | h | h | h | h | h | h | h
+    have hkpow : (u ^ 4) ^ k % 16 = 1 := by
+      have hc := atlas_pow_mod_congr
+        (a := u ^ 4) (b := 1) (m := 16) (e := k) h4
+      simpa using hc
+    have hcube : u ^ e % 16 = u ^ 3 % 16 := by
+      rw [hk, Nat.pow_add, Nat.pow_mul, Nat.mul_mod, hkpow]
+      simp
+    rw [hcube] at hpow
+    rcases odd_res16 huOdd with h | h | h | h | h | h | h | h
+    all_goals try exact h
     all_goals
-      have hc : u ^ e % 16 = (u % 16) ^ e % 16 := by
+      have hc : u ^ 3 % 16 = (u % 16) ^ 3 % 16 := by
         apply atlas_pow_mod_congr
         simp
-      rw [hc, hk, h] at hpow
-      simp [Nat.pow_add, Nat.pow_mul, Nat.mul_mod] at hpow ⊢
+      rw [hc, h] at hpow
+      simp at hpow
 
 /-- Orbit C, x=z=4: c even forces b itself to be 15 mod16. -/
 theorem twoFour_xz_c_even_forces_b_mod16_fifteen
