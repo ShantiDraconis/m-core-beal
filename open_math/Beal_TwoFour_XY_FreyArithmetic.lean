@@ -245,7 +245,6 @@ theorem xy_four_frey_discriminant_normal_form
     simp [Nat.mul_comm]
   unfold XYFreyDiscriminantBeal
   rw [hx, hy, ha8, hb8, hcz]
-  simp [Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm]
 
 private theorem xyFrey_not_dvd_other_of_gcd_one
     {q u v : Nat}
