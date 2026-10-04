@@ -236,9 +236,15 @@ theorem xy_four_frey_discriminant_normal_form
     (hy : r.y = 4) :
     XYFreyDiscriminantBeal r.a r.b r.c r.x r.y r.z =
       16 * r.a ^ 8 * r.b ^ 8 * r.c ^ (2 * r.z) := by
+  have ha8 : (r.a ^ 4) ^ 2 = r.a ^ 8 := by
+    rw [← Nat.pow_mul]
+  have hb8 : (r.b ^ 4) ^ 2 = r.b ^ 8 := by
+    rw [← Nat.pow_mul]
+  have hcz : (r.c ^ r.z) ^ 2 = r.c ^ (2 * r.z) := by
+    rw [← Nat.pow_mul]
+    simp [Nat.mul_comm]
   unfold XYFreyDiscriminantBeal
-  rw [hx, hy]
-  simp [Nat.pow_mul, Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm]
+  rw [hx, hy, ha8, hb8, hcz]
 
 private theorem xyFrey_not_dvd_other_of_gcd_one
     {q u v : Nat}
