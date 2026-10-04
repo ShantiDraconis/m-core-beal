@@ -34,11 +34,11 @@ theorem beal_terminal_refutes_iff_counterexample :
     intro hprime
     have hgt : 1 < Nat.gcd d.a (Nat.gcd d.b d.c) :=
       (commonPrime_iff_one_lt_nestedGCD d).mp hprime
-    omega
+    exact (not_lt_of_ge hg) hgt
   · rintro ⟨d, hcounter⟩
     refine ⟨d, ?_⟩
     by_contra hnot
-    have hgt : 1 < Nat.gcd d.a (Nat.gcd d.b d.c) := by omega
+    have hgt : 1 < Nat.gcd d.a (Nat.gcd d.b d.c) := lt_of_not_ge hnot
     exact hcounter ((commonPrime_iff_one_lt_nestedGCD d).mpr hgt)
 
 theorem not_beal_terminal_certifies_iff_refutes :
@@ -50,12 +50,12 @@ theorem not_beal_terminal_certifies_iff_refutes :
     have hg : GCDLowerBoundProducer := by
       intro d
       by_contra hle
-      exact href ⟨d, by omega⟩
+      exact href ⟨d, le_of_not_gt hle⟩
     exact h ((bealConjecture_iff_gcdLowerBoundProducer).2 hg)
   · rintro ⟨d, hg⟩ hcert
     have hgt : 1 < Nat.gcd d.a (Nat.gcd d.b d.c) :=
       (commonPrime_iff_one_lt_nestedGCD d).mp (hcert d)
-    omega
+    exact (not_lt_of_ge hg) hgt
 
 theorem beal_terminal_cert_refute_disjoint :
     ¬ (BealTerminalCertifies ∧ BealTerminalRefutes) := by
