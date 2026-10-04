@@ -329,11 +329,150 @@ theorem xy_frey_odd_bad_prime_exactly_one_base
       exact (xyFrey_not_dvd_other_of_gcd_one hq hb (xyFrey_gcd_bc r)) hc
     exact Or.inr (Or.inr ⟨hc, hna, hnb⟩)
 
+/-- Natural c4 kernel of the Frey model Y^2=X(X-a^x)(X+b^y). -/
+def XYFreyC4Kernel
+    (a b x y : Nat) : Nat :=
+  16 * ((a ^ x) ^ 2 + (a ^ x) * (b ^ y) + (b ^ y) ^ 2)
+
+private theorem xyFrey_dvd_mul_left
+    {q u v : Nat}
+    (h : q ∣ u) :
+    q ∣ u * v := by
+  rcases h with ⟨k, hk⟩
+  refine ⟨k * v, ?_⟩
+  rw [hk]
+  simp [Nat.mul_assoc]
+
+private theorem xyFrey_dvd_mul_right
+    {q u v : Nat}
+    (h : q ∣ v) :
+    q ∣ u * v := by
+  rcases h with ⟨k, hk⟩
+  refine ⟨u * k, ?_⟩
+  rw [hk]
+  simp [Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm]
+
+private theorem xyFrey_dvd_add
+    {q u v : Nat}
+    (hu : q ∣ u)
+    (hv : q ∣ v) :
+    q ∣ u + v := by
+  rcases hu with ⟨a, ha⟩
+  rcases hv with ⟨b, hb⟩
+  refine ⟨a + b, ?_⟩
+  rw [ha, hb, Nat.mul_add]
+
+/--
+Every odd prime of the raw Frey discriminant is excluded from the c4 kernel.
+This is the exact arithmetic input used by multiplicative-reduction theory.
+-/
+theorem xy_frey_odd_bad_prime_not_dvd_c4
+    (r : ReducedPrimitiveCandidate)
+    {q : Nat}
+    (hq : IsPrime q)
+    (hq2 : q ≠ 2)
+    (hDelta : q ∣ XYFreyDiscriminantBeal
+      r.a r.b r.c r.x r.y r.z) :
+    ¬ q ∣ XYFreyC4Kernel r.a r.b r.x r.y := by
+  intro hc4
+  have h16not : ¬ q ∣ 16 := by
+    intro h16
+    have hq2pow : q ∣ 2 ^ 4 := by simpa using h16
+    have hqTwo : q ∣ 2 := prime_dvd_pow_reflect hq hq2pow
+    have hqle : q ≤ 2 :=
+      Nat.le_of_dvd (by decide : 0 < (2 : Nat)) hqTwo
+    have hqge : 2 ≤ q := Nat.succ_le_of_lt hq.1
+    exact hq2 (Nat.le_antisymm hqle hqge)
+  have hS :
+      q ∣ (r.a ^ r.x) ^ 2 +
+        (r.a ^ r.x) * (r.b ^ r.y) +
+        (r.b ^ r.y) ^ 2 := by
+    unfold XYFreyC4Kernel at hc4
+    rcases prime_dvd_mul_local hq hc4 with h16 | hS
+    · exact False.elim (h16not h16)
+    · exact hS
+  have hsupport :=
+    xy_frey_odd_bad_prime_exactly_one_base r hq hq2 hDelta
+  rcases hsupport with ha | hb | hc
+  ·
+    have hAx : q ∣ r.a ^ r.x :=
+      dvd_pow_of_dvd (Nat.lt_trans (by decide : 0 < 2) r.x_reduced.1) ha.1
+    have hA2 : q ∣ (r.a ^ r.x) ^ 2 :=
+      dvd_pow_of_dvd (by decide : 0 < (2 : Nat)) hAx
+    have hAB : q ∣ (r.a ^ r.x) * (r.b ^ r.y) :=
+      xyFrey_dvd_mul_left hAx
+    have hfirst :
+        q ∣ (r.a ^ r.x) ^ 2 +
+          (r.a ^ r.x) * (r.b ^ r.y) :=
+      xyFrey_dvd_add hA2 hAB
+    have hB2 : q ∣ (r.b ^ r.y) ^ 2 := by
+      have hs := Nat.dvd_sub hS hfirst
+      simpa [Nat.add_assoc] using hs
+    have hBy : q ∣ r.b ^ r.y :=
+      prime_dvd_pow_reflect hq hB2
+    have hB : q ∣ r.b :=
+      prime_dvd_pow_reflect hq hBy
+    exact ha.2.1 hB
+  ·
+    have hBy : q ∣ r.b ^ r.y :=
+      dvd_pow_of_dvd (Nat.lt_trans (by decide : 0 < 2) r.y_reduced.1) hb.1
+    have hB2 : q ∣ (r.b ^ r.y) ^ 2 :=
+      dvd_pow_of_dvd (by decide : 0 < (2 : Nat)) hBy
+    have hAB : q ∣ (r.a ^ r.x) * (r.b ^ r.y) :=
+      xyFrey_dvd_mul_right hBy
+    have htail :
+        q ∣ (r.a ^ r.x) * (r.b ^ r.y) +
+          (r.b ^ r.y) ^ 2 :=
+      xyFrey_dvd_add hAB hB2
+    have hS' :
+        q ∣ (r.a ^ r.x) ^ 2 +
+          ((r.a ^ r.x) * (r.b ^ r.y) +
+            (r.b ^ r.y) ^ 2) := by
+      simpa [Nat.add_assoc] using hS
+    have hA2 : q ∣ (r.a ^ r.x) ^ 2 := by
+      have hs := Nat.dvd_sub hS' htail
+      simpa using hs
+    have hAx : q ∣ r.a ^ r.x :=
+      prime_dvd_pow_reflect hq hA2
+    have hA : q ∣ r.a :=
+      prime_dvd_pow_reflect hq hAx
+    exact hb.2.1 hA
+  ·
+    have hCz : q ∣ r.c ^ r.z :=
+      dvd_pow_of_dvd (Nat.lt_trans (by decide : 0 < 2) r.z_reduced.1) hc.1
+    have hSum : q ∣ r.a ^ r.x + r.b ^ r.y := by
+      rw [r.equation]
+      exact hCz
+    have hProd :
+        q ∣ (r.a ^ r.x) * (r.a ^ r.x + r.b ^ r.y) :=
+      xyFrey_dvd_mul_right hSum
+    have hRewrite :
+        (r.a ^ r.x) ^ 2 +
+            (r.a ^ r.x) * (r.b ^ r.y) +
+            (r.b ^ r.y) ^ 2 =
+          (r.a ^ r.x) * (r.a ^ r.x + r.b ^ r.y) +
+            (r.b ^ r.y) ^ 2 := by
+      simp [Nat.pow_succ, Nat.mul_add, Nat.mul_assoc]
+    have hS' :
+        q ∣ (r.a ^ r.x) * (r.a ^ r.x + r.b ^ r.y) +
+          (r.b ^ r.y) ^ 2 := by
+      rw [← hRewrite]
+      exact hS
+    have hB2 : q ∣ (r.b ^ r.y) ^ 2 := by
+      have hs := Nat.dvd_sub hS' hProd
+      simpa using hs
+    have hBy : q ∣ r.b ^ r.y :=
+      prime_dvd_pow_reflect hq hB2
+    have hB : q ∣ r.b :=
+      prime_dvd_pow_reflect hq hBy
+    exact hc.2.2 hB
+
 #print axioms MCore.BealEffective.OpenMath.xy_frey_discriminant_rewrite
 #print axioms MCore.BealEffective.OpenMath.xy_four_frey_discriminant_normal_form
 #print axioms MCore.BealEffective.OpenMath.xyFourPrimeFreyArithmeticPacket
 #print axioms MCore.BealEffective.OpenMath.xy_frey_odd_bad_prime_divides_a_or_b_or_c
 #print axioms MCore.BealEffective.OpenMath.xy_frey_odd_bad_prime_exactly_one_base
+#print axioms MCore.BealEffective.OpenMath.xy_frey_odd_bad_prime_not_dvd_c4
 
 end OpenMath
 end BealEffective
