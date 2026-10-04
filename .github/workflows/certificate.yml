@@ -62,5 +62,35 @@ jobs:
           if grep -F 'sorryAx' BackwardOracle.log BackwardWithout.log; then exit 1; fi
           grep -F "'MCore.BackwardAudit.hypothetical_common_prime' does not depend on any axioms" BackwardOracle.log
           grep -F "'MCore.BackwardAudit.witness_contract_closes_beal' does not depend on any axioms" BackwardWithout.log
+      - name: G5.5 build open-math forcing frontier
+        run: |
+          set -euo pipefail
+          FILES=(
+            open_math/Beal_Fermat_Mining.lean
+            open_math/Beal_Reduced_ParityPressure.lean
+            open_math/Beal_Reduced_GCDPressure.lean
+            open_math/Beal_Core_Mod16.lean
+            open_math/Beal_TwoFour_XY_CorePressure.lean
+            open_math/Beal_TwoFour_Atlas_Core.lean
+            open_math/Beal_OneFourEqual_CorePressure.lean
+            open_math/Beal_OneFour_GenericPressure.lean
+            open_math/Beal_AllOddPrime_CorePressure.lean
+            open_math/Beal_AllOddPrime_BasePressure.lean
+            open_math/Beal_CoprimePrimePowerSplitter.lean
+            open_math/Beal_Quartic_CoreFactorization.lean
+          )
+          for f in "${FILES[@]}"; do
+            echo "=== BUILD $f ==="
+            lake env lean "$f"
+          done
+          if grep -n -E '(^|[^[:alnum:]_])(sorry|admit)([^[:alnum:]_]|$)' "${FILES[@]}"; then
+            echo "OPEN_MATH hygiene failed: sorry/admit"
+            exit 1
+          fi
+          if grep -n -E '^[[:space:]]*(@\[[^]]*\][[:space:]]*)?(axiom|constant|constants)[[:space:]]' "${FILES[@]}"; then
+            echo "OPEN_MATH hygiene failed: axiom/constant"
+            exit 1
+          fi
+
       - name: G6 clean reproduction
         run: lake clean && timeout 20m lake build MCore
