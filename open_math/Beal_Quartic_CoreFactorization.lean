@@ -602,17 +602,6 @@ def reduced_xz_four_a_even_core_packet
   blocksOdd := reduced_xz_four_a_even_blocks_odd r hx hz ha
   blocksCoprime := reduced_xz_four_a_even_block_gcd_packet r hx hz ha
 
-/--
-Minimal UFD producer: a product of two coprime naturals which is an e-th
-power splits into two e-th powers.
--/
-def CoprimePairPowerSplitting : Prop :=
-  ∀ A B b e : Nat,
-    0 < e →
-    Nat.gcd A B = 1 →
-    b ^ e = A * B →
-    ∃ u v : Nat, A = u ^ e ∧ B = v ^ e
-
 private theorem gcd_mul_eq_one_of_pairwise_gcd
     {A B C : Nat}
     (hAB : Nat.gcd A B = 1)
@@ -650,20 +639,6 @@ private theorem gcd_mul_eq_one_of_pairwise_gcd
     have hle : p ≤ 1 := Nat.le_of_dvd (by decide : 0 < (1 : Nat)) hpG
     exact False.elim ((Nat.not_le_of_gt hp.1) hle)
 
-/-- The two-factor splitter is sufficient to construct the triple splitter. -/
-theorem pairSplitter_implies_tripleSplitter
-    (hPair : CoprimePairPowerSplitting) :
-    CoprimeTriplePowerSplitting := by
-  intro A B C b e he hAB hAC hBC hpow
-  have hA_BC : Nat.gcd A (B * C) = 1 :=
-    gcd_mul_eq_one_of_pairwise_gcd hAB hAC
-  rcases hPair A (B * C) b e he hA_BC hpow with
-    ⟨u, t, hA, hBCpow⟩
-  rcases hPair B C t e he hBC hBCpow.symm with
-    ⟨v, w, hB, hC⟩
-  exact ⟨u, v, w, hA, hB, hC⟩
-
-
 /--
 Exact UFD producer actually needed by the (4,4,p) lane: the exponent is an
 odd prime, not an arbitrary positive natural.
@@ -674,6 +649,169 @@ def CoprimePairPrimePowerSplitting : Prop :=
     Nat.gcd A B = 1 →
     b ^ p = A * B →
     ∃ u v : Nat, A = u ^ p ∧ B = v ^ p
+
+private theorem splitter_prime_pow_dvd_left
+    {q A B k : Nat}
+    (hq : IsPrime q)
+    (hqB : ¬ q ∣ B)
+    (h : q ^ k ∣ A * B) :
+    q ^ k ∣ A := by
+  induction k generalizing A with
+  | zero =>
+      simp
+  | succ k ih =>
+      have hqAB : q ∣ A * B := by
+        rcases h with ⟨t, ht⟩
+        refine ⟨q ^ k * t, ?_⟩
+        rw [ht, Nat.pow_succ]
+        simp [Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm]
+      have hqA : q ∣ A := by
+        rcases prime_dvd_mul_local hq hqAB with hA | hB
+        · exact hA
+        · exact False.elim (hqB hB)
+      rcases hqA with ⟨A1, hA⟩
+      rcases h with ⟨t, ht⟩
+      have hcancel : A1 * B = q ^ k * t := by
+        have hqpos : 0 < q := Nat.lt_trans Nat.zero_lt_one hq.1
+        apply Nat.eq_of_mul_eq_mul_left hqpos
+        calc
+          q * (A1 * B) = (q * A1) * B := by simp [Nat.mul_assoc]
+          _ = A * B := by rw [← hA]
+          _ = q ^ (k + 1) * t := ht
+          _ = q * (q ^ k * t) := by
+                rw [Nat.pow_succ]
+                simp [Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm]
+      have hkA1 : q ^ k ∣ A1 :=
+        ih (A := A1) ⟨t, hcancel⟩
+      rcases hkA1 with ⟨s, hs⟩
+      refine ⟨s, ?_⟩
+      rw [hA, hs, Nat.pow_succ]
+      simp [Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm]
+
+private theorem splitter_gcd_one_for_divisor_left
+    {A A1 B : Nat}
+    (hA1 : A1 ∣ A)
+    (hAB : Nat.gcd A B = 1) :
+    Nat.gcd A1 B = 1 := by
+  apply (Nat.gcd_eq_one_iff).2
+  intro d hdA1 hdB
+  have hdA : d ∣ A := nat_dvd_trans hdA1 hA1
+  have hdG : d ∣ Nat.gcd A B := Nat.dvd_gcd hdA hdB
+  rw [hAB] at hdG
+  exact Nat.dvd_one.mp hdG
+
+private theorem splitter_pow_factor
+    {q b b1 p : Nat}
+    (hb : b = q * b1) :
+    b ^ p = q ^ p * b1 ^ p := by
+  rw [hb, Nat.mul_pow]
+
+/--
+Constructive core inhabitant of the prime-exponent coprime power splitter.
+This avoids Nat.factorization and Mathlib.
+-/
+theorem coprimePairPrimePowerSplitting_resolved :
+    CoprimePairPrimePowerSplitting := by
+  intro A
+  induction A using Nat.lt_wfRel.wf.induction with
+  | h A ih =>
+      intro B b p hp hAB hpow
+      by_cases hA0 : A = 0
+      · subst A
+        have hB1 : B = 1 := by
+          simpa using hAB
+        have hb0 : b = 0 := by
+          have hpow0 : b ^ p = 0 := by simpa using hpow
+          cases b with
+          | zero => rfl
+          | succ n =>
+              have hp0 : p ≠ 0 :=
+                Nat.ne_of_gt (Nat.lt_trans (by decide : 0 < 2) hp.2)
+              simp [hp0] at hpow0
+        refine ⟨0, 1, ?_, ?_⟩
+        · subst b
+          have hp0 : p ≠ 0 :=
+            Nat.ne_of_gt (Nat.lt_trans (by decide : 0 < 2) hp.2)
+          simp [hp0]
+        · simpa [hB1]
+      by_cases hA1 : A = 1
+      · subst A
+        have hBpow : B = b ^ p := by
+          simpa using hpow.symm
+        exact ⟨1, b, by simp, hBpow⟩
+      have hAgt : 1 < A := by
+        have hApos : 0 < A := Nat.pos_of_ne_zero hA0
+        omega
+      rcases primeDivisorProperty_proved A hAgt with ⟨q, hq, hqA⟩
+      have hqB : ¬ q ∣ B := by
+        intro hdivB
+        have hdivG : q ∣ Nat.gcd A B := Nat.dvd_gcd hqA hdivB
+        rw [hAB] at hdivG
+        have hle : q ≤ 1 :=
+          Nat.le_of_dvd (by decide : 0 < (1 : Nat)) hdivG
+        exact (Nat.not_le_of_gt hq.1) hle
+      have hqBpow : q ∣ b ^ p := by
+        rw [hpow]
+        rcases hqA with ⟨k, hk⟩
+        refine ⟨k * B, ?_⟩
+        rw [hk]
+        simp [Nat.mul_assoc]
+      have hqb : q ∣ b := prime_dvd_pow_reflect hq hqBpow
+      rcases hqb with ⟨b1, hb⟩
+      have hqp_bpow : q ^ p ∣ b ^ p := by
+        refine ⟨b1 ^ p, ?_⟩
+        exact splitter_pow_factor hb
+      have hqp_AB : q ^ p ∣ A * B := by
+        rw [← hpow]
+        exact hqp_bpow
+      have hqp_A : q ^ p ∣ A :=
+        splitter_prime_pow_dvd_left hq hqB hqp_AB
+      rcases hqp_A with ⟨A1, hAeq⟩
+      have hqppos : 0 < q ^ p :=
+        Nat.pow_pos (Nat.lt_trans Nat.zero_lt_one hq.1)
+      have hA1lt : A1 < A := by
+        have hqpgt : 1 < q ^ p := by
+          have hpPos : 0 < p :=
+            Nat.lt_trans (by decide : 0 < 2) hp.2
+          have hqq : q ∣ q := ⟨1, (Nat.mul_one q).symm⟩
+          have hqpow : q ∣ q ^ p := dvd_pow_of_dvd hpPos hqq
+          have hqle : q ≤ q ^ p :=
+            Nat.le_of_dvd hqppos hqpow
+          exact Nat.lt_of_lt_of_le hq.1 hqle
+        have hA1pos : 0 < A1 := by
+          cases A1 with
+          | zero =>
+              simp at hAeq
+              exact False.elim (hA0 hAeq)
+          | succ n => exact Nat.succ_pos n
+        rw [hAeq]
+        have hlt :
+            1 * A1 < (q ^ p) * A1 :=
+          Nat.mul_lt_mul_of_pos_right hqpgt hA1pos
+        simpa using hlt
+      have hA1dvdA : A1 ∣ A := by
+        refine ⟨q ^ p, ?_⟩
+        rw [hAeq, Nat.mul_comm]
+      have hA1B : Nat.gcd A1 B = 1 :=
+        splitter_gcd_one_for_divisor_left hA1dvdA hAB
+      have hbpow : b ^ p = q ^ p * b1 ^ p :=
+        splitter_pow_factor hb
+      have hcancel : b1 ^ p = A1 * B := by
+        apply Nat.eq_of_mul_eq_mul_left hqppos
+        calc
+          q ^ p * b1 ^ p = b ^ p := hbpow.symm
+          _ = A * B := hpow
+          _ = (q ^ p * A1) * B := by rw [hAeq]
+          _ = q ^ p * (A1 * B) := by rw [Nat.mul_assoc]
+      rcases ih A1 hA1lt B b1 p hp hA1B hcancel with
+        ⟨u, v, hA1pow, hBpow⟩
+      refine ⟨q * u, v, ?_, hBpow⟩
+      calc
+        A = q ^ p * A1 := hAeq
+        _ = q ^ p * u ^ p := by rw [hA1pow]
+        _ = (q * u) ^ p := by rw [Nat.mul_pow]
+
+
 
 /--
 The prime-exponent pair splitter suffices for the quartic triple whenever the
@@ -936,35 +1074,6 @@ theorem reduced_xz_four_a_even_eliminated_of_denes
       r hx hz hy ha with ⟨S⟩
   exact hDenes r.y hy S
 
-/--
-The a-even x=z=4 branch reduces exactly to the generic coprime power splitter.
-No Beal conclusion appears in this producer.
--/
-theorem reduced_xz_four_a_even_power_forms_of_splitter
-    (hSplit : CoprimeTriplePowerSplitting)
-    (r : ReducedPrimitiveCandidate)
-    (hx : r.x = 4)
-    (hz : r.z = 4)
-    (ha : Even r.a) :
-    ∃ u v w : Nat,
-      r.c - r.a = u ^ r.y ∧
-      r.c + r.a = v ^ r.y ∧
-      r.c ^ 2 + r.a ^ 2 = w ^ r.y := by
-  have P := reduced_xz_four_a_even_core_packet r hx hz ha
-  have hyPos : 0 < r.y :=
-    Nat.lt_trans (by decide : 0 < 2) r.y_reduced.1
-  exact hSplit
-    (r.c - r.a)
-    (r.c + r.a)
-    (r.c ^ 2 + r.a ^ 2)
-    r.b
-    r.y
-    hyPos
-    P.blocksCoprime.1
-    P.blocksCoprime.2.1
-    P.blocksCoprime.2.2
-    P.factorization
-
 #print axioms MCore.BealEffective.OpenMath.core_diff_factorization
 #print axioms MCore.BealEffective.OpenMath.core_right_same_exponent_gap
 #print axioms MCore.BealEffective.OpenMath.reduced_x_eq_z_exact_factor
@@ -985,7 +1094,6 @@ theorem reduced_xz_four_a_even_power_forms_of_splitter
 #print axioms MCore.BealEffective.OpenMath.reduced_xz_four_a_even_block_gcd_packet
 #print axioms MCore.BealEffective.OpenMath.reduced_xz_four_a_even_core_packet
 #print axioms MCore.BealEffective.OpenMath.coprimePairPrimePowerSplitting_resolved
-#print axioms MCore.BealEffective.OpenMath.pairSplitter_implies_tripleSplitter
 #print axioms MCore.BealEffective.OpenMath.primePairSplitter_quartic_triple
 #print axioms MCore.BealEffective.OpenMath.core_quartic_linear_square_sum
 #print axioms MCore.BealEffective.OpenMath.reduced_xz_four_a_even_to_denes_equation
@@ -995,165 +1103,4 @@ theorem reduced_xz_four_a_even_power_forms_of_splitter
 
 end OpenMath
 end BealEffective
-end MCoreprivate theorem splitter_prime_pow_dvd_left
-    {q A B k : Nat}
-    (hq : IsPrime q)
-    (hqB : ¬ q ∣ B)
-    (h : q ^ k ∣ A * B) :
-    q ^ k ∣ A := by
-  induction k generalizing A with
-  | zero =>
-      simp
-  | succ k ih =>
-      have hqAB : q ∣ A * B := by
-        rcases h with ⟨t, ht⟩
-        refine ⟨q ^ k * t, ?_⟩
-        rw [ht, Nat.pow_succ]
-        simp [Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm]
-      have hqA : q ∣ A := by
-        rcases prime_dvd_mul_local hq hqAB with hA | hB
-        · exact hA
-        · exact False.elim (hqB hB)
-      rcases hqA with ⟨A1, hA⟩
-      rcases h with ⟨t, ht⟩
-      have hcancel : A1 * B = q ^ k * t := by
-        have hqpos : 0 < q := Nat.lt_trans Nat.zero_lt_one hq.1
-        apply Nat.eq_of_mul_eq_mul_left hqpos
-        calc
-          q * (A1 * B) = (q * A1) * B := by simp [Nat.mul_assoc]
-          _ = A * B := by rw [← hA]
-          _ = q ^ (k + 1) * t := ht
-          _ = q * (q ^ k * t) := by
-                rw [Nat.pow_succ]
-                simp [Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm]
-      have hkA1 : q ^ k ∣ A1 :=
-        ih (A := A1) ⟨t, hcancel⟩
-      rcases hkA1 with ⟨s, hs⟩
-      refine ⟨s, ?_⟩
-      rw [hA, hs, Nat.pow_succ]
-      simp [Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm]
-
-private theorem splitter_gcd_one_for_divisor_left
-    {A A1 B : Nat}
-    (hA1 : A1 ∣ A)
-    (hAB : Nat.gcd A B = 1) :
-    Nat.gcd A1 B = 1 := by
-  apply (Nat.gcd_eq_one_iff).2
-  intro d hdA1 hdB
-  have hdA : d ∣ A := nat_dvd_trans hdA1 hA1
-  have hdG : d ∣ Nat.gcd A B := Nat.dvd_gcd hdA hdB
-  rw [hAB] at hdG
-  exact Nat.dvd_one.mp hdG
-
-private theorem splitter_pow_factor
-    {q b b1 p : Nat}
-    (hb : b = q * b1) :
-    b ^ p = q ^ p * b1 ^ p := by
-  rw [hb, Nat.mul_pow]
-
-/--
-Constructive core inhabitant of the prime-exponent coprime power splitter.
-This avoids Nat.factorization and Mathlib.
--/
-theorem coprimePairPrimePowerSplitting_resolved :
-    CoprimePairPrimePowerSplitting := by
-  intro A
-  induction A using Nat.lt_wfRel.wf.induction with
-  | h A ih =>
-      intro B b p hp hAB hpow
-      by_cases hA0 : A = 0
-      · subst A
-        have hB1 : B = 1 := by
-          simpa using hAB
-        have hb0 : b = 0 := by
-          have hpow0 : b ^ p = 0 := by simpa using hpow
-          cases b with
-          | zero => rfl
-          | succ n =>
-              have hp0 : p ≠ 0 :=
-                Nat.ne_of_gt (Nat.lt_trans (by decide : 0 < 2) hp.2)
-              simp [hp0] at hpow0
-        refine ⟨0, 1, ?_, ?_⟩
-        · subst b
-          have hp0 : p ≠ 0 :=
-            Nat.ne_of_gt (Nat.lt_trans (by decide : 0 < 2) hp.2)
-          simp [hp0]
-        · simpa [hB1]
-      by_cases hA1 : A = 1
-      · subst A
-        have hBpow : B = b ^ p := by
-          simpa using hpow.symm
-        exact ⟨1, b, by simp, hBpow⟩
-      have hAgt : 1 < A := by
-        have hApos : 0 < A := Nat.pos_of_ne_zero hA0
-        omega
-      rcases primeDivisorProperty_proved A hAgt with ⟨q, hq, hqA⟩
-      have hqB : ¬ q ∣ B := by
-        intro hdivB
-        have hdivG : q ∣ Nat.gcd A B := Nat.dvd_gcd hqA hdivB
-        rw [hAB] at hdivG
-        have hle : q ≤ 1 :=
-          Nat.le_of_dvd (by decide : 0 < (1 : Nat)) hdivG
-        exact (Nat.not_le_of_gt hq.1) hle
-      have hqBpow : q ∣ b ^ p := by
-        rw [hpow]
-        rcases hqA with ⟨k, hk⟩
-        refine ⟨k * B, ?_⟩
-        rw [hk]
-        simp [Nat.mul_assoc]
-      have hqb : q ∣ b := prime_dvd_pow_reflect hq hqBpow
-      rcases hqb with ⟨b1, hb⟩
-      have hqp_bpow : q ^ p ∣ b ^ p := by
-        refine ⟨b1 ^ p, ?_⟩
-        exact splitter_pow_factor hb
-      have hqp_AB : q ^ p ∣ A * B := by
-        rw [← hpow]
-        exact hqp_bpow
-      have hqp_A : q ^ p ∣ A :=
-        splitter_prime_pow_dvd_left hq hqB hqp_AB
-      rcases hqp_A with ⟨A1, hAeq⟩
-      have hqppos : 0 < q ^ p :=
-        Nat.pow_pos (Nat.lt_trans Nat.zero_lt_one hq.1)
-      have hA1lt : A1 < A := by
-        have hqpgt : 1 < q ^ p := by
-          have hpPos : 0 < p :=
-            Nat.lt_trans (by decide : 0 < 2) hp.2
-          have hqq : q ∣ q := ⟨1, (Nat.mul_one q).symm⟩
-          have hqpow : q ∣ q ^ p := dvd_pow_of_dvd hpPos hqq
-          have hqle : q ≤ q ^ p :=
-            Nat.le_of_dvd hqppos hqpow
-          exact Nat.lt_of_lt_of_le hq.1 hqle
-        have hA1pos : 0 < A1 := by
-          cases A1 with
-          | zero =>
-              simp at hAeq
-              exact False.elim (hA0 hAeq)
-          | succ n => exact Nat.succ_pos n
-        rw [hAeq]
-        have hlt :
-            1 * A1 < (q ^ p) * A1 :=
-          Nat.mul_lt_mul_of_pos_right hqpgt hA1pos
-        simpa using hlt
-      have hA1dvdA : A1 ∣ A := by
-        refine ⟨q ^ p, ?_⟩
-        rw [hAeq, Nat.mul_comm]
-      have hA1B : Nat.gcd A1 B = 1 :=
-        splitter_gcd_one_for_divisor_left hA1dvdA hAB
-      have hbpow : b ^ p = q ^ p * b1 ^ p :=
-        splitter_pow_factor hb
-      have hcancel : b1 ^ p = A1 * B := by
-        apply Nat.eq_of_mul_eq_mul_left hqppos
-        calc
-          q ^ p * b1 ^ p = b ^ p := hbpow.symm
-          _ = A * B := hpow
-          _ = (q ^ p * A1) * B := by rw [hAeq]
-          _ = q ^ p * (A1 * B) := by rw [Nat.mul_assoc]
-      rcases ih A1 hA1lt B b1 p hp hA1B hcancel with
-        ⟨u, v, hA1pow, hBpow⟩
-      refine ⟨q * u, v, ?_, hBpow⟩
-      calc
-        A = q ^ p * A1 := hAeq
-        _ = q ^ p * u ^ p := by rw [hA1pow]
-        _ = (q * u) ^ p := by rw [Nat.mul_pow]
-
-
+end MCore
