@@ -36,7 +36,7 @@ private theorem prime_pow_dvd_left_of_not_dvd_right
                 rw [Nat.pow_succ]
                 simp [Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm]
       have hkA1 : q ^ k ∣ A1 :=
-        ih hq hqB ⟨t, hcancel⟩
+        ih (A := A1) ⟨t, hcancel⟩
       rcases hkA1 with ⟨s, hs⟩
       refine ⟨s, ?_⟩
       rw [hA, hs, Nat.pow_succ]
