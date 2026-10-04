@@ -609,19 +609,6 @@ private theorem gcd_mul_eq_one_of_pairwise_gcd
     have hle : p ≤ 1 := Nat.le_of_dvd (by decide : 0 < (1 : Nat)) hpG
     omega
 
-/-- The two-factor splitter is sufficient to construct the triple splitter. -/
-theorem pairSplitter_implies_tripleSplitter
-    (hPair : CoprimePairPowerSplitting) :
-    CoprimeTriplePowerSplitting := by
-  intro A B C b e he hAB hAC hBC hpow
-  have hA_BC : Nat.gcd A (B * C) = 1 :=
-    gcd_mul_eq_one_of_pairwise_gcd hAB hAC
-  rcases hPair A (B * C) b e he hA_BC hpow with
-    ⟨u, t, hA, hBCpow⟩
-  rcases hPair B C t e he hBC hBCpow with
-    ⟨v, w, hB, hC⟩
-  exact ⟨u, v, w, hA, hB, hC⟩
-
 /--
 Generic UFD producer isolated from Beal:
 a pairwise-coprime triple whose product is an e-th power splits into e-th
@@ -638,6 +625,20 @@ def CoprimeTriplePowerSplitting : Prop :=
       A = u ^ e ∧
       B = v ^ e ∧
       C = w ^ e
+
+/-- The two-factor splitter is sufficient to construct the triple splitter. -/
+theorem pairSplitter_implies_tripleSplitter
+    (hPair : CoprimePairPowerSplitting) :
+    CoprimeTriplePowerSplitting := by
+  intro A B C b e he hAB hAC hBC hpow
+  have hA_BC : Nat.gcd A (B * C) = 1 :=
+    gcd_mul_eq_one_of_pairwise_gcd hAB hAC
+  rcases hPair A (B * C) b e he hA_BC hpow with
+    ⟨u, t, hA, hBCpow⟩
+  rcases hPair B C t e he hBC hBCpow with
+    ⟨v, w, hB, hC⟩
+  exact ⟨u, v, w, hA, hB, hC⟩
+
 
 /--
 The a-even x=z=4 branch reduces exactly to the generic coprime power splitter.
