@@ -423,6 +423,151 @@ theorem reduced_xz_four_three_block_odd_prime_separation
     reduced_xz_four_add_quad_odd_prime_disjoint r hx hz hp hp2
   ⟩
 
+private theorem quartic_notEven_mod2_one
+    (n : Nat) :
+    (¬ Even n) ↔ n % 2 = 1 := by
+  unfold Even
+  constructor
+  · intro h
+    have hpos : 0 < n % 2 := Nat.emod_pos_of_not_dvd h
+    have hlt : n % 2 < 2 := Nat.mod_lt n (by decide)
+    omega
+  · intro hm hd
+    have hz : n % 2 = 0 := Nat.mod_eq_zero_of_dvd hd
+    omega
+
+private theorem quarticExactlyOneEven
+    (r : ReducedPrimitiveCandidate) :
+    ExactlyOneEven r.a r.b r.c :=
+  exactlyOneEven_of_pairwise (quarticData r) (quarticPairwise r)
+
+/--
+If a is the unique even base on x=z=4, all three quartic blocks are odd.
+-/
+theorem reduced_xz_four_a_even_blocks_odd
+    (r : ReducedPrimitiveCandidate)
+    (hx : r.x = 4)
+    (hz : r.z = 4)
+    (ha : Even r.a) :
+    (r.c - r.a) % 2 = 1 ∧
+    (r.c + r.a) % 2 = 1 ∧
+    (r.c ^ 2 + r.a ^ 2) % 2 = 1 := by
+  have hE := quarticExactlyOneEven r
+  have hcOdd : r.c % 2 = 1 := by
+    rcases hE with hA | hB | hC
+    · exact (quartic_notEven_mod2_one r.c).mp hA.2.2
+    · exact False.elim (hB.1 ha)
+    · exact False.elim (hC.1 ha)
+  have ha0 : r.a % 2 = 0 := Nat.mod_eq_zero_of_dvd ha
+  constructor
+  · rw [Nat.sub_mod]
+    omega
+  constructor
+  · rw [Nat.add_mod, hcOdd, ha0]
+    decide
+  · rw [Nat.add_mod, Nat.pow_mod, Nat.pow_mod, hcOdd, ha0]
+    decide
+
+private theorem prime_ne_two_of_odd_divisor
+    {p n : Nat}
+    (hp : IsPrime p)
+    (hnOdd : n % 2 = 1)
+    (hpn : p ∣ n) :
+    p ≠ 2 := by
+  intro hp2
+  subst p
+  have hz : n % 2 = 0 := Nat.mod_eq_zero_of_dvd hpn
+  omega
+
+private theorem gcd_eq_one_of_no_common_prime
+    {u v : Nat}
+    (huPos : 0 < u)
+    (hNo :
+      ∀ p : Nat, IsPrime p → ¬ (p ∣ u ∧ p ∣ v)) :
+    Nat.gcd u v = 1 := by
+  by_contra hne
+  have hgPos : 0 < Nat.gcd u v :=
+    Nat.gcd_pos_of_pos_left v huPos
+  have hgGt : 1 < Nat.gcd u v := by omega
+  rcases primeDivisorProperty_proved (Nat.gcd u v) hgGt with
+    ⟨p, hp, hpg⟩
+  have hpu : p ∣ u := nat_dvd_trans hpg (Nat.gcd_dvd_left u v)
+  have hpv : p ∣ v := nat_dvd_trans hpg (Nat.gcd_dvd_right u v)
+  exact hNo p hp ⟨hpu, hpv⟩
+
+/--
+On x=z=4 with a even, the three quartic blocks are pairwise coprime.
+This is the exact UFD-ready packet needed before perfect-power splitting.
+-/
+theorem reduced_xz_four_a_even_block_gcd_packet
+    (r : ReducedPrimitiveCandidate)
+    (hx : r.x = 4)
+    (hz : r.z = 4)
+    (ha : Even r.a) :
+    Nat.gcd (r.c - r.a) (r.c + r.a) = 1 ∧
+    Nat.gcd (r.c - r.a) (r.c ^ 2 + r.a ^ 2) = 1 ∧
+    Nat.gcd (r.c + r.a) (r.c ^ 2 + r.a ^ 2) = 1 := by
+  have hOdd := reduced_xz_four_a_even_blocks_odd r hx hz ha
+  have hac_lt : r.a < r.c := by
+    have heq' : r.b ^ r.y + r.a ^ r.x = r.c ^ r.z := by
+      simpa [Nat.add_comm] using r.equation
+    exact core_right_same_exponent_gap r.b_pos (by simpa [hx, hz] using heq')
+  have hsubPos : 0 < r.c - r.a := Nat.zero_lt_sub_of_lt hac_lt
+  have haddPos : 0 < r.c + r.a := Nat.add_pos_left r.c r.a_pos
+  constructor
+  · apply gcd_eq_one_of_no_common_prime hsubPos
+    intro p hp hboth
+    have hp2 : p ≠ 2 :=
+      prime_ne_two_of_odd_divisor hp hOdd.1 hboth.1
+    exact reduced_xz_four_linear_odd_prime_disjoint
+      r hx hz hp hp2 hboth
+  constructor
+  · apply gcd_eq_one_of_no_common_prime hsubPos
+    intro p hp hboth
+    have hp2 : p ≠ 2 :=
+      prime_ne_two_of_odd_divisor hp hOdd.1 hboth.1
+    exact reduced_xz_four_sub_quad_odd_prime_disjoint
+      r hx hz hp hp2 hboth
+  · apply gcd_eq_one_of_no_common_prime haddPos
+    intro p hp hboth
+    have hp2 : p ≠ 2 :=
+      prime_ne_two_of_odd_divisor hp hOdd.2.1 hboth.1
+    exact reduced_xz_four_add_quad_odd_prime_disjoint
+      r hx hz hp hp2 hboth
+
+/--
+Complete core-only quartic packet for the a-even x=z=4 orientation.
+-/
+structure XZFourAEvenCorePacket
+    (r : ReducedPrimitiveCandidate) : Prop where
+  hx : r.x = 4
+  hz : r.z = 4
+  ha : Even r.a
+  factorization :
+    r.b ^ r.y =
+      (r.c - r.a) * ((r.c + r.a) * (r.c ^ 2 + r.a ^ 2))
+  blocksOdd :
+    (r.c - r.a) % 2 = 1 ∧
+    (r.c + r.a) % 2 = 1 ∧
+    (r.c ^ 2 + r.a ^ 2) % 2 = 1
+  blocksCoprime :
+    Nat.gcd (r.c - r.a) (r.c + r.a) = 1 ∧
+    Nat.gcd (r.c - r.a) (r.c ^ 2 + r.a ^ 2) = 1 ∧
+    Nat.gcd (r.c + r.a) (r.c ^ 2 + r.a ^ 2) = 1
+
+def reduced_xz_four_a_even_core_packet
+    (r : ReducedPrimitiveCandidate)
+    (hx : r.x = 4)
+    (hz : r.z = 4)
+    (ha : Even r.a) :
+    XZFourAEvenCorePacket r where
+  hx := hx
+  hz := hz
+  ha := ha
+  factorization := reduced_xz_four_exact_factorization r hx hz
+  blocksOdd := reduced_xz_four_a_even_blocks_odd r hx hz ha
+  blocksCoprime := reduced_xz_four_a_even_block_gcd_packet r hx hz ha
+
 #print axioms MCore.BealEffective.OpenMath.core_diff_factorization
 #print axioms MCore.BealEffective.OpenMath.core_right_same_exponent_gap
 #print axioms MCore.BealEffective.OpenMath.reduced_x_eq_z_exact_factor
@@ -439,6 +584,9 @@ theorem reduced_xz_four_three_block_odd_prime_separation
 #print axioms MCore.BealEffective.OpenMath.reduced_xz_four_sub_quad_odd_prime_disjoint
 #print axioms MCore.BealEffective.OpenMath.reduced_xz_four_add_quad_odd_prime_disjoint
 #print axioms MCore.BealEffective.OpenMath.reduced_xz_four_three_block_odd_prime_separation
+#print axioms MCore.BealEffective.OpenMath.reduced_xz_four_a_even_blocks_odd
+#print axioms MCore.BealEffective.OpenMath.reduced_xz_four_a_even_block_gcd_packet
+#print axioms MCore.BealEffective.OpenMath.reduced_xz_four_a_even_core_packet
 
 end OpenMath
 end BealEffective
