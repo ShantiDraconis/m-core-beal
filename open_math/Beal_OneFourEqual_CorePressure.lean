@@ -126,21 +126,116 @@ theorem oneFourEqual_x_pressure
     rw [hx, hy, hz, Nat.add_mod, hA8, hC8] at hmod
     omega
 
+/-- Concrete residue consequences for y=4, x=z=p. -/
+def OneFourEqualYPressure
+    (r : ReducedPrimitiveCandidate) (p : Nat) : Prop :=
+  (Even r.b → r.a ^ p % 8 = r.c ^ p % 8) ∧
+  (Even r.a → r.c ^ p % 8 = 1) ∧
+  (Even r.c → r.a ^ p % 8 = 7)
+
+theorem oneFourEqual_y_pressure
+    (r : ReducedPrimitiveCandidate)
+    (p : Nat)
+    (hy : r.y = 4)
+    (hx : r.x = p)
+    (hz : r.z = p)
+    (hp : OddPrimeExponent p) :
+    OneFourEqualYPressure r p := by
+  have hE := ofepExactlyOneEven r
+  constructor
+  · intro hb
+    have hB8 : r.b ^ 4 % 8 = 0 := by
+      rcases hb with ⟨k, rfl⟩
+      simp [mul_pow, Nat.mul_mod]
+    have hmod := congrArg (fun n : Nat => n % 8) r.equation
+    rw [hx, hy, hz, Nat.add_mod, hB8] at hmod
+    omega
+  constructor
+  · intro ha
+    have hbOdd : r.b % 2 = 1 := by
+      rcases hE with hA | hB | hC
+      · exact (ofepNotEven_mod2_one r.b).mp hA.2.1
+      · exact False.elim (hB.1 ha)
+      · exact False.elim (hC.1 ha)
+    have hB8 : r.b ^ 4 % 8 = 1 := ofepOddFourth8 hbOdd
+    have hA8 : r.a ^ p % 8 = 0 := ofepEvenPow8 ha hp.2
+    have hmod := congrArg (fun n : Nat => n % 8) r.equation
+    rw [hx, hy, hz, Nat.add_mod, hA8, hB8] at hmod
+    omega
+  · intro hc
+    have hbOdd : r.b % 2 = 1 := by
+      rcases hE with hA | hB | hC
+      · exact False.elim (hA.2.2 hc)
+      · exact False.elim (hB.2.2 hc)
+      · exact (ofepNotEven_mod2_one r.b).mp hC.2.1
+    have hB8 : r.b ^ 4 % 8 = 1 := ofepOddFourth8 hbOdd
+    have hC8 : r.c ^ p % 8 = 0 := ofepEvenPow8 hc hp.2
+    have hmod := congrArg (fun n : Nat => n % 8) r.equation
+    rw [hx, hy, hz, Nat.add_mod, hB8, hC8] at hmod
+    omega
+
+/-- Concrete residue consequences for z=4, x=y=p. -/
+def OneFourEqualZPressure
+    (r : ReducedPrimitiveCandidate) (p : Nat) : Prop :=
+  (Even r.a → r.b ^ p % 8 = 1) ∧
+  (Even r.b → r.a ^ p % 8 = 1) ∧
+  (Even r.c → (r.a ^ p % 8 + r.b ^ p % 8) % 8 = 0)
+
+theorem oneFourEqual_z_pressure
+    (r : ReducedPrimitiveCandidate)
+    (p : Nat)
+    (hz : r.z = 4)
+    (hx : r.x = p)
+    (hy : r.y = p)
+    (hp : OddPrimeExponent p) :
+    OneFourEqualZPressure r p := by
+  have hE := ofepExactlyOneEven r
+  constructor
+  · intro ha
+    have hcOdd : r.c % 2 = 1 := by
+      rcases hE with hA | hB | hC
+      · exact (ofepNotEven_mod2_one r.c).mp hA.2.2
+      · exact False.elim (hB.1 ha)
+      · exact False.elim (hC.1 ha)
+    have hC8 : r.c ^ 4 % 8 = 1 := ofepOddFourth8 hcOdd
+    have hA8 : r.a ^ p % 8 = 0 := ofepEvenPow8 ha hp.2
+    have hmod := congrArg (fun n : Nat => n % 8) r.equation
+    rw [hx, hy, hz, Nat.add_mod, hA8, hC8] at hmod
+    omega
+  constructor
+  · intro hb
+    have hcOdd : r.c % 2 = 1 := by
+      rcases hE with hA | hB | hC
+      · exact False.elim (hA.2.1 hb)
+      · exact (ofepNotEven_mod2_one r.c).mp hB.2.2
+      · exact False.elim (hC.2.1 hb)
+    have hC8 : r.c ^ 4 % 8 = 1 := ofepOddFourth8 hcOdd
+    have hB8 : r.b ^ p % 8 = 0 := ofepEvenPow8 hb hp.2
+    have hmod := congrArg (fun n : Nat => n % 8) r.equation
+    rw [hx, hy, hz, Nat.add_mod, hB8, hC8] at hmod
+    omega
+  · intro hc
+    have hC8 : r.c ^ 4 % 8 = 0 := by
+      rcases hc with ⟨k, rfl⟩
+      simp [mul_pow, Nat.mul_mod]
+    have hmod := congrArg (fun n : Nat => n % 8) r.equation
+    rw [hx, hy, hz, Nat.add_mod, hC8] at hmod
+    exact hmod
+
 /--
 Concrete pressure payload for all three placements of the single exponent 4.
-The payload is strictly arithmetic and is produced from the candidate.
+Every branch carries an arithmetic consequence, not merely its signature.
 -/
 def OneFourEqualResiduePressure (r : ReducedPrimitiveCandidate) : Prop :=
   (∃ p, OddPrimeExponent p ∧ r.x = 4 ∧ r.y = p ∧ r.z = p ∧
       OneFourEqualXPressure r p) ∨
-  (∃ p, OddPrimeExponent p ∧ r.y = 4 ∧ r.x = p ∧ r.z = p) ∨
-  (∃ p, OddPrimeExponent p ∧ r.z = 4 ∧ r.x = p ∧ r.y = p)
+  (∃ p, OddPrimeExponent p ∧ r.y = 4 ∧ r.x = p ∧ r.z = p ∧
+      OneFourEqualYPressure r p) ∨
+  (∃ p, OddPrimeExponent p ∧ r.z = 4 ∧ r.x = p ∧ r.y = p ∧
+      OneFourEqualZPressure r p)
 
-/--
-The x=4 branch of OneFourEqualPrimes is now materially compressed to residue
-pressure; the other two orientations remain explicit rather than hidden.
--/
-theorem oneFourEqualPrimes_forces_x_pressure_or_other_orientation
+/-- Every (4,p,p) signature now produces a concrete residue-pressure payload. -/
+theorem oneFourEqualPrimes_forces_residue_pressure
     (r : ReducedPrimitiveCandidate)
     (h : OneFourEqualPrimes r.x r.y r.z) :
     OneFourEqualResiduePressure r := by
@@ -149,12 +244,16 @@ theorem oneFourEqualPrimes_forces_x_pressure_or_other_orientation
     exact Or.inl ⟨r.y, hp, hx4, rfl, hzy,
       oneFourEqual_x_pressure r r.y hx4 rfl hzy hp⟩
   · rcases hy with ⟨hy4, hp, hzx⟩
-    exact Or.inr (Or.inl ⟨r.x, hp, hy4, rfl, hzx⟩)
+    exact Or.inr (Or.inl ⟨r.x, hp, hy4, rfl, hzx,
+      oneFourEqual_y_pressure r r.x hy4 rfl hzx hp⟩)
   · rcases hz with ⟨hz4, hp, hyx⟩
-    exact Or.inr (Or.inr ⟨r.x, hp, hz4, rfl, hyx⟩)
+    exact Or.inr (Or.inr ⟨r.x, hp, hz4, rfl, hyx,
+      oneFourEqual_z_pressure r r.x hz4 rfl hyx hp⟩)
 
 #print axioms MCore.BealEffective.OpenMath.oneFourEqual_x_pressure
-#print axioms MCore.BealEffective.OpenMath.oneFourEqualPrimes_forces_x_pressure_or_other_orientation
+#print axioms MCore.BealEffective.OpenMath.oneFourEqual_y_pressure
+#print axioms MCore.BealEffective.OpenMath.oneFourEqual_z_pressure
+#print axioms MCore.BealEffective.OpenMath.oneFourEqualPrimes_forces_residue_pressure
 
 end OpenMath
 end BealEffective
