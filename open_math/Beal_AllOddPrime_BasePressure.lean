@@ -212,10 +212,69 @@ theorem threeDistinctOddPrimes_forces_base_pressure
     AllOddPrimeBasePressure r :=
   allOddPrime_forces_base_pressure r h.1 h.2.1 h.2.2.1
 
+/--
+If c is the unique even base in an all-odd-prime signature, the two odd bases
+must occupy complementary nonzero residue classes modulo 8.
+-/
+theorem allOddPrime_cEven_residue_pairs
+    (r : ReducedPrimitiveCandidate)
+    (hx : OddPrimeExponent r.x)
+    (hy : OddPrimeExponent r.y)
+    (hz : OddPrimeExponent r.z)
+    (hc : Even r.c) :
+    (r.a % 8 = 1 ∧ r.b % 8 = 7) ∨
+    (r.a % 8 = 3 ∧ r.b % 8 = 5) ∨
+    (r.a % 8 = 5 ∧ r.b % 8 = 3) ∨
+    (r.a % 8 = 7 ∧ r.b % 8 = 1) := by
+  have hE := allOddExactlyOneEven r
+  have haOdd : r.a % 2 = 1 := by
+    rcases hE with hA | hB | hC
+    · exact False.elim (hA.2.2 hc)
+    · exact False.elim (hB.2.2 hc)
+    · exact (notEven_mod2_one r.a).mp hC.1
+  have hbOdd : r.b % 2 = 1 := by
+    rcases hE with hA | hB | hC
+    · exact False.elim (hA.2.2 hc)
+    · exact False.elim (hB.2.2 hc)
+    · exact (notEven_mod2_one r.b).mp hC.2.1
+  have hsum :=
+    (allOddPrime_forces_base_pressure r hx hy hz).2.2 hc
+  rcases oddResidue8 haOdd with ha | ha | ha | ha <;>
+    rcases oddResidue8 hbOdd with hb | hb | hb | hb <;>
+    simp [ha, hb] at hsum ⊢ <;>
+    omega
+
+/--
+If a is the unique even base, b and c occupy the same odd class modulo 8.
+-/
+theorem allOddPrime_aEven_equal_residue
+    (r : ReducedPrimitiveCandidate)
+    (hx : OddPrimeExponent r.x)
+    (hy : OddPrimeExponent r.y)
+    (hz : OddPrimeExponent r.z)
+    (ha : Even r.a) :
+    r.b % 8 = r.c % 8 :=
+  (allOddPrime_forces_base_pressure r hx hy hz).1 ha
+
+/--
+If b is the unique even base, a and c occupy the same odd class modulo 8.
+-/
+theorem allOddPrime_bEven_equal_residue
+    (r : ReducedPrimitiveCandidate)
+    (hx : OddPrimeExponent r.x)
+    (hy : OddPrimeExponent r.y)
+    (hz : OddPrimeExponent r.z)
+    (hb : Even r.b) :
+    r.a % 8 = r.c % 8 :=
+  (allOddPrime_forces_base_pressure r hx hy hz).2.1 hb
+
 #print axioms MCore.BealEffective.OpenMath.oddBase_oddExponent_pow_mod8_eq_base
 #print axioms MCore.BealEffective.OpenMath.allOddPrime_forces_base_pressure
 #print axioms MCore.BealEffective.OpenMath.twoEqualOddPrimes_forces_base_pressure
 #print axioms MCore.BealEffective.OpenMath.threeDistinctOddPrimes_forces_base_pressure
+#print axioms MCore.BealEffective.OpenMath.allOddPrime_cEven_residue_pairs
+#print axioms MCore.BealEffective.OpenMath.allOddPrime_aEven_equal_residue
+#print axioms MCore.BealEffective.OpenMath.allOddPrime_bEven_equal_residue
 
 end OpenMath
 end BealEffective
