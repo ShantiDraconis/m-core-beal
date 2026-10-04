@@ -568,6 +568,52 @@ def reduced_xz_four_a_even_core_packet
   blocksOdd := reduced_xz_four_a_even_blocks_odd r hx hz ha
   blocksCoprime := reduced_xz_four_a_even_block_gcd_packet r hx hz ha
 
+/--
+Generic UFD producer isolated from Beal:
+a pairwise-coprime triple whose product is an e-th power splits into e-th
+powers componentwise.
+-/
+def CoprimeTriplePowerSplitting : Prop :=
+  ∀ A B C b e : Nat,
+    0 < e →
+    Nat.gcd A B = 1 →
+    Nat.gcd A C = 1 →
+    Nat.gcd B C = 1 →
+    b ^ e = A * (B * C) →
+    ∃ u v w : Nat,
+      A = u ^ e ∧
+      B = v ^ e ∧
+      C = w ^ e
+
+/--
+The a-even x=z=4 branch reduces exactly to the generic coprime power splitter.
+No Beal conclusion appears in this producer.
+-/
+theorem reduced_xz_four_a_even_power_forms_of_splitter
+    (hSplit : CoprimeTriplePowerSplitting)
+    (r : ReducedPrimitiveCandidate)
+    (hx : r.x = 4)
+    (hz : r.z = 4)
+    (ha : Even r.a) :
+    ∃ u v w : Nat,
+      r.c - r.a = u ^ r.y ∧
+      r.c + r.a = v ^ r.y ∧
+      r.c ^ 2 + r.a ^ 2 = w ^ r.y := by
+  have P := reduced_xz_four_a_even_core_packet r hx hz ha
+  have hyPos : 0 < r.y :=
+    Nat.lt_trans (by decide : 0 < 2) r.y_reduced.1
+  exact hSplit
+    (r.c - r.a)
+    (r.c + r.a)
+    (r.c ^ 2 + r.a ^ 2)
+    r.b
+    r.y
+    hyPos
+    P.blocksCoprime.1
+    P.blocksCoprime.2.1
+    P.blocksCoprime.2.2
+    P.factorization
+
 #print axioms MCore.BealEffective.OpenMath.core_diff_factorization
 #print axioms MCore.BealEffective.OpenMath.core_right_same_exponent_gap
 #print axioms MCore.BealEffective.OpenMath.reduced_x_eq_z_exact_factor
@@ -587,6 +633,7 @@ def reduced_xz_four_a_even_core_packet
 #print axioms MCore.BealEffective.OpenMath.reduced_xz_four_a_even_blocks_odd
 #print axioms MCore.BealEffective.OpenMath.reduced_xz_four_a_even_block_gcd_packet
 #print axioms MCore.BealEffective.OpenMath.reduced_xz_four_a_even_core_packet
+#print axioms MCore.BealEffective.OpenMath.reduced_xz_four_a_even_power_forms_of_splitter
 
 end OpenMath
 end BealEffective
