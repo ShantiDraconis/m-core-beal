@@ -50,7 +50,8 @@ theorem reduced_gcd_ab_eq_one
   have hpos : 0 < Nat.gcd r.a r.b :=
     Nat.gcd_pos_of_pos_left r.b r.a_pos
   have hgt : 1 < Nat.gcd r.a r.b := by
-    omega
+    have hle : 1 ≤ Nat.gcd r.a r.b := Nat.succ_le_of_lt hpos
+    exact Nat.lt_of_le_of_ne hle (Ne.symm hne)
   exact (reduced_pairwisePrimitive_core r).1
     ⟨Nat.gcd r.a r.b, hgt, Nat.gcd_dvd_left _ _, Nat.gcd_dvd_right _ _⟩
 
@@ -62,7 +63,8 @@ theorem reduced_gcd_ac_eq_one
   have hpos : 0 < Nat.gcd r.a r.c :=
     Nat.gcd_pos_of_pos_left r.c r.a_pos
   have hgt : 1 < Nat.gcd r.a r.c := by
-    omega
+    have hle : 1 ≤ Nat.gcd r.a r.c := Nat.succ_le_of_lt hpos
+    exact Nat.lt_of_le_of_ne hle (Ne.symm hne)
   exact (reduced_pairwisePrimitive_core r).2.1
     ⟨Nat.gcd r.a r.c, hgt, Nat.gcd_dvd_left _ _, Nat.gcd_dvd_right _ _⟩
 
@@ -74,7 +76,8 @@ theorem reduced_gcd_bc_eq_one
   have hpos : 0 < Nat.gcd r.b r.c :=
     Nat.gcd_pos_of_pos_left r.c r.b_pos
   have hgt : 1 < Nat.gcd r.b r.c := by
-    omega
+    have hle : 1 ≤ Nat.gcd r.b r.c := Nat.succ_le_of_lt hpos
+    exact Nat.lt_of_le_of_ne hle (Ne.symm hne)
   exact (reduced_pairwisePrimitive_core r).2.2
     ⟨Nat.gcd r.b r.c, hgt, Nat.gcd_dvd_left _ _, Nat.gcd_dvd_right _ _⟩
 
