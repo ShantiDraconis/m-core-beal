@@ -1431,6 +1431,162 @@ theorem reduced_xy_four_prime_orbit_pressure
     pairwise := quarticPairwise r
   }
 
+private theorem quartic_gcd3_eq_one
+    (r : ReducedPrimitiveCandidate) :
+    Nat.gcd r.a (Nat.gcd r.b r.c) = 1 := by
+  by_contra hne
+  have hgPos : 0 < Nat.gcd r.a (Nat.gcd r.b r.c) :=
+    Nat.gcd_pos_of_pos_left (Nat.gcd r.b r.c) r.a_pos
+  have hgGt : 1 < Nat.gcd r.a (Nat.gcd r.b r.c) := by
+    omega
+  rcases primeDivisorProperty_proved
+      (Nat.gcd r.a (Nat.gcd r.b r.c)) hgGt with
+    ⟨p, hp, hpg⟩
+  have hpa : p ∣ r.a :=
+    nat_dvd_trans hpg (Nat.gcd_dvd_left r.a (Nat.gcd r.b r.c))
+  have hpbc : p ∣ Nat.gcd r.b r.c :=
+    nat_dvd_trans hpg (Nat.gcd_dvd_right r.a (Nat.gcd r.b r.c))
+  have hpb : p ∣ r.b :=
+    nat_dvd_trans hpbc (Nat.gcd_dvd_left r.b r.c)
+  have hpc : p ∣ r.c :=
+    nat_dvd_trans hpbc (Nat.gcd_dvd_right r.b r.c)
+  exact r.no_common ⟨p, hp.1, hpa, hpb, hpc⟩
+
+/-- Concrete primitive solution of the generalized Fermat signature (4,4,p). -/
+structure PrimitiveQuarticSumPrimeSolution (p : Nat) where
+  A : Nat
+  B : Nat
+  C : Nat
+  A_pos : 0 < A
+  B_pos : 0 < B
+  C_pos : 0 < C
+  primitive : Nat.gcd A (Nat.gcd B C) = 1
+  equation : A ^ 4 + B ^ 4 = C ^ p
+
+/-- Orbit A produces a genuine primitive (4,4,p) solution object. -/
+theorem reduced_xy_four_prime_to_primitive_quartic_sum
+    (r : ReducedPrimitiveCandidate)
+    (hx : r.x = 4)
+    (hy : r.y = 4)
+    (hzPrime : OddPrimeExponent r.z) :
+    Nonempty (PrimitiveQuarticSumPrimeSolution r.z) := by
+  exact ⟨{
+    A := r.a
+    B := r.b
+    C := r.c
+    A_pos := r.a_pos
+    B_pos := r.b_pos
+    C_pos := r.c_pos
+    primitive := quartic_gcd3_eq_one r
+    equation := by simpa [hx, hy] using r.equation
+  }⟩
+
+/-- Concrete primitive solution of x^4 - y^4 = z^p, written subtraction-free. -/
+structure PrimitiveQuarticDifferencePrimeSolution (p : Nat) where
+  X : Nat
+  Y : Nat
+  Z : Nat
+  X_pos : 0 < X
+  Y_pos : 0 < Y
+  Z_pos : 0 < Z
+  primitiveXY : Nat.gcd X Y = 1
+  equation : Y ^ 4 + Z ^ p = X ^ 4
+
+private theorem quartic_gcd_ac_eq_one
+    (r : ReducedPrimitiveCandidate) :
+    Nat.gcd r.c r.a = 1 := by
+  have hpw := quarticPairwise r
+  apply gcd_eq_one_of_no_common_prime r.c_pos
+  intro p hp hboth
+  exact hpw.2.1 ⟨p, hp.1, hboth.2, hboth.1⟩
+
+private theorem quartic_gcd_bc_eq_one
+    (r : ReducedPrimitiveCandidate) :
+    Nat.gcd r.c r.b = 1 := by
+  have hpw := quarticPairwise r
+  apply gcd_eq_one_of_no_common_prime r.c_pos
+  intro p hp hboth
+  exact hpw.2.2 ⟨p, hp.1, hboth.2, hboth.1⟩
+
+/-- Every x=z=4 branch produces a primitive quartic-difference solution. -/
+theorem reduced_xz_four_to_primitive_quartic_difference
+    (r : ReducedPrimitiveCandidate)
+    (hx : r.x = 4)
+    (hz : r.z = 4)
+    (hyPrime : OddPrimeExponent r.y) :
+    Nonempty (PrimitiveQuarticDifferencePrimeSolution r.y) := by
+  exact ⟨{
+    X := r.c
+    Y := r.a
+    Z := r.b
+    X_pos := r.c_pos
+    Y_pos := r.a_pos
+    Z_pos := r.b_pos
+    primitiveXY := quartic_gcd_ac_eq_one r
+    equation := by
+      have h := r.equation
+      simpa [hx, hz, Nat.add_comm] using h
+  }⟩
+
+/-- Every y=z=4 branch produces the symmetric quartic-difference solution. -/
+theorem reduced_yz_four_to_primitive_quartic_difference
+    (r : ReducedPrimitiveCandidate)
+    (hy : r.y = 4)
+    (hz : r.z = 4)
+    (hxPrime : OddPrimeExponent r.x) :
+    Nonempty (PrimitiveQuarticDifferencePrimeSolution r.x) := by
+  exact ⟨{
+    X := r.c
+    Y := r.b
+    Z := r.a
+    X_pos := r.c_pos
+    Y_pos := r.b_pos
+    Z_pos := r.a_pos
+    primitiveXY := quartic_gcd_bc_eq_one r
+    equation := by
+      simpa [hy, hz] using r.equation
+  }⟩
+
+/--
+Exact external formalization frontier for the known primitive (4,4,p)
+generalized-Fermat exclusion.
+-/
+def PrimitiveQuarticSumPrimeExclusion : Prop :=
+  ∀ p : Nat, OddPrimeExponent p →
+    ∀ S : PrimitiveQuarticSumPrimeSolution p, False
+
+/--
+Exact external formalization frontier for the primitive quartic-difference
+signature x^4-y^4=z^p.
+-/
+def PrimitiveQuarticDifferencePrimeExclusion : Prop :=
+  ∀ p : Nat, OddPrimeExponent p →
+    ∀ S : PrimitiveQuarticDifferencePrimeSolution p, False
+
+/--
+Q3 is now reduced exactly to the two classical generalized-Fermat
+formalization frontiers above.
+-/
+theorem twoFourPrime_eliminated_of_quartic_exclusions
+    (hSum : PrimitiveQuarticSumPrimeExclusion)
+    (hDiff : PrimitiveQuarticDifferencePrimeExclusion) :
+    ∀ r : ReducedPrimitiveCandidate,
+      TwoFourPrime r.x r.y r.z → False := by
+  intro r h
+  rcases h with hxy | hxz | hyz
+  · rcases hxy with ⟨hx, hy, hp⟩
+    rcases reduced_xy_four_prime_to_primitive_quartic_sum
+        r hx hy hp with ⟨S⟩
+    exact hSum r.z hp S
+  · rcases hxz with ⟨hx, hz, hp⟩
+    rcases reduced_xz_four_to_primitive_quartic_difference
+        r hx hz hp with ⟨S⟩
+    exact hDiff r.y hp S
+  · rcases hyz with ⟨hy, hz, hp⟩
+    rcases reduced_yz_four_to_primitive_quartic_difference
+        r hy hz hp with ⟨S⟩
+    exact hDiff r.x hp S
+
 #print axioms MCore.BealEffective.OpenMath.core_diff_factorization
 #print axioms MCore.BealEffective.OpenMath.core_right_same_exponent_gap
 #print axioms MCore.BealEffective.OpenMath.reduced_x_eq_z_exact_factor
@@ -1461,6 +1617,10 @@ theorem reduced_xy_four_prime_orbit_pressure
 #print axioms MCore.BealEffective.OpenMath.reduced_xy_four_c_even_impossible
 #print axioms MCore.BealEffective.OpenMath.twoFourPrime_reduces_to_three_orbits_of_denes
 #print axioms MCore.BealEffective.OpenMath.reduced_xy_four_prime_orbit_pressure
+#print axioms MCore.BealEffective.OpenMath.reduced_xy_four_prime_to_primitive_quartic_sum
+#print axioms MCore.BealEffective.OpenMath.reduced_xz_four_to_primitive_quartic_difference
+#print axioms MCore.BealEffective.OpenMath.reduced_yz_four_to_primitive_quartic_difference
+#print axioms MCore.BealEffective.OpenMath.twoFourPrime_eliminated_of_quartic_exclusions
 
 end OpenMath
 end BealEffective
