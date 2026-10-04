@@ -238,7 +238,8 @@ theorem reduced_xz_four_linear_odd_prime_disjoint
   have hpa : p ∣ r.a := by
     rcases prime_dvd_mul_local hp h2a with htwo | ha
     · have hle : p ≤ 2 := Nat.le_of_dvd (by decide : 0 < (2 : Nat)) htwo
-      have heq : p = 2 := by omega
+      have hge : 2 ≤ p := Nat.succ_le_of_lt hp.1
+      have heq : p = 2 := Nat.le_antisymm hle hge
       exact False.elim (hp2 heq)
     · exact ha
   have hpc : p ∣ r.c := by
@@ -326,7 +327,7 @@ theorem reduced_xz_four_sub_quad_odd_prime_disjoint
   have hdiffEq :
       r.c ^ 2 - r.a ^ 2 = (r.c - r.a) * (r.c + r.a) := by
     rw [← hfac2]
-    simp
+    exact Nat.add_sub_cancel_left _ _
   have hdiff : p ∣ r.c ^ 2 - r.a ^ 2 := by
     rw [hdiffEq]
     exact hprod
@@ -336,15 +337,20 @@ theorem reduced_xz_four_sub_quad_odd_prime_disjoint
     have hsqle : r.a ^ 2 ≤ r.c ^ 2 := by
       rw [← hfac2]
       exact Nat.le_add_right _ _
+    have hcdecomp :
+        r.c ^ 2 = (r.c ^ 2 - r.a ^ 2) + r.a ^ 2 :=
+      (Nat.sub_add_cancel hsqle).symm
     have hid :
         (r.c ^ 2 + r.a ^ 2) - (r.c ^ 2 - r.a ^ 2) =
           2 * (r.a ^ 2) := by
+      rw [hcdecomp]
       omega
     simpa [hid] using hs
   have hpa2 : p ∣ r.a ^ 2 := by
     rcases prime_dvd_mul_local hp h2a2 with htwo | ha2
     · have hle : p ≤ 2 := Nat.le_of_dvd (by decide : 0 < (2 : Nat)) htwo
-      have heq : p = 2 := by omega
+      have hge : 2 ≤ p := Nat.succ_le_of_lt hp.1
+      have heq : p = 2 := Nat.le_antisymm hle hge
       exact False.elim (hp2 heq)
     · exact ha2
   have hpa : p ∣ r.a := prime_dvd_pow_reflect hp hpa2
@@ -371,7 +377,7 @@ theorem reduced_xz_four_add_quad_odd_prime_disjoint
   have hsumSq :
       (r.c + r.a) * (r.c + r.a) =
         r.c ^ 2 + 2 * r.c * r.a + r.a ^ 2 := by
-    simp [Nat.pow_succ, Nat.add_mul, Nat.mul_add,
+    simp [Nat.pow_succ, Nat.add_mul, Nat.mul_add, Nat.succ_mul,
       Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm,
       Nat.add_assoc, Nat.add_comm, Nat.add_left_comm]
   have hfull : p ∣ r.c ^ 2 + 2 * r.c * r.a + r.a ^ 2 := by
@@ -391,17 +397,22 @@ theorem reduced_xz_four_add_quad_odd_prime_disjoint
   rcases prime_dvd_mul_local hp h2ca with h2c | hpa
   · rcases prime_dvd_mul_local hp h2c with htwo | hpc
     · have hle : p ≤ 2 := Nat.le_of_dvd (by decide : 0 < (2 : Nat)) htwo
-      have heq : p = 2 := by omega
+      have hge : 2 ≤ p := Nat.succ_le_of_lt hp.1
+      have heq : p = 2 := Nat.le_antisymm hle hge
       exact hp2 heq
     ·
       have hpa' : p ∣ r.a := by
         have hs : p ∣ (r.c + r.a) - r.c := Nat.dvd_sub hadd hpc
-        simpa using hs
+        have hid : (r.c + r.a) - r.c = r.a :=
+          Nat.add_sub_cancel_left r.c r.a
+        simpa [hid] using hs
       exact (quarticPairwise r).2.1 ⟨p, hp.1, hpa', hpc⟩
   ·
     have hpc : p ∣ r.c := by
       have hs : p ∣ (r.c + r.a) - r.a := Nat.dvd_sub hadd hpa
-      simpa using hs
+      have hid : (r.c + r.a) - r.a = r.c :=
+        Nat.add_sub_cancel r.c r.a
+      simpa [hid] using hs
     exact (quarticPairwise r).2.1 ⟨p, hp.1, hpa, hpc⟩
 
 /--
@@ -459,14 +470,28 @@ theorem reduced_xz_four_a_even_blocks_odd
     · exact False.elim (hB.1 ha)
     · exact False.elim (hC.1 ha)
   have ha0 : r.a % 2 = 0 := Nat.mod_eq_zero_of_dvd ha
-  constructor
-  · rw [Nat.sub_mod]
+  have hac_lt : r.a < r.c := by
+    have heq' : r.b ^ r.y + r.a ^ r.x = r.c ^ r.z := by
+      simpa [Nat.add_comm] using r.equation
+    exact core_right_same_exponent_gap r.b_pos (by simpa [hx, hz] using heq')
+  have hac : r.a ≤ r.c := Nat.le_of_lt hac_lt
+  have hsubOdd : (r.c - r.a) % 2 = 1 := by
+    have hdecomp : (r.c - r.a) + r.a = r.c :=
+      Nat.sub_add_cancel hac
+    have hm := congrArg (fun n : Nat => n % 2) hdecomp
+    rw [Nat.add_mod, ha0, hcOdd] at hm
     omega
-  constructor
-  · rw [Nat.add_mod, hcOdd, ha0]
-    decide
-  · rw [Nat.add_mod, Nat.pow_mod, Nat.pow_mod, hcOdd, ha0]
-    decide
+  have haddOdd : (r.c + r.a) % 2 = 1 := by
+    rw [Nat.add_mod, hcOdd, ha0]
+  have hc2 : r.c ^ 2 % 2 = 1 := by
+    simp [Nat.pow_succ, Nat.mul_mod, hcOdd]
+  have ha2 : r.a ^ 2 % 2 = 0 := by
+    have hdiv : 2 ∣ r.a ^ 2 :=
+      dvd_pow_of_dvd (by decide : 0 < (2 : Nat)) ha
+    exact Nat.mod_eq_zero_of_dvd hdiv
+  have hquadOdd : (r.c ^ 2 + r.a ^ 2) % 2 = 1 := by
+    rw [Nat.add_mod, hc2, ha2]
+  exact ⟨hsubOdd, haddOdd, hquadOdd⟩
 
 private theorem prime_ne_two_of_odd_divisor
     {p n : Nat}
@@ -485,15 +510,24 @@ private theorem gcd_eq_one_of_no_common_prime
     (hNo :
       ∀ p : Nat, IsPrime p → ¬ (p ∣ u ∧ p ∣ v)) :
     Nat.gcd u v = 1 := by
-  by_contra hne
-  have hgPos : 0 < Nat.gcd u v :=
-    Nat.gcd_pos_of_pos_left v huPos
-  have hgGt : 1 < Nat.gcd u v := by omega
-  rcases primeDivisorProperty_proved (Nat.gcd u v) hgGt with
-    ⟨p, hp, hpg⟩
-  have hpu : p ∣ u := nat_dvd_trans hpg (Nat.gcd_dvd_left u v)
-  have hpv : p ∣ v := nat_dvd_trans hpg (Nat.gcd_dvd_right u v)
-  exact hNo p hp ⟨hpu, hpv⟩
+  apply (Nat.gcd_eq_one_iff).2
+  intro d hdu hdv
+  by_cases hd1 : d = 1
+  · exact hd1
+  have hd0 : d ≠ 0 := by
+    intro hd0
+    subst d
+    rcases hdu with ⟨k, hk⟩
+    simp at hk
+    exact (Nat.ne_of_gt huPos) hk
+  have hdpos : 0 < d := Nat.pos_of_ne_zero hd0
+  have hdgt : 1 < d := by
+    have hle : 1 ≤ d := Nat.succ_le_of_lt hdpos
+    exact Nat.lt_of_le_of_ne hle (Ne.symm hd1)
+  rcases primeDivisorProperty_proved d hdgt with ⟨p, hp, hpd⟩
+  have hpu : p ∣ u := nat_dvd_trans hpd hdu
+  have hpv : p ∣ v := nat_dvd_trans hpd hdv
+  exact False.elim (hNo p hp ⟨hpu, hpv⟩)
 
 /--
 On x=z=4 with a even, the three quartic blocks are pairwise coprime.
@@ -513,7 +547,7 @@ theorem reduced_xz_four_a_even_block_gcd_packet
       simpa [Nat.add_comm] using r.equation
     exact core_right_same_exponent_gap r.b_pos (by simpa [hx, hz] using heq')
   have hsubPos : 0 < r.c - r.a := Nat.zero_lt_sub_of_lt hac_lt
-  have haddPos : 0 < r.c + r.a := Nat.add_pos_left r.c r.a_pos
+  have haddPos : 0 < r.c + r.a := by omega
   constructor
   · apply gcd_eq_one_of_no_common_prime hsubPos
     intro p hp hboth
@@ -584,47 +618,37 @@ private theorem gcd_mul_eq_one_of_pairwise_gcd
     (hAB : Nat.gcd A B = 1)
     (hAC : Nat.gcd A C = 1) :
     Nat.gcd A (B * C) = 1 := by
-  by_contra hne
-  have hApos : 0 < A := by
-    by_cases hA0 : A = 0
-    · subst A
-      simp at hAB
-    · exact Nat.pos_of_ne_zero hA0
-  have hgPos : 0 < Nat.gcd A (B * C) :=
-    Nat.gcd_pos_of_pos_left (B * C) hApos
-  have hgGt : 1 < Nat.gcd A (B * C) := by omega
-  rcases primeDivisorProperty_proved (Nat.gcd A (B * C)) hgGt with
-    ⟨p, hp, hpg⟩
-  have hpA : p ∣ A :=
-    nat_dvd_trans hpg (Nat.gcd_dvd_left A (B * C))
-  have hpBC : p ∣ B * C :=
-    nat_dvd_trans hpg (Nat.gcd_dvd_right A (B * C))
+  by_cases hA0 : A = 0
+  · subst A
+    have hB1 : B = 1 := by simpa using hAB
+    have hC1 : C = 1 := by simpa using hAC
+    simp [hB1, hC1]
+  apply (Nat.gcd_eq_one_iff).2
+  intro d hdA hdBC
+  by_cases hd1 : d = 1
+  · exact hd1
+  have hd0 : d ≠ 0 := by
+    intro hd0
+    subst d
+    rcases hdA with ⟨k, hk⟩
+    simp at hk
+    exact hA0 hk
+  have hdgt : 1 < d := by
+    have hdpos : 0 < d := Nat.pos_of_ne_zero hd0
+    have hle : 1 ≤ d := Nat.succ_le_of_lt hdpos
+    exact Nat.lt_of_le_of_ne hle (Ne.symm hd1)
+  rcases primeDivisorProperty_proved d hdgt with ⟨p, hp, hpd⟩
+  have hpA : p ∣ A := nat_dvd_trans hpd hdA
+  have hpBC : p ∣ B * C := nat_dvd_trans hpd hdBC
   rcases prime_dvd_mul_local hp hpBC with hpB | hpC
   · have hpG : p ∣ Nat.gcd A B := Nat.dvd_gcd hpA hpB
     rw [hAB] at hpG
     have hle : p ≤ 1 := Nat.le_of_dvd (by decide : 0 < (1 : Nat)) hpG
-    omega
+    exact False.elim ((Nat.not_le_of_gt hp.1) hle)
   · have hpG : p ∣ Nat.gcd A C := Nat.dvd_gcd hpA hpC
     rw [hAC] at hpG
     have hle : p ≤ 1 := Nat.le_of_dvd (by decide : 0 < (1 : Nat)) hpG
-    omega
-
-/--
-Generic UFD producer isolated from Beal:
-a pairwise-coprime triple whose product is an e-th power splits into e-th
-powers componentwise.
--/
-def CoprimeTriplePowerSplitting : Prop :=
-  ∀ A B C b e : Nat,
-    0 < e →
-    Nat.gcd A B = 1 →
-    Nat.gcd A C = 1 →
-    Nat.gcd B C = 1 →
-    b ^ e = A * (B * C) →
-    ∃ u v w : Nat,
-      A = u ^ e ∧
-      B = v ^ e ∧
-      C = w ^ e
+    exact False.elim ((Nat.not_le_of_gt hp.1) hle)
 
 /-- The two-factor splitter is sufficient to construct the triple splitter. -/
 theorem pairSplitter_implies_tripleSplitter
@@ -635,7 +659,7 @@ theorem pairSplitter_implies_tripleSplitter
     gcd_mul_eq_one_of_pairwise_gcd hAB hAC
   rcases hPair A (B * C) b e he hA_BC hpow with
     ⟨u, t, hA, hBCpow⟩
-  rcases hPair B C t e he hBC hBCpow with
+  rcases hPair B C t e he hBC hBCpow.symm with
     ⟨v, w, hB, hC⟩
   exact ⟨u, v, w, hA, hB, hC⟩
 
@@ -671,7 +695,7 @@ theorem primePairSplitter_quartic_triple
     gcd_mul_eq_one_of_pairwise_gcd hAB hAC
   rcases hPair A (B * C) b p hp hA_BC hpow with
     ⟨u, t, hA, hBCpow⟩
-  rcases hPair B C t p hp hBC hBCpow with
+  rcases hPair B C t p hp hBC hBCpow.symm with
     ⟨v, w, hB, hC⟩
   exact ⟨u, v, w, hA, hB, hC⟩
 
@@ -749,8 +773,7 @@ private theorem splitter_gcd_one_of_two_divisors
   have hdB0 : d ∣ B := nat_dvd_trans hdB hB
   have hdG : d ∣ Nat.gcd A B := Nat.dvd_gcd hdA0 hdB0
   rw [hAB] at hdG
-  have hle : d ≤ 1 := Nat.le_of_dvd (by decide : 0 < (1 : Nat)) hdG
-  omega
+  exact Nat.dvd_one.mp hdG
 
 private theorem square_injective_pos
     {u v : Nat}
@@ -826,33 +849,19 @@ theorem reduced_xz_four_a_even_to_primitive_denes_resolved
       simpa [Nat.add_comm] using r.equation
     exact core_right_same_exponent_gap r.b_pos (by simpa [hx, hz] using heq')
   have hsubPos : 0 < r.c - r.a := Nat.zero_lt_sub_of_lt hac_lt
-  have haddPos : 0 < r.c + r.a := Nat.add_pos_left r.c r.a_pos
-  have hquadPos : 0 < r.c ^ 2 + r.a ^ 2 :=
-    Nat.add_pos_left _ (Nat.pow_pos r.c_pos)
+  have haddPos : 0 < r.c + r.a := by omega
+  have hquadPos : 0 < r.c ^ 2 + r.a ^ 2 := by
+    have hc2 : 0 < r.c ^ 2 := Nat.pow_pos r.c_pos
+    omega
   have huPos : 0 < u := by
     have hup : 0 < u ^ r.y := by simpa [hsub] using hsubPos
-    by_contra hnot
-    have hu0 : u = 0 := Nat.eq_zero_of_not_pos hnot
-    rw [hu0] at hup
-    have hy0 : r.y ≠ 0 :=
-      Nat.ne_of_gt (Nat.lt_trans (by decide : 0 < 2) hy.2)
-    simp [hy0] at hup
+    exact Nat.pos_of_pow_pos _ hup
   have hvPos : 0 < v := by
     have hvp : 0 < v ^ r.y := by simpa [hadd] using haddPos
-    by_contra hnot
-    have hv0 : v = 0 := Nat.eq_zero_of_not_pos hnot
-    rw [hv0] at hvp
-    have hy0 : r.y ≠ 0 :=
-      Nat.ne_of_gt (Nat.lt_trans (by decide : 0 < 2) hy.2)
-    simp [hy0] at hvp
+    exact Nat.pos_of_pow_pos _ hvp
   have hwPos : 0 < w := by
     have hwp : 0 < w ^ r.y := by simpa [hquad] using hquadPos
-    by_contra hnot
-    have hw0 : w = 0 := Nat.eq_zero_of_not_pos hnot
-    rw [hw0] at hwp
-    have hy0 : r.y ≠ 0 :=
-      Nat.ne_of_gt (Nat.lt_trans (by decide : 0 < 2) hy.2)
-    simp [hy0] at hwp
+    exact Nat.pos_of_pow_pos _ hwp
   let X := u ^ 2
   let Y := v ^ 2
   let Z := w
@@ -1034,8 +1043,7 @@ private theorem splitter_gcd_one_for_divisor_left
   have hdA : d ∣ A := nat_dvd_trans hdA1 hA1
   have hdG : d ∣ Nat.gcd A B := Nat.dvd_gcd hdA hdB
   rw [hAB] at hdG
-  have hle : d ≤ 1 := Nat.le_of_dvd (by decide : 0 < (1 : Nat)) hdG
-  omega
+  exact Nat.dvd_one.mp hdG
 
 private theorem splitter_pow_factor
     {q b b1 p : Nat}
@@ -1058,11 +1066,13 @@ theorem coprimePairPrimePowerSplitting_resolved :
         have hB1 : B = 1 := by
           simpa using hAB
         have hb0 : b = 0 := by
-          by_contra hbne
-          have hbPos : 0 < b := Nat.pos_of_ne_zero hbne
-          have hpowPos : 0 < b ^ p := Nat.pow_pos hbPos
-          rw [hpow] at hpowPos
-          simp at hpowPos
+          have hpow0 : b ^ p = 0 := by simpa using hpow
+          cases b with
+          | zero => rfl
+          | succ n =>
+              have hp0 : p ≠ 0 :=
+                Nat.ne_of_gt (Nat.lt_trans (by decide : 0 < 2) hp.2)
+              simp [hp0] at hpow0
         refine ⟨0, 1, ?_, ?_⟩
         · subst b
           have hp0 : p ≠ 0 :=
@@ -1114,11 +1124,11 @@ theorem coprimePairPrimePowerSplitting_resolved :
             Nat.le_of_dvd hqppos hqpow
           exact Nat.lt_of_lt_of_le hq.1 hqle
         have hA1pos : 0 < A1 := by
-          by_contra hzero
-          have hz : A1 = 0 := Nat.eq_zero_of_not_pos hzero
-          rw [hz] at hAeq
-          simp at hAeq
-          exact hA0 hAeq
+          cases A1 with
+          | zero =>
+              simp at hAeq
+              exact False.elim (hA0 hAeq)
+          | succ n => exact Nat.succ_pos n
         rw [hAeq]
         have hlt :
             1 * A1 < (q ^ p) * A1 :=
