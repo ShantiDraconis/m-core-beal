@@ -57,9 +57,8 @@ private theorem odd_fourth_mod8
     {n : Nat}
     (hn : n % 2 = 1) :
     n ^ 4 % 8 = 1 := by
-  have h16 := odd_fourth_mod16 hn
-  have h := congrArg (fun t : Nat => t % 8) h16
-  simpa [Nat.mod_mod_of_dvd n (by decide : 8 ∣ 16)] using h
+  rcases odd_residue16 hn with h | h | h | h | h | h | h | h
+  all_goals simp [Nat.pow_mod, h]
 
 /-- In the x=y=4 orientation, c cannot be the unique even base. -/
 theorem twoFour_xy_rhs_not_even
@@ -150,32 +149,8 @@ theorem twoFour_xy_rhs_pow_mod16
     simpa [hx, hy, Nat.add_mod, hA16, hB16] using hmod
   · exact False.elim (hcOdd hC.2.2)
 
-/-- Odd exponent + c^p=1 mod16 forces c=1 mod16. -/
-theorem twoFour_xy_rhs_base_mod16
-    (r : ReducedPrimitiveCandidate)
-    (hx : r.x = 4)
-    (hy : r.y = 4)
-    (hzPrime : OddPrimeExponent r.z) :
-    r.c % 16 = 1 := by
-  have hzOdd : r.z % 2 = 1 := by
-    have hnot : ¬ 2 ∣ r.z := by
-      intro h2
-      rcases hzPrime.1.2 2 h2 with h1 | hz2 <;> omega
-    have hpos : 0 < r.z % 2 := Nat.emod_pos_of_not_dvd hnot
-    have hlt : r.z % 2 < 2 := Nat.mod_lt r.z (by decide)
-    omega
-  have hcOdd : r.c % 2 = 1 :=
-    (notEven_iff_modTwo_eq_one r.c).mp (twoFour_xy_rhs_not_even r hx hy)
-  have hcSplit := odd_residue16 hcOdd
-  have hp := twoFour_xy_rhs_pow_mod16 r hx hy
-  rcases hcSplit with h | h | h | h | h | h | h | h
-  all_goals
-    simp [Nat.pow_mod, h] at hp
-  all_goals omega
-
 #print axioms MCore.BealEffective.OpenMath.twoFour_xy_rhs_not_even
 #print axioms MCore.BealEffective.OpenMath.twoFour_xy_rhs_pow_mod16
-#print axioms MCore.BealEffective.OpenMath.twoFour_xy_rhs_base_mod16
 
 end OpenMath
 end BealEffective
