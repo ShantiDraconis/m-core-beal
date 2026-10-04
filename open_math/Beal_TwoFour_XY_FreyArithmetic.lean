@@ -406,7 +406,16 @@ theorem xy_frey_odd_bad_prime_not_dvd_c4
       xyFrey_dvd_add hA2 hAB
     have hB2 : q ∣ (r.b ^ r.y) ^ 2 := by
       have hs := Nat.dvd_sub hS hfirst
-      simpa [Nat.add_assoc] using hs
+      have hdiff :
+          ((r.a ^ r.x) ^ 2 +
+              (r.a ^ r.x) * (r.b ^ r.y) +
+              (r.b ^ r.y) ^ 2) -
+            ((r.a ^ r.x) ^ 2 +
+              (r.a ^ r.x) * (r.b ^ r.y)) =
+            (r.b ^ r.y) ^ 2 := by
+        omega
+      rw [hdiff] at hs
+      exact hs
     have hBy : q ∣ r.b ^ r.y :=
       prime_dvd_pow_reflect hq hB2
     have hB : q ∣ r.b :=
@@ -430,7 +439,16 @@ theorem xy_frey_odd_bad_prime_not_dvd_c4
       simpa [Nat.add_assoc] using hS
     have hA2 : q ∣ (r.a ^ r.x) ^ 2 := by
       have hs := Nat.dvd_sub hS' htail
-      simpa using hs
+      have hdiff :
+          ((r.a ^ r.x) ^ 2 +
+              ((r.a ^ r.x) * (r.b ^ r.y) +
+                (r.b ^ r.y) ^ 2)) -
+            ((r.a ^ r.x) * (r.b ^ r.y) +
+              (r.b ^ r.y) ^ 2) =
+            (r.a ^ r.x) ^ 2 := by
+        omega
+      rw [hdiff] at hs
+      exact hs
     have hAx : q ∣ r.a ^ r.x :=
       prime_dvd_pow_reflect hq hA2
     have hA : q ∣ r.a :=
@@ -459,7 +477,14 @@ theorem xy_frey_odd_bad_prime_not_dvd_c4
       exact hS
     have hB2 : q ∣ (r.b ^ r.y) ^ 2 := by
       have hs := Nat.dvd_sub hS' hProd
-      simpa using hs
+      have hdiff :
+          ((r.a ^ r.x) * (r.a ^ r.x + r.b ^ r.y) +
+              (r.b ^ r.y) ^ 2) -
+            ((r.a ^ r.x) * (r.a ^ r.x + r.b ^ r.y)) =
+            (r.b ^ r.y) ^ 2 := by
+        omega
+      rw [hdiff] at hs
+      exact hs
     have hBy : q ∣ r.b ^ r.y :=
       prime_dvd_pow_reflect hq hB2
     have hB : q ∣ r.b :=
