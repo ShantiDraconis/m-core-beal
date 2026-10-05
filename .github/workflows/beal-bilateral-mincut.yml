@@ -29,6 +29,7 @@ jobs:
           lake env lean open_math/Beal_Fermat_Mining.lean
           lake env lean open_math/Beal_ATK_ForcedQuestions.lean
           lake env lean open_math/Beal_BilateralMinCut.lean
+          lake env lean open_math/Beal_MaterialInhabitantSearch.lean
       - name: Hygiene
         run: |
           set -euo pipefail
