@@ -1,5 +1,4 @@
 import MCore.BealEffective.ReducedFamilies
-import Mathlib
 
 namespace MCore
 namespace BealEffective
@@ -48,11 +47,11 @@ structure ReducedFamilyMinCut : Prop where
 
 /-- Search for the exact positive inhabitant.  Failure is informative. -/
 example : ReducedFamilyMinCut := by
-  aesop
+  constructor
 
 /-- Search for a concrete reduced counterexample to the terminal lower bound. -/
 example : ∃ r : ReducedPrimitiveCandidate, True := by
-  aesop
+  constructor
 
 end OpenMath
 end BealEffective
