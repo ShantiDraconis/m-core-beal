@@ -1,0 +1,38 @@
+name: Beal Bilateral Min-Cut
+
+on:
+  push:
+    branches:
+      - work/beal-bilateral-mincut-20261005
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  bilateral:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Lean
+        run: |
+          curl https://elan.lean-lang.org/elan-init.sh -sSf | sh -s -- -y
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Build library
+        run: |
+          export PATH="$HOME/.elan/bin:$PATH"
+          lake update
+          lake build MCore
+      - name: Kernel-check exact min-cut
+        run: |
+          export PATH="$HOME/.elan/bin:$PATH"
+          lake env lean open_math/Beal_Fermat_Mining.lean
+          lake env lean open_math/Beal_ATK_ForcedQuestions.lean
+          lake env lean open_math/Beal_BilateralMinCut.lean
+      - name: Hygiene
+        run: |
+          set -euo pipefail
+          if grep -nE '\b(sorry|admit|sorryAx|axiom)\b'             open_math/Beal_Fermat_Mining.lean             open_math/Beal_ATK_ForcedQuestions.lean             open_math/Beal_BilateralMinCut.lean; then
+            exit 1
+          fi
+          echo BILATERAL_MINCUT_GREEN
