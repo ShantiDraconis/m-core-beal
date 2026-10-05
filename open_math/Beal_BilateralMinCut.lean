@@ -67,22 +67,6 @@ theorem threeDistinctOdd_inconsistent
   rcases hNeg with ⟨r, hr⟩
   exact hPos r hr
 
-structure BilateralFamilySearch : Prop where
-  q1Pos : Prop
-  q1Neg : Prop
-  q2Pos : Prop
-  q2Neg : Prop
-  q3Pos : Prop
-  q3Neg : Prop
-  q4Pos : Prop
-  q4Neg : Prop
-  q5Pos : Prop
-  q5Neg : Prop
-  q6Pos : Prop
-  q6Neg : Prop
-  q7Pos : Prop
-  q7Neg : Prop
-
 #print axioms MCore.BealEffective.OpenMath.allFour_inconsistent
 #print axioms MCore.BealEffective.OpenMath.equalOddPrime_inconsistent
 #print axioms MCore.BealEffective.OpenMath.twoFourPrime_inconsistent
