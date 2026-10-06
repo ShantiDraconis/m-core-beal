@@ -20,6 +20,11 @@ jobs:
           test "$(cat lean-toolchain)" = "leanprover/lean4:v4.19.0"
           if grep -R -n -E '(^|[^[:alnum:]_])(sorry|admit)([^[:alnum:]_]|$)' --include='*.lean' lean; then exit 1; else rc=$?; [ "$rc" -eq 1 ] || exit "$rc"; fi
           if grep -R -n -E '^[[:space:]]*(@\[[^]]*\][[:space:]]*)?(axiom|constant|constants)[[:space:]]' --include='*.lean' lean; then exit 1; else rc=$?; [ "$rc" -eq 1 ] || exit "$rc"; fi
+      - name: Resolve project dependencies
+        run: |
+          set -euo pipefail
+          lake update
+          lake exe cache get || true
       - name: G1 preserve frozen K9 layer
         run: lake build MCore.K9.Core.Arith && lake build MCore.K9
       - name: G2 build K10 prime-divisor closure
