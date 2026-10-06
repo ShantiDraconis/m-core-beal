@@ -5,10 +5,14 @@ on:
       - atk/beal-full-toolchain-20261006
   workflow_dispatch:
 
+concurrency:
+  group: beal-unified-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   terminal-cycle:
     runs-on: ubuntu-latest
-    timeout-minutes: 180
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
 
