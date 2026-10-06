@@ -67,7 +67,7 @@ theorem SixFamilyMinCut.eliminates_seven
 /-- Six material eliminators are sufficient for the full Q10 endpoint. -/
 theorem sixFamilyMinCut_closes_Q10
     (K : SixFamilyMinCut) :
-    MaterialPrimitiveExclusion := by
+    MCore.OpenMath.BealProbe.MaterialPrimitiveExclusion := by
   intro d hd
   rcases primitive_seven_family d hd with ⟨r, hs⟩
   exact K.eliminates_seven r hs
