@@ -1,8 +1,5 @@
 name: Beal Terminal Cycle Kernel Test
 on:
-  push:
-    branches:
-      - atk/beal-full-toolchain-20261006
   workflow_dispatch:
 
 concurrency:
