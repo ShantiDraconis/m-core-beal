@@ -1,0 +1,57 @@
+name: BEAL Structural All Kernel
+
+on:
+  push:
+    branches:
+      - atk/beal-full-toolchain-20261006
+  workflow_dispatch:
+
+concurrency:
+  group: beal-structural-all-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  structural-all:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pinned Lean
+        uses: leanprover/lean-action@v1
+        with:
+          build: false
+          test: false
+          lint: false
+
+      - name: Resolve dependencies
+        run: |
+          set -euo pipefail
+          lake update || true
+          test -d .lake/packages/mathlib
+
+      - name: Build structural aggregate
+        run: |
+          set -euo pipefail
+          lake build MCore.OpenMath.BealQ10StructuralAll
+
+      - name: Fail closed on project placeholders
+        run: |
+          set -euo pipefail
+          if grep -RInE '\b(sorry|admit)\b|^[[:space:]]*axiom[[:space:]]' lean/MCore/OpenMath/BealQ10DualEndpointState.lean lean/MCore/OpenMath/BealQ10EndpointLattice.lean lean/MCore/OpenMath/BealQ10EndpointCube3.lean lean/MCore/OpenMath/BealQ10StructuralAll.lean; then
+            exit 1
+          fi
+
+      - name: Audit structural axioms
+        run: |
+          set -euo pipefail
+          cat > StructuralAllAudit.lean <<'EOF'
+          import MCore.OpenMath.BealQ10StructuralAll
+          #print axioms MCore.OpenMath.BealQ10.structuralAllCertificate
+          #print axioms MCore.OpenMath.BealQ10.endpointLatticeCertificate
+          #print axioms MCore.OpenMath.BealQ10.endpointCube3Certificate
+          #print axioms MCore.OpenMath.BealQ10.dualEndpointState_iff_endpoint
+          #print axioms MCore.OpenMath.BealQ10.fullMaterial_iff_endpoint
+          EOF
+          lake env lean StructuralAllAudit.lean 2>&1 | tee StructuralAllAudit.log
+          if grep -F 'sorryAx' StructuralAllAudit.log; then exit 1; fi
