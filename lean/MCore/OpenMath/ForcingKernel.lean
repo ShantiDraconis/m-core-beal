@@ -11,6 +11,7 @@ import MCore.OpenMath.BealQ10ExternalFLT
 import MCore.OpenMath.BealQ10FinalMixedLeaf
 import MCore.OpenMath.BealQ10FinalRoot
 import MCore.OpenMath.BealQ10TerminalFixedPoint
+import MCore.OpenMath.BealQ10EndpointGapFixedPoint
 import MCore.OpenMath.BealQ10ExponentReduction
 
 namespace MCore.OpenMath.Beal
