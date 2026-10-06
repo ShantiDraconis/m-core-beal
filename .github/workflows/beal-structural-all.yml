@@ -73,3 +73,20 @@ jobs:
             exit 1
           fi
           echo "Expected failure confirmed: structural aggregate does not synthesize Endpoint."
+
+      - name: Confirm structural aggregate does not synthesize material endpoint
+        run: |
+          set -euo pipefail
+          cat > StructuralNoPromotion.lean <<'EOF'
+          import MCore.OpenMath.BealQ10StructuralAll
+          open MCore.OpenMath.BealQ10
+          example : Endpoint := by
+            exact structuralAllCertificate.terminalCycle
+          EOF
+          if lake env lean StructuralNoPromotion.lean > StructuralNoPromotion.log 2>&1; then
+            cat StructuralNoPromotion.log
+            echo "ERROR: structural certificate unexpectedly synthesized Endpoint"
+            exit 1
+          fi
+          cat StructuralNoPromotion.log
+          echo "Expected failure confirmed: structural certificate does not synthesize Endpoint."
