@@ -21,8 +21,7 @@ theorem finalMixedExclusion_closes_Q10
   exact fiveMixedFamilyMinCut_closes_Q10 h
 
 /--
-Exact terminal producer type.  There is no default inhabitant and no axiom,
-sorry, admit, or hypothetical endpoint hidden here.
+Exact terminal producer type. There is no default inhabitant and no hidden terminal assumption.
 -/
 def FinalMixedProducer : Type :=
   { h : FinalMixedExclusion // True }
