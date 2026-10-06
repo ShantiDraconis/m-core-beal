@@ -18,6 +18,7 @@ import MCore.OpenMath.BealQ10TerminalCycle
 import MCore.OpenMath.BealQ10Core012Dynamics
 import MCore.OpenMath.BealQ10PairNormalization
 import MCore.OpenMath.BealQ10FinalPolarity
+import MCore.OpenMath.BealQ10FinalReflexivity
 import MCore.OpenMath.BealQ10ExponentReduction
 
 namespace MCore.OpenMath.Beal
