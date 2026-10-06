@@ -23,8 +23,9 @@ jobs:
       - name: Resolve project dependencies
         run: |
           set -euo pipefail
-          lake update
-          lake exe cache get || true
+          lake update || true
+          test -d .lake/packages/mathlib
+          test -d .lake/packages/flt_e2e
       - name: G1 preserve frozen K9 layer
         run: lake build MCore.K9.Core.Arith && lake build MCore.K9
       - name: G2 build K10 prime-divisor closure
