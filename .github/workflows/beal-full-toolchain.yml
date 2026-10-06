@@ -22,8 +22,9 @@ jobs:
       - name: Resolve pinned Mathlib and FLT dependencies
         run: |
           set -euo pipefail
-          lake update
-          lake exe cache get || true
+          lake update || true
+          test -d .lake/packages/mathlib
+          test -d .lake/packages/flt_e2e
 
       - name: Build external FLT bridge
         run: |
