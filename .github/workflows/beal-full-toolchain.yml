@@ -1,0 +1,50 @@
+name: Beal Full Toolchain
+on:
+  push:
+    branches:
+      - atk/beal-full-toolchain-20261006
+  workflow_dispatch:
+
+jobs:
+  full-toolchain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pinned Lean
+        uses: leanprover/lean-action@v1
+        with:
+          build: false
+          test: false
+          lint: false
+
+      - name: Resolve pinned Mathlib and FLT dependencies
+        run: |
+          set -euo pipefail
+          lake update
+          lake exe cache get || true
+
+      - name: Build external FLT bridge
+        run: |
+          set -euo pipefail
+          lake build MCore.OpenMath.BealQ10ExternalFLT
+
+      - name: Build exact forcing kernel
+        run: |
+          set -euo pipefail
+          lake build MCore.OpenMath.ForcingKernel
+
+      - name: Audit bridge axioms
+        run: |
+          set -euo pipefail
+          printf 'import MCore.OpenMath.BealQ10ExternalFLT\n#print axioms MCore.OpenMath.BealQ10.equalOddPrime_eliminated_external\n#print axioms MCore.OpenMath.BealQ10.fiveMixedFamilyMinCut_closes_Q10\n' > FullFLTAudit.lean
+          lake env lean FullFLTAudit.lean 2>&1 | tee FullFLTAudit.log
+          if grep -F 'sorryAx' FullFLTAudit.log; then exit 1; fi
+          grep -F "depends on axioms: [propext, Classical.choice, Quot.sound]" FullFLTAudit.log
+
+      - name: Fail closed on project placeholders
+        run: |
+          set -euo pipefail
+          if grep -R -n -E '(^|[^[:alnum:]_])(sorry|admit)([^[:alnum:]_]|$)' --include='*.lean' lean; then exit 1; else rc=$?; [ "$rc" -eq 1 ] || exit "$rc"; fi
+          if grep -R -n -E '^[[:space:]]*(@\[[^]]*\][[:space:]]*)?(axiom|constant|constants)[[:space:]]' --include='*.lean' lean; then exit 1; else rc=$?; [ "$rc" -eq 1 ] || exit "$rc"; fi
