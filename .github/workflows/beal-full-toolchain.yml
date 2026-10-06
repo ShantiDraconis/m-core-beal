@@ -1,14 +1,11 @@
 name: Beal Full Toolchain
 on:
-  push:
-    branches:
-      - atk/beal-full-toolchain-20261006
   workflow_dispatch:
 
 jobs:
   full-toolchain:
     runs-on: ubuntu-latest
-    timeout-minutes: 180
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
 
