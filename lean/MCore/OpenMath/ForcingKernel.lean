@@ -21,6 +21,7 @@ import MCore.OpenMath.BealQ10FinalPolarity
 import MCore.OpenMath.BealQ10FinalReflexivity
 import MCore.OpenMath.BealQ10TerminalClosureTransition
 import MCore.OpenMath.BealQ10RPAFiveView
+import MCore.OpenMath.BealQ10DualEndpointState
 import MCore.OpenMath.BealQ10ExponentReduction
 
 namespace MCore.OpenMath.Beal
