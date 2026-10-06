@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - atk/first-real-open-math-20261005
+      - atk/beal-q10-primitive-exclusion-20261006
   workflow_dispatch:
 
 permissions:
