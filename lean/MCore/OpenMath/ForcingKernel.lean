@@ -7,6 +7,7 @@ import MCore.OpenMath.BealQ10FLT4
 import MCore.OpenMath.BealQ10SevenFamilies
 import MCore.OpenMath.BealQ10SixFamilyMinCut
 import MCore.OpenMath.BealQ10PrimitiveReduced
+import MCore.OpenMath.BealQ10ExternalFLT
 import MCore.OpenMath.BealQ10ExponentReduction
 
 namespace MCore.OpenMath.Beal
