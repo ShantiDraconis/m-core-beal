@@ -24,12 +24,14 @@ jobs:
           build: false
           test: false
           lint: false
+          use-mathlib-cache: false
 
-      - name: Resolve dependencies
+      - name: Resolve dependencies and restore cache
         run: |
           set -euo pipefail
-          lake update || true
+          lake update
           test -d .lake/packages/mathlib
+          lake exe cache get || true
 
       - name: Build structural aggregate
         run: |
