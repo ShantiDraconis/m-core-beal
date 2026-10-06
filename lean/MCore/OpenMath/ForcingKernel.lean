@@ -2,6 +2,7 @@ import MCore.BealSpecification
 import MCore.BackwardAudit.WithoutOracle
 import MCore.OpenMath.P02RejectionBealInvariantProbe
 import MCore.OpenMath.BealQ10PrimitiveExclusion
+import MCore.OpenMath.BealQ10Parity
 
 namespace MCore.OpenMath.Beal
 
