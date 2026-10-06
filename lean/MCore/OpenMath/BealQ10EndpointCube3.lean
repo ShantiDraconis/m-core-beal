@@ -123,7 +123,7 @@ theorem endpointCube3Certificate : EndpointCube3Certificate := by
     cco_exists := rfl
     full_exists := rfl
     full_collapses := rfl
-    full_material := finalRoot_iff_globalExternal.trans (finalRoot_iff_globalExternal.symm)
+    full_material := Iff.rfl
   }
 
 #print axioms MCore.OpenMath.BealQ10.endpointCube3Certificate
