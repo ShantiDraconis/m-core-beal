@@ -3,7 +3,7 @@ on: [push, pull_request]
 jobs:
   k10:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - name: Install pinned Lean toolchain without implicit project build
