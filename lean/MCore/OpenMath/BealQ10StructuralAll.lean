@@ -1,6 +1,7 @@
 import MCore.OpenMath.BealQ10DualEndpointState
 import MCore.OpenMath.BealQ10EndpointLattice
 import MCore.OpenMath.BealQ10EndpointCube3
+import MCore.OpenMath.BealQ10TerminalCycle
 
 namespace MCore.OpenMath.BealQ10
 
@@ -11,6 +12,7 @@ structure StructuralAllCertificate : Prop where
   rpa : Nonempty RPAFiveViewCertificate
   endpointPositionsDistinct :
     OpenEndpoint.tag ≠ ClosedEndpoint.tag
+  terminalCycle : TerminalCycleClosed
 
 theorem structuralAllCertificate : StructuralAllCertificate := by
   exact {
@@ -18,6 +20,7 @@ theorem structuralAllCertificate : StructuralAllCertificate := by
     cube := ⟨endpointCube3Certificate⟩
     rpa := ⟨rpaFiveViewCertificate⟩
     endpointPositionsDistinct := endpoint_tags_distinct
+    terminalCycle := terminalCycleClosed
   }
 
 #print axioms MCore.OpenMath.BealQ10.structuralAllCertificate
@@ -25,5 +28,6 @@ theorem structuralAllCertificate : StructuralAllCertificate := by
 #print axioms MCore.OpenMath.BealQ10.endpointCube3Certificate
 #print axioms MCore.OpenMath.BealQ10.dualEndpointState_iff_endpoint
 #print axioms MCore.OpenMath.BealQ10.fullMaterial_iff_endpoint
+#print axioms MCore.OpenMath.BealQ10.terminalCycleClosed
 
 end MCore.OpenMath.BealQ10
