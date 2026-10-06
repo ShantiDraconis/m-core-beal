@@ -1,0 +1,57 @@
+name: Beal Terminal Cycle Kernel Test
+on:
+  push:
+    branches:
+      - atk/beal-full-toolchain-20261006
+  workflow_dispatch:
+
+jobs:
+  terminal-cycle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pinned Lean
+        uses: leanprover/lean-action@v1
+        with:
+          build: false
+          test: false
+          lint: false
+
+      - name: Resolve dependencies
+        run: |
+          set -euo pipefail
+          lake update || true
+          test -d .lake/packages/mathlib
+          test -d .lake/packages/flt_e2e
+
+      - name: Build terminal cycle
+        run: |
+          set -euo pipefail
+          lake build MCore.OpenMath.BealQ10TerminalCycle
+
+      - name: Audit cycle axioms
+        run: |
+          set -euo pipefail
+          printf 'import MCore.OpenMath.BealQ10TerminalCycle\n#print axioms MCore.OpenMath.BealQ10.terminal_cycle\n#print axioms MCore.OpenMath.BealQ10.cycle_inhabited_iff_endpoint\n#print axioms MCore.OpenMath.BealQ10.terminalCycleClosed\n' > TerminalCycleAudit.lean
+          lake env lean TerminalCycleAudit.lean 2>&1 | tee TerminalCycleAudit.log
+          if grep -F 'sorryAx' TerminalCycleAudit.log; then exit 1; fi
+
+      - name: Confirm cycle does not synthesize endpoint
+        run: |
+          set -euo pipefail
+          cat > TerminalCycleNegative.lean <<'EOF'
+          import MCore.OpenMath.BealQ10TerminalCycle
+          open MCore.OpenMath.BealQ10
+          example : Endpoint := by
+            exact terminalCycleClosed
+          EOF
+          if lake env lean TerminalCycleNegative.lean > TerminalCycleNegative.log 2>&1; then
+            echo "Unexpected: cycle alone synthesized Endpoint"
+            cat TerminalCycleNegative.log
+            exit 1
+          else
+            echo "Expected: cycle certificate is not itself an Endpoint inhabitant"
+            cat TerminalCycleNegative.log
+          fi
