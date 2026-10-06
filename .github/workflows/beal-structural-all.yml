@@ -7,13 +7,14 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: beal-structural-all-${{ github.ref }}
+  group: beal-unified-${{ github.ref }}
   cancel-in-progress: true
+
 
 jobs:
   structural-all:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
 
