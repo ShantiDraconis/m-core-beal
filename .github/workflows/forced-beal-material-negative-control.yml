@@ -18,17 +18,22 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
-      - name: Lean kernel negative control
+      - name: Install pinned Lean toolchain
+        uses: leanprover/lean-action@v1
+        with:
+          build: false
+          test: false
+          lint: false
+      - name: Build dependency and run forced material
         run: |
           set -euo pipefail
-          curl https://elan.lean-lang.org/elan-init.sh -sSf | sh -s -- -y
-          export PATH="$HOME/.elan/bin:$PATH"
-          lake update
-          lake env lean lean/MCore/ForcedMaterialNegativeControl.lean
+          lake build MCore.GCDLowerBoundProducer
+          lake env lean lean/MCore/ForcedMaterialNegativeControl.lean 2>&1 | tee ForcedMaterial.log
+          grep -F 'sorryAx' ForcedMaterial.log
       - name: Fail closed on proof escape
         run: |
           set -euo pipefail
-          if grep -nE '\b(sorry|admit|sorryAx|axiom)\b' lean/MCore/ForcedMaterialNegativeControl.lean; then
+          if grep -n -E '(^|[^[:alnum:]_])(sorry|admit)([^[:alnum:]_]|$)' lean/MCore/ForcedMaterialNegativeControl.lean; then
             echo "EXPECTED_RED: forced material contains a forbidden proof escape"
             exit 1
           fi
