@@ -18,18 +18,28 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Cache Lean packages and build artifacts
+        uses: actions/cache@v4
+        with:
+          path: |
+            .lake/packages
+            .lake/build
+          key: ${{ runner.os }}-beal-lean-${{ hashFiles('lean-toolchain', 'lakefile.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-beal-lean-
+
       - name: Install pinned Lean
         uses: leanprover/lean-action@v1
         with:
           build: false
           test: false
           lint: false
-          use-mathlib-cache: false
+          use-mathlib-cache: true
 
       - name: Resolve pinned dependencies
         run: |
           set -euo pipefail
-          MATHLIB_NO_CACHE_ON_UPDATE=1 lake update || true
+          lake update
           test -d .lake/packages/mathlib
 
       - name: Build structural aggregate
