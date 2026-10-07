@@ -27,7 +27,7 @@ jobs:
       - name: Build dependency and run forced material
         run: |
           set -euo pipefail
-          lake build MCore.GCDLowerBoundProducer
+          lake build MCore.BealDirectProducer
           lake env lean lean/MCore/ForcedMaterialNegativeControl.lean 2>&1 | tee ForcedMaterial.log
           grep -F 'sorryAx' ForcedMaterial.log
       - name: Fail closed on proof escape
