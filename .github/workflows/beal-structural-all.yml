@@ -39,7 +39,7 @@ jobs:
       - name: Resolve pinned dependencies
         run: |
           set -euo pipefail
-          lake update
+          MATHLIB_NO_CACHE_ON_UPDATE=1 lake update
           test -d .lake/packages/mathlib
 
       - name: Build structural aggregate
