@@ -26,12 +26,11 @@ jobs:
           lint: false
           use-mathlib-cache: false
 
-      - name: Resolve dependencies and restore cache
+      - name: Resolve pinned dependencies
         run: |
           set -euo pipefail
           lake update
           test -d .lake/packages/mathlib
-          lake exe cache get || true
 
       - name: Build structural aggregate
         run: |
