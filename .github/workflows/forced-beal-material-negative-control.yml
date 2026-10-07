@@ -1,0 +1,36 @@
+name: Forced Beal Material Negative Control
+
+on:
+  push:
+    branches:
+      - atk/forced-material-negative-control-20261007
+    paths:
+      - 'lean/MCore/ForcedMaterialNegativeControl.lean'
+      - '.github/workflows/forced-beal-material-negative-control.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  negative-control:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Lean kernel negative control
+        run: |
+          set -euo pipefail
+          curl https://elan.lean-lang.org/elan-init.sh -sSf | sh -s -- -y
+          export PATH="$HOME/.elan/bin:$PATH"
+          lake update
+          lake env lean lean/MCore/ForcedMaterialNegativeControl.lean
+      - name: Fail closed on proof escape
+        run: |
+          set -euo pipefail
+          if grep -nE '\b(sorry|admit|sorryAx|axiom)\b' lean/MCore/ForcedMaterialNegativeControl.lean; then
+            echo "EXPECTED_RED: forced material contains a forbidden proof escape"
+            exit 1
+          fi
+          echo "UNEXPECTED: negative control escaped hygiene"
+          exit 2
