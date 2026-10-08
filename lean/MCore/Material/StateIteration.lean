@@ -21,7 +21,7 @@ theorem stateIter_measure_strict
     μ (stateIter T (n + 1) s) < μ (stateIter T n s) := by
   exact hdec (stateIter T n s)
 
-/-- A state space cannot admit a globally strict Nat-valued self-descent transform.
+/-- A state space cannot support a globally strict Nat-valued self-descent transform.
 This is the well-founded obstruction behind the N -> N^(n) scheme. -/
 theorem no_global_nat_descent
     {α : Type} (T : α → α) (μ : α → Nat)
