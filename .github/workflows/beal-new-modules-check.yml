@@ -1,0 +1,18 @@
+name: beal-new-modules-check
+on:
+  push:
+    branches:
+      - atk/power-sum-balance-identity-20261008
+  workflow_dispatch:
+jobs:
+  lean-modules:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: leanprover/lean-action@v1
+        with:
+          build: false
+          test: false
+          lint: false
+      - name: Compile descent and exponent obstruction
+        run: lake build MCore.Material.StateIteration MCore.Material.ModularExponentObstruction
