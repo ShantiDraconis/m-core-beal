@@ -21,7 +21,7 @@ theorem stateIter_measure_strict
     μ (stateIter T (n + 1) s) < μ (stateIter T n s) := by
   exact hdec (stateIter T n s)
 
-/-- No state can admit a globally strict Nat-valued self-descent transform.
+/-- A state space cannot admit a globally strict Nat-valued self-descent transform.
 This is the well-founded obstruction behind the N -> N^(n) scheme. -/
 theorem no_global_nat_descent
     {α : Type} (T : α → α) (μ : α → Nat)
@@ -40,7 +40,7 @@ theorem no_global_nat_descent
   exact hP (μ s) s rfl
 
 /-- Consequently, a globally defined strict descent on an inhabited state
-space is impossible.  Any material descent proof must restrict the transform
+space is impossible.  A material descent proof must restrict the transform
 to nonterminal/counterexample states and prove termination separately. -/
 theorem inhabited_forbids_global_nat_descent
     {α : Type} [Nonempty α] (T : α → α) (μ : α → Nat) :
