@@ -62,5 +62,9 @@ jobs:
           if grep -F 'sorryAx' BackwardOracle.log BackwardWithout.log; then exit 1; fi
           grep -F "'MCore.BackwardAudit.hypothetical_common_prime' does not depend on any axioms" BackwardOracle.log
           grep -F "'MCore.BackwardAudit.witness_contract_closes_beal' does not depend on any axioms" BackwardWithout.log
+      - name: ATK dense Beal kernel and axiom audit
+        run: |
+          lake env lean lean/ATK/Beal_MaterialDense.lean 2>&1 | tee ATK_Beal_Dense.log
+          if grep -F 'sorryAx' ATK_Beal_Dense.log; then exit 1; fi
       - name: G6 clean reproduction
         run: lake clean && timeout 20m lake build MCore
