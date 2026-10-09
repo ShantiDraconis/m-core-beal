@@ -1,22 +1,9 @@
-/-!
-ATK Beal dense material consolidation entrypoint.
-This file deliberately asserts no unproved terminal theorem.
-All certified theorems must be migrated with their exact dependencies
-and checked by Lean before adding their declarations here.
--/
-
+import MCore.Material.Closure
 namespace ATK.Beal
+abbrev Material (C M : Type) [LT M] : Prop :=
+  MCore.Material.MaterialBealDescent C M
 
-/-- An explicit record of the certification state; not a mathematical proof. -/
-inductive AuditState where
-  | source
-  | buildPending
-  | kernelVerified
-  deriving DecidableEq, Repr
-
-/-- Conservative status until the dense source and kernel audit are complete. -/
-def currentState : AuditState := .buildPending
-
-theorem currentState_eq_buildPending : currentState = .buildPending := rfl
-
+theorem producer_of_concrete {C M : Type} [LT M]
+    (h : MCore.Material.BealDescentClosure C M) : Material C M := ⟨h⟩
 end ATK.Beal
+#print axioms ATK.Beal.producer_of_concrete
