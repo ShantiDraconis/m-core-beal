@@ -10,10 +10,13 @@ abbrev B01ActualConductorLevel :=
 
 /-- Exact cut between the certified structural conductor-level bookkeeping and
 the still-open semantic statement that a level is the actual conductor level
-of the concrete Frey object. -/
+of the concrete Frey object.
+
+The contract carries the level as data, so it lives in `Type`: a `Prop`-valued
+structure cannot have a `Nat` field (Lean rejects the projection). -/
 structure B01ExactConductorContract
     (ActualConductor : B01ActualConductorLevel)
-    (d : T59ResidualCandidate) : Prop where
+    (d : T59ResidualCandidate) : Type where
   level : Nat
   structural : B01ConductorLevel d level
   actual : ActualConductor d level
