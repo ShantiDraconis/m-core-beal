@@ -1,0 +1,1 @@
+ATK.Beal.exponent_gcd_le_two
