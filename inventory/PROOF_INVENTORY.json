@@ -1,0 +1,3962 @@
+{
+ "schema": "proof-inventory.v1",
+ "generated_by": "scripts/proof_inventory.py (kernel-derived; do not edit by hand)",
+ "toolchain": "leanprover/lean4:v4.19.0",
+ "libraries": [
+  {
+   "name": "MCore",
+   "srcDir": "lean"
+  }
+ ],
+ "policy": {
+  "standard_axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ],
+  "theorem_status": "CLEAN = only standard axioms; USES_SORRY = depends on sorryAx; USES_PROJECT_AXIOM = depends on an axiom declared in this library",
+  "prop_status": "PROVED/REFUTED = a CLEAN theorem has exactly that Prop (or its negation) as its type; VACUOUS = the definition body ends in True; NO_PROOF_IN_LIBRARY = no theorem of that exact type exists here (this is not a claim that it is open mathematics)",
+  "scope": "closed (arity-0) Prop definitions, plus any Prop-valued definition that is vacuous"
+ },
+ "summary": {
+  "modules_total": 80,
+  "modules_ok": 77,
+  "modules_failed": 2,
+  "modules_blocked": 1,
+  "modules_outside_default_build": 5,
+  "standalone_files_total": 0,
+  "standalone_files_failed": 0,
+  "theorems_total": 403,
+  "theorems_clean": 403,
+  "theorems_using_sorry": 0,
+  "theorems_using_project_axiom": 0,
+  "theorems_nonstandard_axioms": 0,
+  "project_axioms_declared": 0,
+  "props_reported": 64,
+  "props_proved": 4,
+  "props_refuted": 5,
+  "props_vacuous": 0,
+  "props_no_proof_in_library": 55
+ },
+ "project_axioms": [],
+ "environment_groups": 1,
+ "name_clashes": [],
+ "modules": [
+  {
+   "module": "MCore",
+   "path": "lean/MCore.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.ATK_HARD_BEAL_CONDUCTOR_EXACT",
+   "path": "lean/MCore/ATK_HARD_BEAL_CONDUCTOR_EXACT.lean",
+   "status": "FAILED",
+   "in_default_build": false,
+   "first_error": "lean/MCore/ATK_HARD_BEAL_CONDUCTOR_EXACT.lean:5:7: unknown identifier 'hard_beal_conductor_exact_level'"
+  },
+  {
+   "module": "MCore.AttackDAG.K3AlgebraAttacks",
+   "path": "lean/MCore/AttackDAG/K3AlgebraAttacks.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.Audit",
+   "path": "lean/MCore/Audit.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.B01ConductorLevel",
+   "path": "lean/MCore/B01ConductorLevel.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.B01ExactConductorContract",
+   "path": "lean/MCore/B01ExactConductorContract.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.BackwardAudit.HypotheticalClosureOracle",
+   "path": "lean/MCore/BackwardAudit/HypotheticalClosureOracle.lean",
+   "status": "OK",
+   "in_default_build": false
+  },
+  {
+   "module": "MCore.BackwardAudit.WithoutOracle",
+   "path": "lean/MCore/BackwardAudit/WithoutOracle.lean",
+   "status": "OK",
+   "in_default_build": false
+  },
+  {
+   "module": "MCore.BealSpecification",
+   "path": "lean/MCore/BealSpecification.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.Boundary",
+   "path": "lean/MCore/Boundary.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.DiscreteBoundary",
+   "path": "lean/MCore/DiscreteBoundary.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.Frontier.K3Gaps",
+   "path": "lean/MCore/Frontier/K3Gaps.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.GCDSignature",
+   "path": "lean/MCore/GCDSignature.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.K0",
+   "path": "lean/MCore/K0.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.K1",
+   "path": "lean/MCore/K1.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.K10",
+   "path": "lean/MCore/K10.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.K2",
+   "path": "lean/MCore/K2.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.K3",
+   "path": "lean/MCore/K3.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.K4",
+   "path": "lean/MCore/K4.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.K5",
+   "path": "lean/MCore/K5.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.K6",
+   "path": "lean/MCore/K6.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.K7",
+   "path": "lean/MCore/K7.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.K8",
+   "path": "lean/MCore/K8.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.K9",
+   "path": "lean/MCore/K9.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.K9.Core.Arith",
+   "path": "lean/MCore/K9/Core/Arith.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.PostT36EConductorBridge",
+   "path": "lean/MCore/PostT36EConductorBridge.lean",
+   "status": "BLOCKED",
+   "in_default_build": false,
+   "blocked_by": "MCore.T36E_MASTER"
+  },
+  {
+   "module": "MCore.Signature",
+   "path": "lean/MCore/Signature.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T10",
+   "path": "lean/MCore/T10.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T11",
+   "path": "lean/MCore/T11.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T12",
+   "path": "lean/MCore/T12.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T13",
+   "path": "lean/MCore/T13.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T14",
+   "path": "lean/MCore/T14.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T15",
+   "path": "lean/MCore/T15.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T16",
+   "path": "lean/MCore/T16.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T17",
+   "path": "lean/MCore/T17.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T18",
+   "path": "lean/MCore/T18.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T19",
+   "path": "lean/MCore/T19.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T20",
+   "path": "lean/MCore/T20.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T21",
+   "path": "lean/MCore/T21.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T22",
+   "path": "lean/MCore/T22.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T23",
+   "path": "lean/MCore/T23.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T24",
+   "path": "lean/MCore/T24.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T25",
+   "path": "lean/MCore/T25.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T26",
+   "path": "lean/MCore/T26.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T27",
+   "path": "lean/MCore/T27.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T28",
+   "path": "lean/MCore/T28.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T29",
+   "path": "lean/MCore/T29.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T30",
+   "path": "lean/MCore/T30.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T31",
+   "path": "lean/MCore/T31.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T32",
+   "path": "lean/MCore/T32.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T33",
+   "path": "lean/MCore/T33.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T34",
+   "path": "lean/MCore/T34.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T35",
+   "path": "lean/MCore/T35.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T36",
+   "path": "lean/MCore/T36.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T36E_MASTER",
+   "path": "lean/MCore/T36E_MASTER.lean",
+   "status": "FAILED",
+   "in_default_build": false,
+   "first_error": "lean/MCore/T36E_MASTER.lean:1:0: unknown module prefix 'Mathlib'\n\nNo directory 'Mathlib' or file 'Mathlib.olean' in the search path entries:\n././.lake/build/lib/lean\n/home/runner/.elan/toolchains/leanprover--lean4---v4.19.0/lib/lean"
+  },
+  {
+   "module": "MCore.T37",
+   "path": "lean/MCore/T37.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T38",
+   "path": "lean/MCore/T38.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T39",
+   "path": "lean/MCore/T39.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T40",
+   "path": "lean/MCore/T40.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T41",
+   "path": "lean/MCore/T41.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T42",
+   "path": "lean/MCore/T42.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T43",
+   "path": "lean/MCore/T43.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T44",
+   "path": "lean/MCore/T44.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T45",
+   "path": "lean/MCore/T45.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T48",
+   "path": "lean/MCore/T48.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T49",
+   "path": "lean/MCore/T49.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T51",
+   "path": "lean/MCore/T51.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T52",
+   "path": "lean/MCore/T52.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T53",
+   "path": "lean/MCore/T53.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T54",
+   "path": "lean/MCore/T54.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T55",
+   "path": "lean/MCore/T55.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T56",
+   "path": "lean/MCore/T56.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T57",
+   "path": "lean/MCore/T57.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T58",
+   "path": "lean/MCore/T58.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T59",
+   "path": "lean/MCore/T59.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T60",
+   "path": "lean/MCore/T60.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T7",
+   "path": "lean/MCore/T7.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T8",
+   "path": "lean/MCore/T8.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.T9",
+   "path": "lean/MCore/T9.lean",
+   "status": "OK",
+   "in_default_build": true
+  },
+  {
+   "module": "MCore.V012",
+   "path": "lean/MCore/V012.lean",
+   "status": "OK",
+   "in_default_build": true
+  }
+ ],
+ "standalone_files": [],
+ "props": [
+  {
+   "name": "MCore.BackwardAudit.HypotheticalClosure",
+   "module": "MCore.BackwardAudit.HypotheticalClosureOracle",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.BealConjecture",
+   "module": "MCore.BealSpecification",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.PrimeDivisorProperty",
+   "module": "MCore.K9",
+   "closed_prop": true,
+   "status": "PROVED",
+   "inhabited_by": [
+    "MCore.primeDivisorProperty_core",
+    "MCore.primeDivisorProperty_proved"
+   ],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T10ReducedCandidate",
+   "module": "MCore.T10",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T10ReducedScientificFrontier",
+   "module": "MCore.T10",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T11PairwiseReducedCandidate",
+   "module": "MCore.T11",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T11PairwiseScientificFrontier",
+   "module": "MCore.T11",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T12ParityReducedCandidate",
+   "module": "MCore.T12",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T12ParityScientificFrontier",
+   "module": "MCore.T12",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T13ModularReducedCandidate",
+   "module": "MCore.T13",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T13ModularScientificFrontier",
+   "module": "MCore.T13",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T14ResidueReducedCandidate",
+   "module": "MCore.T14",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T14ResidueScientificFrontier",
+   "module": "MCore.T14",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T15BaseResidueReducedCandidate",
+   "module": "MCore.T15",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T15BaseResidueScientificFrontier",
+   "module": "MCore.T15",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T16EightReducedCandidate",
+   "module": "MCore.T16",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T16EightScientificFrontier",
+   "module": "MCore.T16",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T17ClassifiedReducedCandidate",
+   "module": "MCore.T17",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T17ClassifiedScientificFrontier",
+   "module": "MCore.T17",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T18FullParityClassifiedCandidate",
+   "module": "MCore.T18",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T18FullParityScientificFrontier",
+   "module": "MCore.T18",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T19VariableTwoAdicCandidate",
+   "module": "MCore.T19",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T19VariableTwoAdicScientificFrontier",
+   "module": "MCore.T19",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T20TwoAdicDepthCandidate",
+   "module": "MCore.T20",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T20TwoAdicDepthScientificFrontier",
+   "module": "MCore.T20",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T21EqualExponentFactorCandidate",
+   "module": "MCore.T21",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T21EqualExponentFactorScientificFrontier",
+   "module": "MCore.T21",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T22EqualOddExponentTwoAdicCandidate",
+   "module": "MCore.T22",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T22EqualOddExponentTwoAdicScientificFrontier",
+   "module": "MCore.T22",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T23EqualOddGapDepthCandidate",
+   "module": "MCore.T23",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T23EqualOddGapDepthScientificFrontier",
+   "module": "MCore.T23",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T24FreyDiscriminantCandidate",
+   "module": "MCore.T24",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T24FreyDiscriminantScientificFrontier",
+   "module": "MCore.T24",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T25FreyTwoAdicDepthCandidate",
+   "module": "MCore.T25",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T25FreyTwoAdicDepthScientificFrontier",
+   "module": "MCore.T25",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T26CertifiedBaseToFreyBridge",
+   "module": "MCore.T26",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T26FreyContradictionBridge",
+   "module": "MCore.T26",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T26UnrestrictedCrossDomainPromotion",
+   "module": "MCore.T26",
+   "closed_prop": true,
+   "status": "REFUTED",
+   "inhabited_by": [],
+   "refuted_by": [
+    "MCore.T26_unrestricted_cross_domain_promotion_refuted"
+   ]
+  },
+  {
+   "name": "MCore.T27FreyDivisorDepthCandidate",
+   "module": "MCore.T27",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T27FreyDivisorDepthScientificFrontier",
+   "module": "MCore.T27",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T28FreyPrimeSupportCandidate",
+   "module": "MCore.T28",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T28FreyPrimeSupportScientificFrontier",
+   "module": "MCore.T28",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T28PrimeProductProperty",
+   "module": "MCore.T28",
+   "closed_prop": true,
+   "status": "PROVED",
+   "inhabited_by": [
+    "MCore.T29_prime_product_property_proved"
+   ],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T30FreyBasePrimeSupportCandidate",
+   "module": "MCore.T30",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T30FreyBasePrimeSupportScientificFrontier",
+   "module": "MCore.T30",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T31FreyRadicalSupportCandidate",
+   "module": "MCore.T31",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T31FreyRadicalSupportScientificFrontier",
+   "module": "MCore.T31",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T32FreyC4CoprimeCandidate",
+   "module": "MCore.T32",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T32FreyC4CoprimeScientificFrontier",
+   "module": "MCore.T32",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T33OddPrimeReductionInputCandidate",
+   "module": "MCore.T33",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T33OddPrimeReductionInputScientificFrontier",
+   "module": "MCore.T33",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T34FreyNodalCollisionCandidate",
+   "module": "MCore.T34",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T34FreyNodalCollisionScientificFrontier",
+   "module": "MCore.T34",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T35GlobalEliminationBridge",
+   "module": "MCore.T35",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T35UniversalGapSkip",
+   "module": "MCore.T35",
+   "closed_prop": true,
+   "status": "REFUTED",
+   "inhabited_by": [],
+   "refuted_by": [
+    "MCore.T35_universal_gap_skip_refuted"
+   ]
+  },
+  {
+   "name": "MCore.T3RawEquationDivisorBridge",
+   "module": "MCore.V012",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T43UniversalSingleResidualPrimeRule",
+   "module": "MCore.T43",
+   "closed_prop": true,
+   "status": "REFUTED",
+   "inhabited_by": [],
+   "refuted_by": [
+    "MCore.T43_universal_single_residual_prime_rule_refuted"
+   ]
+  },
+  {
+   "name": "MCore.T44UniversalLevelTwoPromotion",
+   "module": "MCore.T44",
+   "closed_prop": true,
+   "status": "REFUTED",
+   "inhabited_by": [],
+   "refuted_by": [
+    "MCore.T44_universal_level_two_promotion_refuted"
+   ]
+  },
+  {
+   "name": "MCore.T4NoPrimitiveEquation",
+   "module": "MCore.V012",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T52UniversalNonemptyPromotion",
+   "module": "MCore.T52",
+   "closed_prop": true,
+   "status": "REFUTED",
+   "inhabited_by": [],
+   "refuted_by": [
+    "MCore.T52_nonempty_only_is_insufficient"
+   ]
+  },
+  {
+   "name": "MCore.T6ScientificFrontier",
+   "module": "MCore.V012",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T8EuclidKernel",
+   "module": "MCore.T8",
+   "closed_prop": true,
+   "status": "PROVED",
+   "inhabited_by": [
+    "MCore.T9_euclidKernel_proved"
+   ],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.T8PrimePowerReflection",
+   "module": "MCore.T8",
+   "closed_prop": true,
+   "status": "PROVED",
+   "inhabited_by": [
+    "MCore.T9_primePowerReflection_proved"
+   ],
+   "refuted_by": []
+  },
+  {
+   "name": "MCore.V0EquationToCommonDivisor",
+   "module": "MCore.V012",
+   "closed_prop": true,
+   "status": "NO_PROOF_IN_LIBRARY",
+   "inhabited_by": [],
+   "refuted_by": []
+  }
+ ],
+ "theorems": [
+  {
+   "name": "MCore.B01ConductorLevel.four_not_dvd",
+   "module": "MCore.B01ConductorLevel",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.B01ConductorLevel.of_dvd",
+   "module": "MCore.B01ConductorLevel",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.B01ConductorLevel.pos",
+   "module": "MCore.B01ConductorLevel",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.B01ConductorLevel.prime_square_not_dvd",
+   "module": "MCore.B01ConductorLevel",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.B01ConductorLevel.prime_support",
+   "module": "MCore.B01ConductorLevel",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.B01ConductorLevel.squarefree",
+   "module": "MCore.B01ConductorLevel",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.B01ConductorLevel.support",
+   "module": "MCore.B01ConductorLevel",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.B01ExactConductorContract.actual",
+   "module": "MCore.B01ExactConductorContract",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.B01ExactConductorContract.structural",
+   "module": "MCore.B01ExactConductorContract",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.BackwardAudit.CommonPrimeWitnessContract.witness",
+   "module": "MCore.BackwardAudit.WithoutOracle",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.BackwardAudit.beal_without_oracle_still_open",
+   "module": "MCore.BackwardAudit.WithoutOracle",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.BackwardAudit.hypothetical_common_prime",
+   "module": "MCore.BackwardAudit.HypotheticalClosureOracle",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.BackwardAudit.witness_contract_closes_beal",
+   "module": "MCore.BackwardAudit.WithoutOracle",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.BealData.a_pos",
+   "module": "MCore.BealSpecification",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.BealData.b_pos",
+   "module": "MCore.BealSpecification",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.BealData.c_pos",
+   "module": "MCore.BealSpecification",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.BealData.equation",
+   "module": "MCore.BealSpecification",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.BealData.x_gt_two",
+   "module": "MCore.BealSpecification",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.BealData.y_gt_two",
+   "module": "MCore.BealSpecification",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.BealData.z_gt_two",
+   "module": "MCore.BealSpecification",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.K9.Core.add_assoc_core",
+   "module": "MCore.K9.Core.Arith",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.K9.Core.add_succ_core",
+   "module": "MCore.K9.Core.Arith",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.K9.Core.mul_add_core",
+   "module": "MCore.K9.Core.Arith",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.K9.Core.mul_assoc_core",
+   "module": "MCore.K9.Core.Arith",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.K9.Core.mul_succ_core",
+   "module": "MCore.K9.Core.Arith",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.OpenBridgeFirewall.certificate_blocked",
+   "module": "MCore.K5",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.OpenBridgeFirewall.open_status",
+   "module": "MCore.K5",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.ProofCertificate.proof",
+   "module": "MCore.K2",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.ProofCertificate.status_proved",
+   "module": "MCore.K2",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T0_beal_to_v0",
+   "module": "MCore.V012",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T10_beal_iff_reduced_frontier",
+   "module": "MCore.T10",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T10_candidate_iff_reduced",
+   "module": "MCore.T10",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T10_candidate_to_reduced",
+   "module": "MCore.T10",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T10_frontier_iff_reduced",
+   "module": "MCore.T10",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T10_pow_add",
+   "module": "MCore.T10",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T10_pow_mul_outer",
+   "module": "MCore.T10",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T10_reduced_to_candidate",
+   "module": "MCore.T10",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T11_T10_to_pairwise",
+   "module": "MCore.T11",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T11_ab_pair_forces_common",
+   "module": "MCore.T11",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T11_ac_pair_forces_common",
+   "module": "MCore.T11",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T11_bc_pair_forces_common",
+   "module": "MCore.T11",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T11_beal_iff_pairwise_frontier",
+   "module": "MCore.T11",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T11_candidate_iff_pairwise",
+   "module": "MCore.T11",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T11_dvd_add",
+   "module": "MCore.T11",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T11_dvd_pow_of_dvd",
+   "module": "MCore.T11",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T11_pairwise_of_primitive_equation",
+   "module": "MCore.T11",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T11_pairwise_to_T10",
+   "module": "MCore.T11",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T12_T11_to_parity",
+   "module": "MCore.T12",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T12_beal_iff_parity_frontier",
+   "module": "MCore.T12",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T12_candidate_iff_parity",
+   "module": "MCore.T12",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T12_exactly_one_even_of_pairwise",
+   "module": "MCore.T12",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T12_not_even_iff_odd",
+   "module": "MCore.T12",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T12_odd_pow_mod_two",
+   "module": "MCore.T12",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T12_parity_to_T11",
+   "module": "MCore.T12",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T12_some_base_even",
+   "module": "MCore.T12",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T13_T12_to_modular",
+   "module": "MCore.T13",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T13_beal_iff_modular_frontier",
+   "module": "MCore.T13",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T13_c_even_excludes_double_four",
+   "module": "MCore.T13",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T13_candidate_iff_modular",
+   "module": "MCore.T13",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T13_even_pow_mod_four",
+   "module": "MCore.T13",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T13_modular_to_T12",
+   "module": "MCore.T13",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T13_odd_fourth_mod_four",
+   "module": "MCore.T13",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T13_odd_mod_four",
+   "module": "MCore.T13",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T13_odd_representation",
+   "module": "MCore.T13",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T14_T13_to_residue",
+   "module": "MCore.T14",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T14_beal_iff_residue_frontier",
+   "module": "MCore.T14",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T14_c_even_left_four_forces_right_three",
+   "module": "MCore.T14",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T14_c_even_right_four_forces_left_three",
+   "module": "MCore.T14",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T14_candidate_iff_residue",
+   "module": "MCore.T14",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T14_residue_to_T13",
+   "module": "MCore.T14",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T15_T14_to_base_residue",
+   "module": "MCore.T15",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T15_base_residue_to_T14",
+   "module": "MCore.T15",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T15_beal_iff_base_residue_frontier",
+   "module": "MCore.T15",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T15_c_even_left_four_forces_right_base_three",
+   "module": "MCore.T15",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T15_c_even_right_four_forces_left_base_three",
+   "module": "MCore.T15",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T15_candidate_iff_base_residue",
+   "module": "MCore.T15",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T15_odd_pow_mod_four_eq_base",
+   "module": "MCore.T15",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T15_odd_square_mod_four",
+   "module": "MCore.T15",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T15_one_mod_four_pow",
+   "module": "MCore.T15",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T15_prime_gt_two_odd",
+   "module": "MCore.T15",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T16_T15_to_eight",
+   "module": "MCore.T16",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T16_beal_iff_eight_frontier",
+   "module": "MCore.T16",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T16_c_even_left_four_forces_right_seven",
+   "module": "MCore.T16",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T16_c_even_right_four_forces_left_seven",
+   "module": "MCore.T16",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T16_candidate_iff_eight",
+   "module": "MCore.T16",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T16_eight_to_T15",
+   "module": "MCore.T16",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T16_even_pow_mod_eight",
+   "module": "MCore.T16",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T16_mod_eight_succ_zero_forces_seven",
+   "module": "MCore.T16",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T16_odd_fourth_mod_eight",
+   "module": "MCore.T16",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T16_odd_mod_eight",
+   "module": "MCore.T16",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T16_odd_square_mod_eight",
+   "module": "MCore.T16",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T17_T16_to_classified",
+   "module": "MCore.T17",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T17_beal_iff_classified_frontier",
+   "module": "MCore.T17",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T17_c_even_left_four_forces_right_base_seven",
+   "module": "MCore.T17",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T17_c_even_odd_odd_sum_zero",
+   "module": "MCore.T17",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T17_c_even_right_four_forces_left_base_seven",
+   "module": "MCore.T17",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T17_candidate_iff_classified",
+   "module": "MCore.T17",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T17_classified_to_T16",
+   "module": "MCore.T17",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T17_odd_pow_mod_eight_eq_base",
+   "module": "MCore.T17",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T17_one_mod_eight_pow",
+   "module": "MCore.T17",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T17_reduced_ne_four_odd",
+   "module": "MCore.T17",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T18_T17_to_full",
+   "module": "MCore.T18",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T18_a_even_odd_odd_residues_eq",
+   "module": "MCore.T18",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T18_a_even_other_odd",
+   "module": "MCore.T18",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T18_a_even_power_residue_eq",
+   "module": "MCore.T18",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T18_a_even_y_four_z_odd",
+   "module": "MCore.T18",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T18_a_even_y_odd_z_four",
+   "module": "MCore.T18",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T18_b_even_odd_odd_residues_eq",
+   "module": "MCore.T18",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T18_b_even_other_odd",
+   "module": "MCore.T18",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T18_b_even_power_residue_eq",
+   "module": "MCore.T18",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T18_b_even_x_four_z_odd",
+   "module": "MCore.T18",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T18_b_even_x_odd_z_four",
+   "module": "MCore.T18",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T18_beal_iff_full_parity_frontier",
+   "module": "MCore.T18",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T18_candidate_iff_full",
+   "module": "MCore.T18",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T18_full_to_T17",
+   "module": "MCore.T18",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T19_T18_to_variable_two_adic",
+   "module": "MCore.T19",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T19_a_even_variable_two_adic",
+   "module": "MCore.T19",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T19_b_even_variable_two_adic",
+   "module": "MCore.T19",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T19_beal_iff_variable_two_adic_frontier",
+   "module": "MCore.T19",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T19_c_even_variable_two_adic",
+   "module": "MCore.T19",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T19_candidate_iff_variable_two_adic",
+   "module": "MCore.T19",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T19_even_power_factor",
+   "module": "MCore.T19",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T19_mul_pow",
+   "module": "MCore.T19",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T19_variable_two_adic_to_T18",
+   "module": "MCore.T19",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T1_v0_to_beal",
+   "module": "MCore.V012",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T20_T19_to_depth",
+   "module": "MCore.T20",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T20_a_depth_constraint",
+   "module": "MCore.T20",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T20_b_depth_constraint",
+   "module": "MCore.T20",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T20_beal_iff_two_adic_depth_frontier",
+   "module": "MCore.T20",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T20_c_depth_constraint",
+   "module": "MCore.T20",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T20_candidate_iff_depth",
+   "module": "MCore.T20",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T20_depth_to_T19",
+   "module": "MCore.T20",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T20_two_power_depth_scales",
+   "module": "MCore.T20",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T21_T20_to_equal_exponent_factor",
+   "module": "MCore.T21",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T21_beal_iff_equal_exponent_factor_frontier",
+   "module": "MCore.T21",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T21_candidate_iff_equal_exponent_factor",
+   "module": "MCore.T21",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T21_diff_factorization",
+   "module": "MCore.T21",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T21_equal_exponent_factor_to_T20",
+   "module": "MCore.T21",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T21_right_same_exponent_gap",
+   "module": "MCore.T21",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T21_x_eq_z_gap_divides_b_power",
+   "module": "MCore.T21",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T21_y_eq_z_gap_divides_a_power",
+   "module": "MCore.T21",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T22_T21_to_two_adic_exact",
+   "module": "MCore.T22",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T22_a_even_equal_odd_exponent_two_adic_exact",
+   "module": "MCore.T22",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T22_b_even_equal_odd_exponent_two_adic_exact",
+   "module": "MCore.T22",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T22_beal_iff_equal_odd_exponent_two_adic_frontier",
+   "module": "MCore.T22",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T22_candidate_iff_two_adic_exact",
+   "module": "MCore.T22",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T22_diff_quot_mod_two",
+   "module": "MCore.T22",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T22_diff_quot_odd",
+   "module": "MCore.T22",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T22_two_adic_exact_to_T21",
+   "module": "MCore.T22",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T22_two_pow_dvd_mul_odd_iff_left",
+   "module": "MCore.T22",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T22_two_pow_dvd_mul_odd_left",
+   "module": "MCore.T22",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T22_x_eq_z_exact_factor",
+   "module": "MCore.T22",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T22_y_eq_z_exact_factor",
+   "module": "MCore.T22",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T23_T22_to_gap_depth",
+   "module": "MCore.T23",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T23_a_even_equal_odd_gap_depth",
+   "module": "MCore.T23",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T23_b_even_equal_odd_gap_depth",
+   "module": "MCore.T23",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T23_beal_iff_equal_odd_gap_depth_frontier",
+   "module": "MCore.T23",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T23_candidate_iff_gap_depth",
+   "module": "MCore.T23",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T23_gap_depth_to_T22",
+   "module": "MCore.T23",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T24_T23_to_frey_discriminant",
+   "module": "MCore.T24",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T24_beal_iff_frey_discriminant_frontier",
+   "module": "MCore.T24",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T24_candidate_iff_frey_discriminant",
+   "module": "MCore.T24",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T24_frey_discriminant_rewrite",
+   "module": "MCore.T24",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T24_frey_discriminant_to_T23",
+   "module": "MCore.T24",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T25_T24_to_frey_two_adic_depth",
+   "module": "MCore.T25",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T25_beal_iff_frey_two_adic_depth_frontier",
+   "module": "MCore.T25",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T25_candidate_iff_frey_two_adic_depth",
+   "module": "MCore.T25",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T25_frey_a_two_adic_factorization",
+   "module": "MCore.T25",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T25_frey_b_two_adic_factorization",
+   "module": "MCore.T25",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T25_frey_c_two_adic_factorization",
+   "module": "MCore.T25",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T25_frey_two_adic_depth_to_T24",
+   "module": "MCore.T25",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T26_base_38970_certified",
+   "module": "MCore.T26",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T26_beal_iff_certified_base_frey_bridge",
+   "module": "MCore.T26",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T26_beal_to_missing_bridge",
+   "module": "MCore.T26",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T26_certified_base_bridge_iff_frey_bridge",
+   "module": "MCore.T26",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T26_frey_bridge_iff_T25_frontier",
+   "module": "MCore.T26",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T26_missing_bridge_to_beal",
+   "module": "MCore.T26",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T26_unrestricted_cross_domain_promotion_refuted",
+   "module": "MCore.T26",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T27_T25_to_frey_divisor_depth",
+   "module": "MCore.T27",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T27_beal_iff_frey_divisor_depth_frontier",
+   "module": "MCore.T27",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T27_candidate_iff_frey_divisor_depth",
+   "module": "MCore.T27",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T27_divisor_power_depth_scales",
+   "module": "MCore.T27",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T27_frey_a_divisor_depth",
+   "module": "MCore.T27",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T27_frey_b_divisor_depth",
+   "module": "MCore.T27",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T27_frey_c_divisor_depth",
+   "module": "MCore.T27",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T27_frey_divisor_depth_to_T25",
+   "module": "MCore.T27",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T28_T27_to_prime_support",
+   "module": "MCore.T28",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T28_beal_iff_prime_support_frontier",
+   "module": "MCore.T28",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T28_candidate_iff_prime_support",
+   "module": "MCore.T28",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T28_frey_prime_support_of_product_property",
+   "module": "MCore.T28",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T28_prime_support_to_T27",
+   "module": "MCore.T28",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T29_frey_prime_support",
+   "module": "MCore.T29",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T29_gcd_eq_one_of_prime_not_dvd",
+   "module": "MCore.T29",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T29_prime_dvd_mul",
+   "module": "MCore.T29",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T29_prime_product_property_proved",
+   "module": "MCore.T29",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T2_v2_collision",
+   "module": "MCore.V012",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T30_T28_to_base_prime_support",
+   "module": "MCore.T30",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T30_base_prime_support_to_T28",
+   "module": "MCore.T30",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T30_beal_iff_base_prime_support_frontier",
+   "module": "MCore.T30",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T30_candidate_iff_base_prime_support",
+   "module": "MCore.T30",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T30_frey_base_prime_support",
+   "module": "MCore.T30",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T30_prime_dvd_pow_of_pos",
+   "module": "MCore.T30",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T30_prime_dvd_pow_succ",
+   "module": "MCore.T30",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T30_prime_dvd_power_square_to_base",
+   "module": "MCore.T30",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T31_T30_to_radical_support",
+   "module": "MCore.T31",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T31_beal_iff_radical_support_frontier",
+   "module": "MCore.T31",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T31_candidate_iff_radical_support",
+   "module": "MCore.T31",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T31_frey_radical_prime_support",
+   "module": "MCore.T31",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T31_prime_dvd_sixteen_eq_two",
+   "module": "MCore.T31",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T31_prime_dvd_two_eq_two",
+   "module": "MCore.T31",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T31_radical_support_to_T30",
+   "module": "MCore.T31",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T32_T31_to_c4_coprime",
+   "module": "MCore.T32",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T32_beal_iff_c4_coprime_frontier",
+   "module": "MCore.T32",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T32_c4_coprime_to_T31",
+   "module": "MCore.T32",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T32_candidate_iff_c4_coprime",
+   "module": "MCore.T32",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T32_dvd_mul_of_dvd_left",
+   "module": "MCore.T32",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T32_dvd_mul_of_dvd_right",
+   "module": "MCore.T32",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T32_no_odd_common_prime_delta_c4",
+   "module": "MCore.T32",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T32_quadratic_decompose",
+   "module": "MCore.T32",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T33_T32_to_reduction_input",
+   "module": "MCore.T33",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T33_beal_iff_reduction_input_frontier",
+   "module": "MCore.T33",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T33_candidate_iff_reduction_input",
+   "module": "MCore.T33",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T33_odd_delta_prime_has_reduction_input",
+   "module": "MCore.T33",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T33_reduction_goal_iff_local_contract",
+   "module": "MCore.T33",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T33_reduction_input_to_T32",
+   "module": "MCore.T33",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T34_T33_to_nodal_collision",
+   "module": "MCore.T34",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T34_beal_iff_nodal_collision_frontier",
+   "module": "MCore.T34",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T34_candidate_iff_nodal_collision",
+   "module": "MCore.T34",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T34_nodal_collision_to_T33",
+   "module": "MCore.T34",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T34_not_dvd_pow_of_not_dvd",
+   "module": "MCore.T34",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T34_reduction_input_to_nodal_collision",
+   "module": "MCore.T34",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T35_all_gaps_to_beal",
+   "module": "MCore.T35",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T35_all_gaps_to_global_elimination",
+   "module": "MCore.T35",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T35_beal_iff_global_elimination_bridge",
+   "module": "MCore.T35",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T35_universal_gap_skip_refuted",
+   "module": "MCore.T35",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T36OddLocalReductionCertificate.bridge",
+   "module": "MCore.T36",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T36_certificate_discharges_odd_local",
+   "module": "MCore.T36",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T37TwoAdicReductionCertificate.bridge",
+   "module": "MCore.T37",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T37_certificate_discharges_two_adic",
+   "module": "MCore.T37",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T38GlobalConductorCertificate.bridge",
+   "module": "MCore.T38",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T38_certificate_discharges_global_conductor",
+   "module": "MCore.T38",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T39ModularityCertificate.bridge",
+   "module": "MCore.T39",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T39_certificate_discharges_modularity",
+   "module": "MCore.T39",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T3_closes_beal",
+   "module": "MCore.V012",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T3_v0_iff_raw",
+   "module": "MCore.V012",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T40LevelLoweringCertificate.bridge",
+   "module": "MCore.T40",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T40_certificate_discharges_level_lowering",
+   "module": "MCore.T40",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T41NewformEliminationCertificate.bridge",
+   "module": "MCore.T41",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T41_certificate_discharges_newform_elimination",
+   "module": "MCore.T41",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T42FinalContradictionCertificate.bridge",
+   "module": "MCore.T42",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T42FinalProofBundle.conductor",
+   "module": "MCore.T42",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T42FinalProofBundle.finalContradiction",
+   "module": "MCore.T42",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T42FinalProofBundle.levelLowering",
+   "module": "MCore.T42",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T42FinalProofBundle.modularity",
+   "module": "MCore.T42",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T42FinalProofBundle.newformElimination",
+   "module": "MCore.T42",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T42FinalProofBundle.oddLocal",
+   "module": "MCore.T42",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T42FinalProofBundle.twoAdic",
+   "module": "MCore.T42",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T42_bundle_to_all_gap_contracts",
+   "module": "MCore.T42",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T42_certificate_discharges_final_contradiction",
+   "module": "MCore.T42",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T42_final_bundle_exports_beal",
+   "module": "MCore.T42",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T43ResidualIrreducibilityCertificate.compatible",
+   "module": "MCore.T43",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T43ResidualIrreducibilityCertificate.irreducible",
+   "module": "MCore.T43",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T43_certificate_supplies_irreducible_residual_prime",
+   "module": "MCore.T43",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T43_no_single_residual_prime_345",
+   "module": "MCore.T43",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T43_single_residual_prime_controls_raw_delta_exponents",
+   "module": "MCore.T43",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T43_universal_single_residual_prime_rule_refuted",
+   "module": "MCore.T43",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T44NewformEliminationCertificate.coverage",
+   "module": "MCore.T44",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T44NewformEliminationCertificate.eliminateCovered",
+   "module": "MCore.T44",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T44_certificate_closes_step8",
+   "module": "MCore.T44",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T44_coverage_and_elimination_close_step8",
+   "module": "MCore.T44",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T44_level_two_endgame_closes_if_coverage_is_proved",
+   "module": "MCore.T44",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T44_universal_level_two_promotion_refuted",
+   "module": "MCore.T44",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T45_equal_signature_supplies_single_residual_prime",
+   "module": "MCore.T45",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T45_mixed_signature_has_no_single_residual_prime",
+   "module": "MCore.T45",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T45_odd_prime_not_dvd_four",
+   "module": "MCore.T45",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T45_reduced_exponent_eq_residual_prime",
+   "module": "MCore.T45",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T45_single_residual_prime_for_reduced_signature_is_equal",
+   "module": "MCore.T45",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T45_single_residual_prime_iff_equal_prime_signature",
+   "module": "MCore.T45",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T48_mixed_coarse_split",
+   "module": "MCore.T48",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T48_mixed_signature_three_family_split",
+   "module": "MCore.T48",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T48_not_all_equal_split",
+   "module": "MCore.T48",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T48_reduced_four_or_all_prime",
+   "module": "MCore.T48",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T49_all_four_beal_equation_is_flt4",
+   "module": "MCore.T49",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T49_contains_four_reduced_by_flt4",
+   "module": "MCore.T49",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T49_contains_four_trichotomy",
+   "module": "MCore.T49",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T49_flt4_eliminates_all_four",
+   "module": "MCore.T49",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T4_from_T3",
+   "module": "MCore.V012",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T51_exactly_one_four_split",
+   "module": "MCore.T51",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T51_exactly_two_four_to_prime_family",
+   "module": "MCore.T51",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T51_mixed_reduced_five_family_split",
+   "module": "MCore.T51",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T51_prime_of_reduced_ne_four",
+   "module": "MCore.T51",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T52CertifiedLevelTable.complete",
+   "module": "MCore.T52",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T52CertifiedLevelTable.nonempty",
+   "module": "MCore.T52",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T52CertifiedLevelTable.sound",
+   "module": "MCore.T52",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T52ResidualSignature.hx",
+   "module": "MCore.T52",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T52ResidualSignature.hy",
+   "module": "MCore.T52",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T52ResidualSignature.hz",
+   "module": "MCore.T52",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T52ResidualSignature.mixed",
+   "module": "MCore.T52",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T52ResidualSignature.notAllFour",
+   "module": "MCore.T52",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T52_nonempty_only_is_insufficient",
+   "module": "MCore.T52",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T52_residual_signature_five_family_coverage",
+   "module": "MCore.T52",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T52_table_exact_iff",
+   "module": "MCore.T52",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T53TwoFourPrimeEliminationCertificate.eliminate",
+   "module": "MCore.T53",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T53_certificate_eliminates",
+   "module": "MCore.T53",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T54OneFourEqualPrimesEliminationCertificate.eliminate",
+   "module": "MCore.T54",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T54_certificate_eliminates",
+   "module": "MCore.T54",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T55OneFourDistinctPrimesEliminationCertificate.eliminate",
+   "module": "MCore.T55",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T55_certificate_eliminates",
+   "module": "MCore.T55",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T56TwoEqualOddPrimesEliminationCertificate.eliminate",
+   "module": "MCore.T56",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T56_certificate_eliminates",
+   "module": "MCore.T56",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T57ThreeDistinctOddPrimesEliminationCertificate.eliminate",
+   "module": "MCore.T57",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T57_certificate_eliminates",
+   "module": "MCore.T57",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T58MixedEliminationBundle.oneFourDistinctPrimes",
+   "module": "MCore.T58",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T58MixedEliminationBundle.oneFourEqualPrimes",
+   "module": "MCore.T58",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T58MixedEliminationBundle.threeDistinctOddPrimes",
+   "module": "MCore.T58",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T58MixedEliminationBundle.twoEqualOddPrimes",
+   "module": "MCore.T58",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T58MixedEliminationBundle.twoFourPrime",
+   "module": "MCore.T58",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T58_five_family_bundle_eliminates_residual_survivors",
+   "module": "MCore.T58",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T59CertifiedCandidateLevelTable.complete",
+   "module": "MCore.T59",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T59CertifiedCandidateLevelTable.nonempty",
+   "module": "MCore.T59",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T59CertifiedCandidateLevelTable.sound",
+   "module": "MCore.T59",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T59ResidualCandidate.a_pos",
+   "module": "MCore.T59",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T59ResidualCandidate.b_pos",
+   "module": "MCore.T59",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T59ResidualCandidate.c_pos",
+   "module": "MCore.T59",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T59ResidualCandidate.equation",
+   "module": "MCore.T59",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T59ResidualCandidate.exactlyOneEven",
+   "module": "MCore.T59",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T59ResidualCandidate.mixed",
+   "module": "MCore.T59",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T59ResidualCandidate.notAllFour",
+   "module": "MCore.T59",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T59ResidualCandidate.pairwisePrimitive",
+   "module": "MCore.T59",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T59ResidualCandidate.x_reduced",
+   "module": "MCore.T59",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T59ResidualCandidate.y_reduced",
+   "module": "MCore.T59",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T59ResidualCandidate.z_reduced",
+   "module": "MCore.T59",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T59_candidate_has_five_family_signature",
+   "module": "MCore.T59",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T59_candidate_table_exact_iff",
+   "module": "MCore.T59",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T59_signature_only_exact_impossible_of_local_variation",
+   "module": "MCore.T59",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T5_T3_iff_T4",
+   "module": "MCore.V012",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T5_T4_to_T3",
+   "module": "MCore.V012",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T5_commonDivisor_exists_stable",
+   "module": "MCore.V012",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T60OddLocalArithmeticPacket.input",
+   "module": "MCore.T60",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T60OddLocalArithmeticPacket.nodal",
+   "module": "MCore.T60",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T60_candidate_odd_prime_has_arithmetic_packet",
+   "module": "MCore.T60",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T60_every_candidate_satisfies_odd_local_arithmetic",
+   "module": "MCore.T60",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T60_odd_bad_prime_base_support",
+   "module": "MCore.T60",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T60_odd_bad_prime_not_dvd_c4",
+   "module": "MCore.T60",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T6PrimitiveSolution.a_pos",
+   "module": "MCore.V012",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T6PrimitiveSolution.b_pos",
+   "module": "MCore.V012",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T6PrimitiveSolution.c_pos",
+   "module": "MCore.V012",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T6PrimitiveSolution.equation",
+   "module": "MCore.V012",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T6PrimitiveSolution.primitive",
+   "module": "MCore.V012",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T6PrimitiveSolution.x_gt_two",
+   "module": "MCore.V012",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T6PrimitiveSolution.y_gt_two",
+   "module": "MCore.V012",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T6PrimitiveSolution.z_gt_two",
+   "module": "MCore.V012",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T6_T4_iff_no_primitive",
+   "module": "MCore.V012",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T6_beal_iff_frontier",
+   "module": "MCore.V012",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T7_exponent_reduction",
+   "module": "MCore.T7",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T7_two_factor_gt_one",
+   "module": "MCore.T7",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T8_powered_primitive",
+   "module": "MCore.T8",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T8_transport_reduces_to_reflection",
+   "module": "MCore.T8",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T9_euclidKernel_proved",
+   "module": "MCore.T9",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T9_powered_primitive_unconditional",
+   "module": "MCore.T9",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T9_primePowerReflection_of_euclid",
+   "module": "MCore.T9",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T9_primePowerReflection_proved",
+   "module": "MCore.T9",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.T9_prime_not_dvd_one",
+   "module": "MCore.T9",
+   "axioms": [
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.admissible_boundary_data",
+   "module": "MCore.DiscreteBoundary",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.b01_exact_conductor_contract_exposes_actual",
+   "module": "MCore.B01ExactConductorContract",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.beal_commonPrime_implies_commonDivisor",
+   "module": "MCore.GCDSignature",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.beal_excludes_all_counterexamples",
+   "module": "MCore.K8",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.boundary_ne_regular",
+   "module": "MCore.K0",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.bridge_not_certified",
+   "module": "MCore.K2",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.candidate_equation",
+   "module": "MCore.DiscreteBoundary",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.candidate_ne_provedProperty",
+   "module": "MCore.K0",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.closeBeal_from_commonPrime_witnesses",
+   "module": "MCore.K8",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.commonDivisor_to_commonPrime_of_primeDivisor",
+   "module": "MCore.K9",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.commonPrime_iff_commonDivisor",
+   "module": "MCore.K10",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.commonPrime_iff_commonDivisor_of_primeDivisor",
+   "module": "MCore.K9",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.commonPrime_to_commonDivisor",
+   "module": "MCore.GCDSignature",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.conjecture_excludes_counterexamples",
+   "module": "MCore.BealSpecification",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.counterexample_refutes",
+   "module": "MCore.BealSpecification",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.exponent_three_le",
+   "module": "MCore.DiscreteBoundary",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.k1_not_proved",
+   "module": "MCore.K1",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.k1_status_openBridge",
+   "module": "MCore.K1",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.k2_node_not_proved",
+   "module": "MCore.K2",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.k2_node_status_openBridge",
+   "module": "MCore.K2",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.k3_attack_cannot_promote",
+   "module": "MCore.AttackDAG.K3AlgebraAttacks",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.k3_attack_route_only",
+   "module": "MCore.AttackDAG.K3AlgebraAttacks",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.k3_frontier_open",
+   "module": "MCore.Frontier.K3Gaps",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.k3_gap_not_certified",
+   "module": "MCore.K3",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.k3_gap_not_proved",
+   "module": "MCore.K3",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.k3_gap_status_openBridge",
+   "module": "MCore.K3",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.k4_no_promotion",
+   "module": "MCore.K4",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.k4_status_openBridge",
+   "module": "MCore.K4",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.k5_openBridge_cannot_certify",
+   "module": "MCore.K5",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.k6_source_open",
+   "module": "MCore.K6",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.k6_target_not_certified",
+   "module": "MCore.K6",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.k6_target_open",
+   "module": "MCore.K6",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.k7_endpoint_not_certified",
+   "module": "MCore.K7",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.k7_endpoint_not_proved",
+   "module": "MCore.K7",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.k7_endpoint_status_open",
+   "module": "MCore.K7",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.nat_dvd_trans",
+   "module": "MCore.K9",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.noCommonPrime_is_counterexample",
+   "module": "MCore.K8",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.noCommonPrime_refutes_beal",
+   "module": "MCore.K8",
+   "axioms": [],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.primeDivisorProperty_core",
+   "module": "MCore.K10",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  },
+  {
+   "name": "MCore.primeDivisorProperty_proved",
+   "module": "MCore.K10",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "status": "CLEAN"
+  }
+ ]
+}
