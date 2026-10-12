@@ -1,0 +1,12 @@
+{
+  "id": "BEAL descida por mínimo de C (sem usar x,y,z > 2)",
+  "problema": "BEAL",
+  "alvo": "item 42",
+  "onde_quebra_hoje": "—",
+  "proposta": {
+    "nome": "descida",
+    "definicao": "contraexemplo primitivo mínimo → menor",
+    "usa_expoentes_maiores_que_2_em": ""
+  },
+  "veredito_esperado": "REJEITADA"
+}

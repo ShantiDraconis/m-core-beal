@@ -1,0 +1,16 @@
+{
+  "id": "BEAL-Corpo6 curva de Frey–Beal",
+  "problema": "BEAL",
+  "alvo": "itens 42, 64–67",
+  "onde_quebra_hoje": "descida ⇔ Beal (kernel)",
+  "proposta": {
+    "nome": "E_{A,B,C}",
+    "definicao": "y² = x(x − Aˣ)(x + Bʸ); 'se x,y,z > 2 e mdc = 1, E não é modular'",
+    "classe": "BealModularity",
+    "usa_expoentes_maiores_que_2_em": "na hipótese da não modularidade"
+  },
+  "revisao": {
+    "contradiz": "toda curva elíptica sobre ℚ é modular (Wiles; Breuil–Conrad–Diamond–Taylor 2001); em Fermat a contradição vem do rebaixamento de nível (Ribet) com um expoente primo comum, que não existe para (x, y, z) distintos"
+  },
+  "veredito_esperado": "REJEITADA"
+}
