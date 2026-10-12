@@ -1,1 +1,5 @@
 ATK.Beal.exponent_gcd_le_two
+ATK.BealDescent.no_primitive_of_descent
+ATK.BealDescent.beal_of_descent
+ATK.BealDescent.descent_of_beal
+ATK.BealDescent.descent_iff_beal
