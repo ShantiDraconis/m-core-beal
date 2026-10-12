@@ -1,0 +1,9 @@
+N=1000 M=100: termos=98000, pares verificados=4802049000, coincidências mod p=1904, soluções exatas=1904, primitivas (gcd=1)=0, tempo=176.6s
+  exemplo: ((2, 3), (2, 3), (2, 4)) gcd = 2
+  exemplo: ((2, 4), (2, 4), (2, 5)) gcd = 2
+  exemplo: ((2, 5), (2, 5), (2, 6)) gcd = 2
+  exemplo: ((2, 5), (2, 5), (4, 3)) gcd = 2
+  exemplo: ((2, 6), (2, 6), (2, 7)) gcd = 2
+  exemplo: ((2, 6), (4, 3), (2, 7)) gcd = 2
+  exemplo: ((2, 7), (2, 7), (2, 8)) gcd = 2
+  exemplo: ((2, 7), (2, 7), (4, 4)) gcd = 2
