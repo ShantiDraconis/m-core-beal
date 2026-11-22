@@ -28,6 +28,25 @@ theorem localPolynomial_eq_one_sub_or_add_X_of_multiplicative
   · right
     simp [WeierstrassCurve.localPolynomial, W', hnotgood, hsplit, hmult]
 
+/-- Multiplicative reduction forces the local polynomial to have degree one. -/
+theorem localPolynomial_natDegree_eq_one_of_multiplicative
+    (R : Type*) [CommRing R] [IsDomain R] [IsDiscreteValuationRing R]
+    {K : Type*} [Field K] [Algebra R K] [IsFractionRing R K]
+    (W : WeierstrassCurve K)
+    (hmult : (W.minimal R).HasMultiplicativeReduction R) :
+    (W.localPolynomial R).natDegree = 1 := by
+  rcases localPolynomial_eq_one_sub_or_add_X_of_multiplicative R W hmult with h | h
+  · rw [h]
+    have hp : (1 - X : ℤ[X]) = -(X - C 1) := by
+      ext n
+      simp [sub_eq_add_neg]
+    rw [hp, natDegree_neg, natDegree_X_sub_C]
+  · rw [h]
+    have hp : (1 + X : ℤ[X]) = X + C 1 := by
+      simp [add_comm]
+    rw [hp, natDegree_X_add_C]
+
 #print axioms MCore.localPolynomial_eq_one_sub_or_add_X_of_multiplicative
+#print axioms MCore.localPolynomial_natDegree_eq_one_of_multiplicative
 
 end MCore
